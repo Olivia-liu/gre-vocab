@@ -421,6 +421,15 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
             </div>
             <input type="range" id="new-words-range" min="0" max="60" step="5" value="10" style="width:100%">
           </div>
+          <!-- Sync -->
+          <div class="api-key-wrap">
+            <div class="api-key-label">☁️ 多设备同步密钥（自己设一个任意密码，所有设备填一样的）</div>
+            <div class="api-key-row">
+              <input class="api-key-input" type="password" id="sync-token-input" placeholder="自定义同步密码">
+              <button class="api-key-save-btn" id="sync-token-save">保存</button>
+            </div>
+            <div class="api-key-status" id="sync-status"></div>
+          </div>
           <!-- AI API Key -->
           <div class="api-key-wrap">
             <div class="api-key-label">🤖 Anthropic API Key（用于AI联想记忆生成，<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取Key</a>）</div>
@@ -586,6 +595,49 @@ let queueIdx = 0;
 let isFlipped = false;
 let todayCount = 0;
 let sessionSize = parseInt(localStorage.getItem('gre_session_size') || '20');
+
+// ============================================================
+// CLOUD SYNC
+// ============================================================
+const SYNC_URL = 'https://gre-sync.liu-peixuan.workers.dev/';
+
+function getSyncToken() { return localStorage.getItem('gre_sync_token') || ''; }
+
+async function syncPush() {
+  const token = getSyncToken();
+  if (!token) return;
+  try {
+    await fetch(SYNC_URL + '?token=' + encodeURIComponent(token), {
+      method: 'PUT',
+      body: JSON.stringify(srData)
+    });
+  } catch(e) {}
+}
+
+let syncPushTimer = null;
+function syncPushDebounced() {
+  clearTimeout(syncPushTimer);
+  syncPushTimer = setTimeout(syncPush, 2000);
+}
+
+async function syncPull() {
+  const token = getSyncToken();
+  if (!token) return;
+  try {
+    const res = await fetch(SYNC_URL + '?token=' + encodeURIComponent(token));
+    if (!res.ok) return;
+    const cloud = await res.json();
+    if (!cloud || !Object.keys(cloud).length) return;
+    // Merge: per word, keep whichever was reviewed more recently
+    let changed = false;
+    for (const [k, v] of Object.entries(cloud)) {
+      if (!srData[k] || v.due > srData[k].due) {
+        srData[k] = v; changed = true;
+      }
+    }
+    if (changed) SR.save(srData);
+  } catch(e) {}
+}
 let newWordsMin = parseInt(localStorage.getItem('gre_new_words_min') || '10');
 let activeFilter = 'all';
 let browseSearch = '';
@@ -620,10 +672,7 @@ Promise.all([
 }).catch(() => { document.getElementById('front-word').textContent = '加载失败，请检查服务器'; });
 
 function init() {
-  buildQueue();
-  showCard();
-  updateStats();
-  renderWordList();
+  syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); });
   setupEventListeners();
   updateApiKeyUI();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -791,6 +840,7 @@ function rateWord(q) {
   srData = SR.load();
   SR.rate(currentQueue[queueIdx], q, srData);
   SR.save(srData);
+  syncPushDebounced();
   todayCount++;
   localStorage.setItem('gre_today_count', String(todayCount));
   localStorage.setItem('gre_last_day', new Date().toDateString());
@@ -1152,6 +1202,22 @@ function setupEventListeners() {
     } else {
       alert('请输入有效的 API Key（以 sk- 开头）');
     }
+  });
+
+  // Sync token
+  const syncInput = document.getElementById('sync-token-input');
+  const syncStatus = document.getElementById('sync-status');
+  const existingToken = getSyncToken();
+  if (existingToken) syncStatus.textContent = '✓ 同步已启用';
+  document.getElementById('sync-token-save').addEventListener('click', async () => {
+    const val = syncInput.value.trim();
+    if (!val) return;
+    localStorage.setItem('gre_sync_token', val);
+    syncInput.value = '';
+    syncStatus.textContent = '同步中…';
+    await syncPull();
+    syncPush();
+    syncStatus.textContent = '✓ 同步已启用';
   });
 
   // Reset
