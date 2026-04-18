@@ -199,6 +199,8 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 
 /* Stats View */
 #stats-view { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; }
+#settings-view { overflow: hidden; padding: 16px 16px 0; }
+#settings-view > div:last-child { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 32px; }
 .stats-title { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .stat-card { background: var(--card-bg); border-radius: 16px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
@@ -405,42 +407,57 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
             <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-new" style="background:var(--sep);width:100%"></div></div><div class="ring-count" id="pct-new">100%</div><div class="ring-label">未学</div></div>
           </div>
         </div>
-        <div class="stat-card wide">
-          <div class="stat-label" style="margin-bottom:10px">⚙️ 设置</div>
-          <div class="settings-row">
-            <div class="settings-item">
-              <span class="settings-label">每次学习词数</span>
-              <span class="settings-value" id="session-size-val">20词</span>
-            </div>
-            <input type="range" id="session-size-range" min="10" max="100" step="5" value="20" style="width:100%">
+      </div>
+    </div>
+  </div>
+
+  <div class="view hidden" id="settings-view">
+    <div class="stats-title" style="padding:0 4px;flex-shrink:0;">设置</div>
+    <div style="max-width:480px;margin:0 auto;width:100%;overflow-y:auto;flex:1;">
+      <div class="stat-card wide" style="display:flex;flex-direction:column;gap:20px;">
+
+        <div class="settings-row">
+          <div class="settings-item">
+            <span class="settings-label">每次学习词数</span>
+            <span class="settings-value" id="session-size-val">20词</span>
           </div>
-          <div class="settings-row">
-            <div class="settings-item">
-              <span class="settings-label">每次新词保底数</span>
-              <span class="settings-value" id="new-words-val">10词</span>
-            </div>
-            <input type="range" id="new-words-range" min="0" max="60" step="5" value="10" style="width:100%">
-          </div>
-          <!-- Sync -->
-          <div class="api-key-wrap">
-            <div class="api-key-label">☁️ 多设备同步密钥（自己设一个任意密码，所有设备填一样的）</div>
-            <div class="api-key-row">
-              <input class="api-key-input" type="password" id="sync-token-input" placeholder="自定义同步密码">
-              <button class="api-key-save-btn" id="sync-token-save">保存</button>
-            </div>
-            <div class="api-key-status" id="sync-status"></div>
-          </div>
-          <!-- AI API Key -->
-          <div class="api-key-wrap">
-            <div class="api-key-label">🤖 Anthropic API Key（用于AI联想记忆生成，<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取Key</a>）</div>
-            <div class="api-key-row">
-              <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-…">
-              <button class="api-key-save-btn" id="api-key-save">保存</button>
-            </div>
-            <div class="api-key-status" id="api-key-status"></div>
-          </div>
-          <button class="reset-btn" id="reset-btn">⚠️ 重置所有进度</button>
+          <input type="range" id="session-size-range" min="10" max="100" step="5" value="20" style="width:100%">
         </div>
+
+        <div class="settings-row">
+          <div class="settings-item">
+            <span class="settings-label">每次新词保底数</span>
+            <span class="settings-value" id="new-words-val">10词</span>
+          </div>
+          <input type="range" id="new-words-range" min="0" max="60" step="5" value="10" style="width:100%">
+        </div>
+
+        <div style="border-top:1px solid var(--sep);"></div>
+
+        <div>
+          <div class="api-key-label" style="margin-bottom:8px;">☁️ 多设备同步密钥（所有设备填一样的密码）</div>
+          <div class="api-key-row">
+            <input class="api-key-input" type="password" id="sync-token-input" placeholder="自定义同步密码">
+            <button class="api-key-save-btn" id="sync-token-save">保存</button>
+          </div>
+          <div class="api-key-status" id="sync-status"></div>
+        </div>
+
+        <div style="border-top:1px solid var(--sep);"></div>
+
+        <div>
+          <div class="api-key-label" style="margin-bottom:8px;">🤖 Anthropic API Key（<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取 Key</a>）</div>
+          <div class="api-key-row">
+            <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-…">
+            <button class="api-key-save-btn" id="api-key-save">保存</button>
+          </div>
+          <div class="api-key-status" id="api-key-status"></div>
+        </div>
+
+        <div style="border-top:1px solid var(--sep);"></div>
+
+        <button class="reset-btn" id="reset-btn" style="margin-top:0;">⚠️ 重置所有进度</button>
+
       </div>
     </div>
   </div>
