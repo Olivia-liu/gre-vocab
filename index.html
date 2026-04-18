@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GRE单词">
+<meta name="theme-color" content="#b87a90">
+<link rel="manifest" href="manifest.json">
+<title>GRE单词 · 要你命3000</title>
+<style>
+:root {
+  --bg: #f2f2f7;
+  --card-bg: #fff;
+  --text: #000;
+  --text2: #3c3c43;
+  --text3: #8e8e93;
+  --sep: #c6c6c8;
+  --blue: #b87a90;
+  --green: #34c759;
+  --orange: #ff9500;
+  --red: #e05c6a;
+  --yellow: #ffcc00;
+  --purple: #c47fa8;
+  --nav-bg: rgba(249,249,249,0.94);
+  --header-bg: rgba(249,249,249,0.94);
+  --safe-top: env(safe-area-inset-top, 44px);
+  --safe-bot: env(safe-area-inset-bottom, 34px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: var(--bg); color: var(--text); }
+#app { display: flex; flex-direction: column; height: 100%; }
+
+/* Header */
+#header {
+  flex-shrink: 0; padding: calc(var(--safe-top) + 8px) 20px 8px;
+  background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid var(--sep); z-index: 100;
+}
+.header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.header-title { font-size: 17px; font-weight: 600; }
+.header-sub { font-size: 12px; color: var(--text3); }
+.header-btn { background: none; border: none; color: var(--blue); font-size: 15px; font-weight: 500; cursor: pointer; padding: 4px; }
+.progress-track { height: 4px; background: var(--sep); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width 0.4s ease; }
+
+/* Views */
+#content { flex: 1; overflow: hidden; position: relative; }
+.view { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden; transition: opacity 0.2s, transform 0.2s; }
+.view.hidden { opacity: 0; pointer-events: none; transform: translateX(30px); }
+
+/* Study View */
+#study-view { padding: 10px 16px 6px; }
+.session-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.session-count { font-size: 15px; font-weight: 500; color: var(--text2); }
+.session-icons { display: flex; gap: 16px; }
+.icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text3); padding: 4px; }
+
+/* Card 3D flip */
+.card-area { flex: 1; display: flex; align-items: center; justify-content: center; perspective: 1200px; min-height: 0; padding: 12px 0; box-sizing: border-box; }
+.card-outer { width: 100%; max-width: 400px; max-height: 100%; aspect-ratio: 3/4; }
+.card {
+  width: 100%; height: 100%;
+  position: relative; transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer; user-select: none; -webkit-user-select: none;
+}
+.card.flipped { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; inset: 0; background: var(--card-bg); border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column; padding: 20px 18px; overflow: hidden;
+}
+.card-back-face { transform: rotateY(180deg); }
+
+/* Card Front */
+.front-top { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.word-pos {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: lowercase;
+  color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent);
+  padding: 3px 8px; border-radius: 6px;
+}
+.word-num { font-size: 12px; color: var(--text3); }
+.word-ipa { font-size: 14px; color: var(--text3); letter-spacing: 0.3px; margin-top: 2px; }
+.word-text { font-size: 40px; font-weight: 700; letter-spacing: -1px; margin: 8px 0 6px; line-height: 1.1; word-break: break-word; flex-shrink: 0; }
+
+/* Mnemonic on front (cached) */
+.front-mnemonic {
+  flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--purple) 10%, transparent), color-mix(in srgb, var(--yellow) 8%, transparent));
+  border-radius: 14px; padding: 12px 14px; margin-bottom: 8px;
+  border: 1px solid color-mix(in srgb, var(--purple) 20%, transparent);
+}
+.front-mnemonic-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); margin-bottom: 6px; }
+.front-mnemonic-text { font-size: 14px; line-height: 1.55; color: var(--text2); }
+
+/* AI button on front (no mnemonic yet) */
+.ai-prompt-area { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.ai-generate-btn {
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: #fff; border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 600; padding: 12px 22px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--purple) 30%, transparent);
+}
+.ai-generate-btn.loading { opacity: 0.7; pointer-events: none; }
+.ai-hint-text { font-size: 12px; color: var(--text3); text-align: center; }
+
+/* Front bottom */
+.front-bottom { flex-shrink: 0; text-align: center; color: var(--text3); font-size: 12px; margin-top: 6px; }
+
+/* Card Back */
+.back-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; flex-shrink: 0; }
+.back-pos {
+  font-size: 12px; font-weight: 600; text-transform: lowercase; letter-spacing: 0.5px;
+  color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent);
+  padding: 3px 8px; border-radius: 6px;
+}
+.def-word-small { font-size: 13px; font-weight: 500; color: var(--text3); margin-bottom: 4px; flex-shrink: 0; }
+.def-cn { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; line-height: 1.2; flex-shrink: 0; }
+.def-en { font-size: 13px; color: var(--text2); line-height: 1.4; border-left: 3px solid var(--sep); padding-left: 10px; flex-shrink: 0; }
+
+/* Mnemonic on back */
+.back-mnemonic-area { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.back-mnemonic-box {
+  flex: 1; background: linear-gradient(135deg, color-mix(in srgb, var(--purple) 10%, transparent), color-mix(in srgb, var(--yellow) 8%, transparent));
+  border-radius: 14px; padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--purple) 20%, transparent);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.mnemonic-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.mnemonic-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); }
+.mnemonic-regen-btn { background: none; border: none; color: var(--text3); font-size: 14px; cursor: pointer; padding: 2px 4px; }
+.back-mnemonic-text { font-size: 13px; line-height: 1.55; color: var(--text2); }
+.back-mnemonic-generate {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  color: var(--purple); font-size: 13px; font-weight: 500; cursor: pointer;
+  background: none; border: none; height: 100%;
+}
+.example-inline { margin-top: 6px; margin-bottom: 10px; flex-shrink: 0; }
+.example-inline-text { font-size: 11px; color: var(--text3); font-style: italic; line-height: 1.4; }
+
+/* Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid color-mix(in srgb, var(--purple) 30%, transparent); border-top-color: var(--purple); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; }
+
+/* Study Actions */
+.study-actions { flex-shrink: 0; padding: 8px 16px 4px; }
+.flip-row { text-align: center; }
+.flip-btn {
+  background: color-mix(in srgb, var(--blue) 15%, #fff); color: var(--blue); border: none; border-radius: 16px;
+  font-size: 17px; font-weight: 600; padding: 19px 48px; cursor: pointer; width: 100%;
+  box-shadow: none;
+}
+.rate-row { display: flex; gap: 10px; }
+.rate-btn {
+  flex: 1; border: none; border-radius: 16px; padding: 11px 8px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-weight: 600; font-size: 15px;
+}
+.rate-btn small { font-size: 11px; opacity: 0.8; font-weight: 400; }
+.btn-again { background: color-mix(in srgb, var(--red) 15%, transparent); color: var(--red); }
+.btn-hard  { background: color-mix(in srgb, var(--orange) 15%, transparent); color: var(--orange); }
+.btn-easy  { background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green); }
+
+/* Done state */
+.done-card { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 24px; }
+.done-icon { font-size: 64px; margin-bottom: 16px; }
+.done-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+.done-sub { font-size: 16px; color: var(--text3); margin-bottom: 24px; line-height: 1.5; }
+.done-btn { background: var(--blue); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; padding: 14px 32px; cursor: pointer; }
+
+/* Browse View */
+.search-bar-wrap { padding: 10px 16px 6px; flex-shrink: 0; }
+.search-input {
+  width: 100%; padding: 10px 14px 10px 36px; border-radius: 12px; border: none;
+  background: var(--card-bg); color: var(--text); font-size: 15px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08); outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: 10px center;
+}
+.filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; margin-top: 8px; }
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-chip { flex-shrink: 0; padding: 5px 12px; border-radius: 20px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--card-bg); color: var(--text3); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.filter-chip.active { background: var(--blue); color: #fff; }
+.word-list { flex: 1; overflow-y: auto; padding: 0 16px 8px; -webkit-overflow-scrolling: touch; }
+.word-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--sep); cursor: pointer; gap: 10px; }
+.word-item:last-child { border-bottom: none; }
+.word-item-left { flex: 1; min-width: 0; }
+.word-item-name { font-size: 17px; font-weight: 600; }
+.word-item-cn { font-size: 13px; color: var(--text3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.word-item-badge { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.badge-new { background: color-mix(in srgb, var(--text3) 15%, transparent); color: var(--text3); }
+.badge-learning { background: color-mix(in srgb, var(--orange) 15%, transparent); color: var(--orange); }
+.badge-known { background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green); }
+.pos-tag { font-size: 11px; color: var(--blue); font-weight: 600; text-transform: uppercase; }
+
+/* Stats View */
+#stats-view { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; }
+.stats-title { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-card { background: var(--card-bg); border-radius: 16px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.stat-card.wide { grid-column: 1 / -1; }
+.stat-value { font-size: 36px; font-weight: 700; }
+.stat-label { font-size: 13px; color: var(--text3); margin-top: 2px; }
+.progress-rings { display: flex; gap: 12px; align-items: center; justify-content: space-around; margin: 8px 0; }
+.ring-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.ring-label { font-size: 12px; color: var(--text3); }
+.ring-count { font-size: 15px; font-weight: 600; }
+.ring-bar { height: 8px; border-radius: 4px; width: 60px; overflow: hidden; background: var(--sep); }
+.ring-fill { height: 100%; border-radius: 4px; }
+.settings-row { display: flex; flex-direction: column; gap: 10px; }
+.settings-item { display: flex; justify-content: space-between; align-items: center; }
+.settings-label { font-size: 15px; }
+.settings-value { font-size: 15px; color: var(--blue); font-weight: 500; }
+
+/* API key input */
+.api-key-wrap { margin-top: 12px; }
+.api-key-label { font-size: 13px; color: var(--text3); margin-bottom: 6px; line-height: 1.4; }
+.api-key-row { display: flex; gap: 8px; }
+.api-key-input {
+  flex: 1; border: none; border-radius: 10px; padding: 10px 12px;
+  background: color-mix(in srgb, var(--sep) 30%, transparent);
+  color: var(--text); font-size: 14px; outline: none; font-family: monospace;
+}
+.api-key-save-btn {
+  background: var(--blue); color: #fff; border: none; border-radius: 10px;
+  padding: 10px 14px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.api-key-status { font-size: 12px; margin-top: 6px; }
+.api-key-status.ok { color: var(--green); }
+.api-key-status.none { color: var(--text3); }
+.reset-btn { background: color-mix(in srgb, var(--red) 12%, transparent); color: var(--red); border: none; border-radius: 12px; padding: 12px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; }
+
+/* Nav */
+#nav {
+  flex-shrink: 0; display: flex; justify-content: space-around; align-items: center;
+  padding: 8px 0 calc(var(--safe-bot) + 2px);
+  background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 0.5px solid var(--sep);
+}
+.nav-btn { flex: 1; background: none; border: none; cursor: pointer; padding: 6px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--text3); font-size: 10px; font-weight: 500; }
+.nav-btn .nav-icon { font-size: 22px; line-height: 1; }
+.nav-btn.active { color: var(--blue); }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-sheet { background: var(--card-bg); border-radius: 20px 20px 0 0; width: 100%; padding: 20px 20px calc(20px + var(--safe-bot)); max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+.modal-overlay.open .modal-sheet { transform: translateY(0); }
+.modal-handle { width: 36px; height: 4px; background: var(--sep); border-radius: 2px; margin: 0 auto 16px; }
+.modal-word { font-size: 34px; font-weight: 700; margin-bottom: 2px; }
+.modal-pos { font-size: 13px; color: var(--blue); font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
+.modal-def-cn { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+.modal-def-en { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 10px; }
+.modal-example { font-size: 13px; color: var(--text3); font-style: italic; line-height: 1.5; margin-bottom: 14px; padding: 10px 12px; background: color-mix(in srgb, var(--sep) 30%, transparent); border-radius: 10px; }
+
+/* Modal mnemonic section */
+.modal-mnemonic-section { margin-bottom: 14px; }
+.modal-mnemonic-box { background: linear-gradient(135deg, color-mix(in srgb, var(--purple) 10%, transparent), color-mix(in srgb, var(--yellow) 8%, transparent)); border-radius: 14px; padding: 14px; border: 1px solid color-mix(in srgb, var(--purple) 20%, transparent); }
+.modal-mnemonic-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.modal-mnemonic-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); }
+.modal-mnemonic-regen { background: none; border: 1px solid color-mix(in srgb, var(--purple) 30%, transparent); border-radius: 8px; color: var(--purple); font-size: 12px; padding: 4px 8px; cursor: pointer; font-weight: 500; }
+.modal-mnemonic-text { font-size: 15px; line-height: 1.6; color: var(--text); }
+.modal-mnemonic-generate-btn {
+  width: 100%; background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: #fff; border: none; border-radius: 14px; padding: 13px;
+  font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.modal-mnemonic-generate-btn.loading { opacity: 0.7; pointer-events: none; }
+
+.note-area { width: 100%; border: none; border-radius: 12px; padding: 10px 12px; background: color-mix(in srgb, var(--sep) 20%, transparent); color: var(--text); font-size: 14px; min-height: 60px; resize: none; outline: none; font-family: inherit; }
+.note-area::placeholder { color: var(--text3); }
+.modal-actions { display: flex; gap: 10px; margin-top: 10px; }
+.modal-btn { flex: 1; border: none; border-radius: 12px; padding: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.modal-btn-study { background: var(--blue); color: #fff; }
+.modal-btn-known { background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green); }
+
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+.pulsing { animation: pulse 1.5s ease infinite; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="header">
+    <div class="header-row">
+      <div>
+        <div class="header-title">GRE 单词</div>
+        <div class="header-sub" id="header-sub">要你命3000</div>
+      </div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </header>
+
+  <div id="content">
+    <!-- Study View -->
+    <div class="view" id="study-view">
+      <div class="session-bar">
+        <span class="session-count" id="session-count">今日: 0 词</span>
+        <div class="session-icons">
+          <button class="icon-btn" id="prev-btn" style="font-size:16px">◀</button>
+          <button class="icon-btn" id="skip-btn">⏭</button>
+        </div>
+      </div>
+      <div class="card-area">
+        <div class="card-outer">
+          <div class="card" id="card">
+            <!-- Front -->
+            <div class="card-face card-front-face">
+              <div class="front-top">
+                <span class="word-pos" id="front-pos"></span>
+                <span class="word-num" id="front-num"></span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:18%;">
+                <div class="word-text" id="front-word" style="text-align:center;">Loading…</div>
+                <div class="word-ipa" id="front-ipa"></div>
+              </div>
+              <!-- Mnemonic area on front -->
+              <div id="front-mnemonic-cached" class="front-mnemonic" style="display:none">
+                <div class="front-mnemonic-label">✨ 联想记忆</div>
+                <div class="front-mnemonic-text" id="front-mnemonic-text"></div>
+              </div>
+              <div id="front-ai-area" class="ai-prompt-area">
+                <button class="ai-generate-btn" id="front-gen-btn">
+                  <span>✨</span><span>AI帮我记</span>
+                </button>
+                <div class="ai-hint-text">生成一个搞笑联想记忆法</div>
+              </div>
+            </div>
+            <!-- Back -->
+            <div class="card-face card-back-face">
+              <div class="back-top">
+                <span class="back-pos" id="back-pos"></span>
+                <span class="word-num" id="back-num"></span>
+              </div>
+              <div class="def-word-small" id="back-word"></div>
+              <div class="def-cn" id="def-cn"></div>
+              <div class="def-en" id="def-en"></div>
+              <div class="example-inline" id="example-inline" style="display:none">
+                <div class="example-inline-text" id="example-inline-text"></div>
+              </div>
+              <div class="back-mnemonic-area">
+                <div class="back-mnemonic-box">
+                  <div class="mnemonic-header">
+                    <span class="mnemonic-label">✨ 联想记忆</span>
+                    <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button>
+                  </div>
+                  <div id="back-mnemonic-content">
+                    <button class="back-mnemonic-generate" id="back-gen-btn">
+                      <span>✨</span><span>点击生成联想记忆法</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="study-actions" id="study-actions">
+        <div class="flip-row" id="flip-row">
+          <button class="flip-btn" id="flip-btn">翻转查看释义</button>
+        </div>
+        <div class="rate-row" id="rate-row" style="display:none">
+          <button class="rate-btn btn-again" id="btn-again"><span>← 不会</span><small>明天再来</small></button>
+          <button class="rate-btn btn-hard" id="btn-hard"><span>↑↓ 模糊</span><small>2天后</small></button>
+          <button class="rate-btn btn-easy" id="btn-easy"><span>记住了 →</span><small>4天+</small></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Browse View -->
+    <div class="view hidden" id="browse-view">
+      <div class="search-bar-wrap">
+        <input class="search-input" type="search" id="search-input" placeholder="搜索单词…">
+        <div class="filter-row">
+          <button class="filter-chip active" data-filter="all">全部</button>
+          <button class="filter-chip" data-filter="new">未学</button>
+          <button class="filter-chip" data-filter="learning">学习中</button>
+          <button class="filter-chip" data-filter="known">已掌握</button>
+          <button class="filter-chip" data-filter="n">名词</button>
+          <button class="filter-chip" data-filter="v">动词</button>
+          <button class="filter-chip" data-filter="adj">形容词</button>
+        </div>
+      </div>
+      <div class="word-list" id="word-list"></div>
+    </div>
+
+    <!-- Stats View -->
+    <div class="view hidden" id="stats-view">
+      <div class="stats-title" style="padding:0 4px">学习统计</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-value" id="stat-known">0</div><div class="stat-label">✅ 已掌握</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-learning">0</div><div class="stat-label">📖 学习中</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-today">0</div><div class="stat-label">🔥 今日学习</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">⚡ 连续天数</div></div>
+        <div class="stat-card wide">
+          <div class="stat-label" style="margin-bottom:10px">总进度 (<span id="stat-total">0</span> / 2967词)</div>
+          <div class="progress-track" style="height:8px"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
+          <div class="progress-rings">
+            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-known" style="background:var(--green);width:0%"></div></div><div class="ring-count" id="pct-known">0%</div><div class="ring-label">已掌握</div></div>
+            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-learning" style="background:var(--orange);width:0%"></div></div><div class="ring-count" id="pct-learning">0%</div><div class="ring-label">学习中</div></div>
+            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-new" style="background:var(--sep);width:100%"></div></div><div class="ring-count" id="pct-new">100%</div><div class="ring-label">未学</div></div>
+          </div>
+        </div>
+        <div class="stat-card wide">
+          <div class="stat-label" style="margin-bottom:10px">⚙️ 设置</div>
+          <div class="settings-row">
+            <div class="settings-item">
+              <span class="settings-label">每次学习词数</span>
+              <span class="settings-value" id="session-size-val">20词</span>
+            </div>
+            <input type="range" id="session-size-range" min="10" max="100" step="5" value="20" style="width:100%">
+          </div>
+          <div class="settings-row">
+            <div class="settings-item">
+              <span class="settings-label">每次新词保底数</span>
+              <span class="settings-value" id="new-words-val">10词</span>
+            </div>
+            <input type="range" id="new-words-range" min="0" max="60" step="5" value="10" style="width:100%">
+          </div>
+          <!-- AI API Key -->
+          <div class="api-key-wrap">
+            <div class="api-key-label">🤖 Anthropic API Key（用于AI联想记忆生成，<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取Key</a>）</div>
+            <div class="api-key-row">
+              <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-…">
+              <button class="api-key-save-btn" id="api-key-save">保存</button>
+            </div>
+            <div class="api-key-status" id="api-key-status"></div>
+          </div>
+          <button class="reset-btn" id="reset-btn">⚠️ 重置所有进度</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav id="nav">
+    <button class="nav-btn active" data-view="study"><span class="nav-icon">📚</span><span>学习</span></button>
+    <button class="nav-btn" data-view="browse"><span class="nav-icon">📖</span><span>单词表</span></button>
+    <button class="nav-btn" data-view="stats"><span class="nav-icon">📊</span><span>统计</span></button>
+  </nav>
+</div>
+
+<!-- Word Detail Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-word" id="modal-word"></div>
+    <div class="modal-pos" id="modal-pos"></div>
+    <div class="modal-def-cn" id="modal-def-cn"></div>
+    <div class="modal-def-en" id="modal-def-en"></div>
+    <div class="modal-example" id="modal-example" style="display:none"></div>
+    <div class="modal-mnemonic-section" id="modal-mnemonic-section">
+      <!-- filled dynamically -->
+    </div>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:6px">📝 我的笔记</div>
+    <textarea class="note-area" id="modal-note" placeholder="写下你自己的联想、造句…"></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-study" id="modal-study-btn">加入学习队列</button>
+      <button class="modal-btn modal-btn-known" id="modal-known-btn">✓ 已掌握</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// BUNDLED MNEMONICS (loaded from mnemonics.json at startup)
+// ============================================================
+let MNEMONICS = [];   // populated by loadAll()
+let PHONETICS = [];   // populated by loadAll()
+
+// ============================================================
+// SPACED REPETITION
+// ============================================================
+const SR = {
+  load() { try { return JSON.parse(localStorage.getItem('gre_sr') || '{}'); } catch { return {}; } },
+  save(d) { localStorage.setItem('gre_sr', JSON.stringify(d)); },
+  rate(id, q, d) {
+    const now = Date.now();
+    let s = d[id] || {interval:0, reps:0, ease:2.5, due:now, status:'new'};
+    if (q === 1) {
+      s.reps = 0; s.interval = 1; s.status = 'learning'; s.ease = Math.max(1.3, s.ease - 0.2);
+    } else if (q === 2) {
+      s.reps++; s.interval = s.reps===1 ? 1 : Math.max(1, Math.round(s.interval*1.2));
+      s.ease = Math.max(1.3, s.ease - 0.15); s.status = s.interval>=7 ? 'known' : 'learning';
+    } else {
+      s.reps++;
+      if (s.reps===1) s.interval = 1;
+      else if (s.reps===2) s.interval = 4;
+      else s.interval = Math.round(s.interval * s.ease);
+      s.ease = Math.min(2.5, s.ease + 0.1); s.status = s.interval>=7 ? 'known' : 'learning';
+    }
+    s.due = now + s.interval * 86400000; d[id] = s; return s;
+  }
+};
+
+// ============================================================
+// MNEMONIC GENERATION via Claude API
+// ============================================================
+async function generateMnemonic(wordIdx, force = false) {
+  const word = WORDS[wordIdx];
+  const cacheKey = 'gre_mn_' + wordIdx;
+
+  // Return cached (user-generated or previously fetched) if not forcing regen
+  if (!force) {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) return cached;
+    // Fall back to bundled static mnemonic
+    const bundled = MNEMONICS[wordIdx];
+    if (bundled) return bundled;
+  }
+
+  const apiKey = localStorage.getItem('gre_api_key');
+  if (!apiKey) {
+    const key = prompt('请输入 Anthropic API Key（将只保存在您的设备上）\n\n可在 console.anthropic.com 免费获取：');
+    if (!key || !key.trim().startsWith('sk-')) {
+      alert('API Key 无效，请确认格式以 sk- 开头');
+      return null;
+    }
+    localStorage.setItem('gre_api_key', key.trim());
+    updateApiKeyUI();
+  }
+
+  const prompt = `你是专门帮中国学生记GRE单词的记忆大师，擅长创作让人忍不住笑的联想记忆。
+
+单词：${word.w}（${word.p ? word.p + '.  ' : ''}${word.c || word.e}）
+
+请创作一个极其有趣、难以忘记的中文联想记忆法。你可以用以下一种或多种方式：
+🔊 谐音梗：这个词读起来像什么中文词或句子？能不能编个段子？
+🖼️ 夸张画面：想象一个荒诞、视觉冲击强的场景，包含这个词的读音或含义
+😂 搞笑故事：用两三句话讲一个傻乎乎但好记的故事
+🧩 词形拆解：把单词拆成像中文读音的片段，赋予含义
+
+要求：
+- 越荒诞夸张越好，要让人印象深刻
+- 不超过3句话
+- 直接给联想内容，不要说"这个词…"或"可以联想…"之类的开头
+- 最后可以用一句话点出这个词的核心意思
+
+示例风格参考（你要比这个更有创意）：
+abandon → "阿～班顿！（停！）" 想象班主任对一个叫阿班的学生大吼让他停下，结果阿班直接撒腿跑掉了——他放弃了一切，abandon了！
+garrulous → "哥儿们嘴巴从来没停过" ——那个无话不说的"哥儿们"就是garrulous（话痨）的化身。
+abhor → "啊！好恶！" 看到一只超大蟑螂，你尖叫"啊！好恶！" ——abhor就是极度厌恶的意思。`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': localStorage.getItem('gre_api_key'),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-request-header': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const mnemonic = data.content[0].text.trim();
+    localStorage.setItem(cacheKey, mnemonic);
+    return mnemonic;
+
+  } catch (e) {
+    console.error('Mnemonic generation failed:', e);
+    throw e;
+  }
+}
+
+// ============================================================
+// APP STATE
+// ============================================================
+let WORDS = [];
+let srData = SR.load();
+let currentQueue = [];
+let queueIdx = 0;
+let isFlipped = false;
+let todayCount = 0;
+let sessionSize = parseInt(localStorage.getItem('gre_session_size') || '20');
+let newWordsMin = parseInt(localStorage.getItem('gre_new_words_min') || '10');
+let activeFilter = 'all';
+let browseSearch = '';
+let currentModalIdx = -1;
+
+// Daily streak logic
+const todayKey = new Date().toDateString();
+if (localStorage.getItem('gre_today_key') !== todayKey) {
+  const lastDay = localStorage.getItem('gre_last_day');
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  const streak = parseInt(localStorage.getItem('gre_streak') || '0');
+  localStorage.setItem('gre_today_key', todayKey);
+  localStorage.setItem('gre_today_count', '0');
+  if (lastDay === yesterday) localStorage.setItem('gre_streak', String(streak + 1));
+  else if (lastDay !== todayKey) localStorage.setItem('gre_streak', '1');
+}
+todayCount = parseInt(localStorage.getItem('gre_today_count') || '0');
+
+// ============================================================
+// LOAD WORDS + BUNDLED MNEMONICS
+// ============================================================
+const _v = Date.now();
+Promise.all([
+  fetch('words.json?v=' + _v).then(r => r.json()),
+  fetch('mnemonics.json?v=' + _v).then(r => r.json()).catch(() => []),
+  fetch('phonetics.json?v=' + _v).then(r => r.json()).catch(() => [])
+]).then(([words, mns, phon]) => {
+  WORDS = words;
+  MNEMONICS = mns;
+  PHONETICS = phon;
+  init();
+}).catch(() => { document.getElementById('front-word').textContent = '加载失败，请检查服务器'; });
+
+function init() {
+  buildQueue();
+  showCard();
+  updateStats();
+  renderWordList();
+  setupEventListeners();
+  updateApiKeyUI();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ============================================================
+// QUEUE
+// ============================================================
+function buildQueue() {
+  const now = Date.now();
+  const due = [], newWords = [];
+  for (let i = 0; i < WORDS.length; i++) {
+    const s = srData[i];
+    if (!s || s.status === 'new') newWords.push(i);
+    else if (s.status !== 'known' || now >= s.due) due.push(i);
+  }
+  shuffle(newWords);
+  shuffle(due);
+  const newSlots = Math.min(newWordsMin, newWords.length);
+  const dueSlots = Math.min(sessionSize - newSlots, due.length);
+  const combined = [...due.slice(0, dueSlots), ...newWords.slice(0, Math.max(newSlots, sessionSize - dueSlots))].slice(0, sessionSize);
+  shuffle(combined);
+  if (combined.length === 0) {
+    const known = Object.keys(srData).filter(k => srData[k].status === 'known');
+    shuffle(known);
+    currentQueue = known.slice(0, sessionSize).map(Number);
+  } else {
+    currentQueue = combined;
+  }
+  queueIdx = 0;
+}
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+}
+
+// ============================================================
+// CARD DISPLAY
+// ============================================================
+function showCard() {
+  isFlipped = false;
+  const card = document.getElementById('card');
+  card.classList.remove('flipped');
+  document.getElementById('flip-row').style.display = '';
+  document.getElementById('rate-row').style.display = 'none';
+
+  if (queueIdx >= currentQueue.length) { showDone(); return; }
+
+  const wordIdx = currentQueue[queueIdx];
+  const word = WORDS[wordIdx];
+  const pos = word.p || '';
+
+  // Front
+  const frontPosEl = document.getElementById('front-pos');
+  frontPosEl.textContent = '';
+  frontPosEl.style.display = 'none';
+  document.getElementById('front-word').textContent = word.w;
+  document.getElementById('front-ipa').textContent = PHONETICS[wordIdx] ? '/' + PHONETICS[wordIdx] + '/' : '';
+  document.getElementById('front-num').textContent = `${queueIdx + 1}/${currentQueue.length}`;
+
+  // Front mnemonic — prefer localStorage override, then bundled
+  const cached = localStorage.getItem('gre_mn_' + wordIdx);
+  const displayed = cached || MNEMONICS[wordIdx] || '';
+  const frontCached = document.getElementById('front-mnemonic-cached');
+  const frontAiArea = document.getElementById('front-ai-area');
+  frontCached.style.display = 'none';
+  frontAiArea.style.display = 'none';
+
+  // Back
+  document.getElementById('back-pos').textContent = pos ? pos + '.' : '';
+  document.getElementById('back-word').textContent = word.w;
+  document.getElementById('back-num').textContent = `${queueIdx + 1}/${currentQueue.length}`;
+  document.getElementById('def-cn').textContent = word.c || '（无中文释义）';
+
+  const defEnEl = document.getElementById('def-en');
+  if (word.e) { defEnEl.textContent = word.e; defEnEl.style.display = ''; }
+  else defEnEl.style.display = 'none';
+
+  // Back mnemonic
+  setBackMnemonicUI(wordIdx, displayed, false);
+
+  // Example
+  const exInline = document.getElementById('example-inline');
+  const defEn = document.getElementById('def-en');
+  if (word.x) {
+    document.getElementById('example-inline-text').textContent = word.x;
+    exInline.style.display = '';
+    defEn.style.marginBottom = '4px';
+  } else {
+    exInline.style.display = 'none';
+    defEn.style.marginBottom = '8px';
+  }
+
+  // Progress + header
+  document.getElementById('progress-fill').style.width = (queueIdx / currentQueue.length * 100) + '%';
+  document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
+  document.getElementById('header-sub').textContent = `第 ${queueIdx+1}/${currentQueue.length} 词`;
+
+}
+
+function setBackMnemonicUI(wordIdx, text, loading) {
+  const content = document.getElementById('back-mnemonic-content');
+  const regenBtn = document.getElementById('back-regen-btn');
+  if (loading) {
+    content.innerHTML = `<div style="text-align:center;padding:8px 0;color:var(--purple)"><span class="spinner"></span> <span class="pulsing" style="font-size:13px;margin-left:6px">正在生成联想记忆…</span></div>`;
+    regenBtn.style.display = 'none';
+  } else if (text) {
+    content.innerHTML = `<div class="back-mnemonic-text" id="back-mnemonic-text">${escHtml(text)}</div>`;
+    regenBtn.style.display = '';
+  } else {
+    content.innerHTML = `<button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span>点击生成联想记忆法</span></button>`;
+    regenBtn.style.display = 'none';
+    // Re-attach event
+    const btn = document.getElementById('back-gen-btn');
+    if (btn) btn.addEventListener('click', e => { e.stopPropagation(); triggerGenerateMnemonic(wordIdx); });
+  }
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+async function triggerGenerateMnemonic(wordIdx, force = false) {
+  // Show loading on both front and back
+  const frontCached = document.getElementById('front-mnemonic-cached');
+  const frontAiArea = document.getElementById('front-ai-area');
+  const frontBtn = document.getElementById('front-gen-btn');
+
+  if (frontBtn) {
+    frontBtn.innerHTML = '<span class="spinner"></span><span>生成中…</span>';
+    frontBtn.classList.add('loading');
+  }
+  setBackMnemonicUI(wordIdx, null, true);
+
+  try {
+    const mnemonic = await generateMnemonic(wordIdx, force);
+    if (!mnemonic) {
+      // User cancelled or error - reset
+      if (frontBtn) { frontBtn.innerHTML = '<span>✨</span><span>AI帮我记</span>'; frontBtn.classList.remove('loading'); }
+      setBackMnemonicUI(wordIdx, null, false);
+      return;
+    }
+    // Show on back
+    setBackMnemonicUI(wordIdx, mnemonic, false);
+  } catch (e) {
+    if (frontBtn) { frontBtn.innerHTML = '<span>✨</span><span>重试</span>'; frontBtn.classList.remove('loading'); }
+    setBackMnemonicUI(wordIdx, null, false);
+    alert('生成失败：' + e.message + '\n\n请检查API Key是否正确，或网络是否正常。');
+  }
+}
+
+function flipCard() {
+  if (isFlipped) return;
+  isFlipped = true;
+  document.getElementById('card').classList.add('flipped');
+  document.getElementById('flip-row').style.display = 'none';
+  document.getElementById('rate-row').style.display = 'flex';
+}
+
+function rateWord(q) {
+  if (!isFlipped) { flipCard(); return; }
+  srData = SR.load();
+  SR.rate(currentQueue[queueIdx], q, srData);
+  SR.save(srData);
+  todayCount++;
+  localStorage.setItem('gre_today_count', String(todayCount));
+  localStorage.setItem('gre_last_day', new Date().toDateString());
+  queueIdx++;
+  setTimeout(() => {
+    const c = document.getElementById('card');
+    c.style.transition = 'none';
+    c.classList.remove('flipped');
+    void c.offsetWidth;
+    c.style.transition = '';
+    showCard();
+  }, 80);
+}
+
+function showDone() {
+  document.querySelector('.card-area').innerHTML = `
+    <div class="done-card">
+      <div class="done-icon">🎉</div>
+      <div class="done-title">本轮完成！</div>
+      <div class="done-sub">今日已学 <strong>${todayCount}</strong> 个单词<br>每天坚持，GRE必过！</div>
+      <button class="done-btn" onclick="nextRound()">继续下一轮</button>
+    </div>`;
+  document.getElementById('study-actions').style.display = 'none';
+  document.getElementById('progress-fill').style.width = '100%';
+  updateStats();
+}
+
+function nextRound() {
+  document.querySelector('.card-area').innerHTML = `
+    <div class="card-outer">
+      <div class="card" id="card">
+        <div class="card-face card-front-face">
+          <div class="front-top"><span class="word-pos" id="front-pos"></span><span class="word-num" id="front-num"></span></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:18%;">
+            <div class="word-text" id="front-word" style="text-align:center;">Loading…</div>
+            <div class="word-ipa" id="front-ipa"></div>
+          </div>
+          <div id="front-mnemonic-cached" class="front-mnemonic" style="display:none">
+            <div class="front-mnemonic-label">✨ 联想记忆</div>
+            <div class="front-mnemonic-text" id="front-mnemonic-text"></div>
+          </div>
+          <div id="front-ai-area" class="ai-prompt-area">
+            <button class="ai-generate-btn" id="front-gen-btn"><span>✨</span><span>AI帮我记</span></button>
+            <div class="ai-hint-text">生成一个搞笑联想记忆法</div>
+          </div>
+          <div class="front-bottom">点击卡片查看释义</div>
+        </div>
+        <div class="card-face card-back-face">
+          <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="word-num" id="back-num"></span></div>
+          <div class="def-word-small" id="back-word"></div>
+          <div class="def-cn" id="def-cn"></div>
+          <div class="def-en" id="def-en"></div>
+          <div class="example-inline" id="example-inline" style="display:none"><div class="example-inline-text" id="example-inline-text"></div></div>
+          <div class="back-mnemonic-area">
+            <div class="back-mnemonic-box">
+              <div class="mnemonic-header"><span class="mnemonic-label">✨ 联想记忆</span><button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button></div>
+              <div id="back-mnemonic-content"><button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span>点击生成联想记忆法</span></button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('study-actions').style.display = '';
+  setupCardEvents();
+  buildQueue();
+  showCard();
+}
+
+// ============================================================
+// BROWSE
+// ============================================================
+function renderWordList() {
+  const srNow = SR.load();
+  let list = WORDS.map((w, i) => ({...w, idx: i}));
+
+  if (browseSearch) {
+    const q = browseSearch.toLowerCase();
+    list = list.filter(w => w.w.includes(q) || (w.c && w.c.includes(q)) || (w.e && w.e.toLowerCase().includes(q)));
+  }
+  if (activeFilter === 'new') list = list.filter(w => !srNow[w.idx] || srNow[w.idx].status === 'new');
+  else if (activeFilter === 'learning') list = list.filter(w => srNow[w.idx]?.status === 'learning');
+  else if (activeFilter === 'known') list = list.filter(w => srNow[w.idx]?.status === 'known');
+  else if (['n','v','vt','vi','adj','adv'].includes(activeFilter)) list = list.filter(w => w.p?.startsWith(activeFilter));
+
+  const html = list.slice(0,200).map(w => {
+    const status = srNow[w.idx]?.status || 'new';
+    const bc = status==='known'?'badge-known':status==='learning'?'badge-learning':'badge-new';
+    const bs = status==='known'?'✓':status==='learning'?'…':'·';
+    return `<div class="word-item" onclick="openModal(${w.idx})">
+      <div class="word-item-left">
+        <div class="word-item-name">${w.w} <span class="pos-tag">${w.p||''}</span></div>
+        <div class="word-item-cn">${w.c||w.e||''}</div>
+      </div>
+      <div class="word-item-badge ${bc}">${bs}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('word-list').innerHTML = html +
+    (list.length > 200 ? `<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">共 ${list.length} 词，显示前200条</div>` : '');
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(idx) {
+  currentModalIdx = idx;
+  const word = WORDS[idx];
+
+  document.getElementById('modal-word').textContent = word.w;
+  document.getElementById('modal-pos').textContent = word.p ? word.p + '.' : '';
+  document.getElementById('modal-def-cn').textContent = word.c || '（无中文释义）';
+  document.getElementById('modal-def-en').textContent = word.e || '';
+
+  const exEl = document.getElementById('modal-example');
+  if (word.x) { exEl.textContent = word.x; exEl.style.display = ''; }
+  else exEl.style.display = 'none';
+
+  // Mnemonic section
+  renderModalMnemonic(idx);
+
+  // Note
+  document.getElementById('modal-note').value = localStorage.getItem('gre_note_' + idx) || '';
+
+  // Known button
+  const s = srData[idx];
+  document.getElementById('modal-known-btn').textContent = s?.status === 'known' ? '✓ 已掌握' : '标记已掌握';
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function renderModalMnemonic(idx) {
+  const cached = localStorage.getItem('gre_mn_' + idx) || MNEMONICS[idx] || '';
+  const section = document.getElementById('modal-mnemonic-section');
+
+  if (cached) {
+    section.innerHTML = `
+      <div class="modal-mnemonic-box" style="margin-bottom:14px">
+        <div class="modal-mnemonic-top">
+          <span class="modal-mnemonic-title">✨ 联想记忆</span>
+          <button class="modal-mnemonic-regen" onclick="modalRegenMnemonic(${idx})">↻ 重新生成</button>
+        </div>
+        <div class="modal-mnemonic-text">${escHtml(cached)}</div>
+      </div>`;
+  } else {
+    section.innerHTML = `
+      <button class="modal-mnemonic-generate-btn" id="modal-gen-btn" onclick="modalGenerateMnemonic(${idx})">
+        <span>✨</span><span>AI帮我生成联想记忆法</span>
+      </button>`;
+  }
+}
+
+async function modalGenerateMnemonic(idx) {
+  const btn = document.getElementById('modal-gen-btn');
+  if (btn) { btn.innerHTML = '<span class="spinner"></span><span>生成中…</span>'; btn.classList.add('loading'); }
+  try {
+    const m = await generateMnemonic(idx, false);
+    if (m) renderModalMnemonic(idx);
+    else { if (btn) { btn.innerHTML = '<span>✨</span><span>AI帮我生成联想记忆法</span>'; btn.classList.remove('loading'); } }
+  } catch (e) {
+    if (btn) { btn.innerHTML = '<span>✨</span><span>重试</span>'; btn.classList.remove('loading'); }
+    alert('生成失败：' + e.message);
+  }
+}
+
+async function modalRegenMnemonic(idx) {
+  const section = document.getElementById('modal-mnemonic-section');
+  section.innerHTML = `<div style="text-align:center;padding:16px;color:var(--purple)"><span class="spinner"></span> <span class="pulsing" style="font-size:14px;margin-left:8px">重新生成中…</span></div>`;
+  try {
+    const m = await generateMnemonic(idx, true);
+    if (m) renderModalMnemonic(idx);
+  } catch (e) {
+    renderModalMnemonic(idx);
+    alert('生成失败：' + e.message);
+  }
+}
+
+function closeModal() {
+  if (currentModalIdx >= 0) {
+    const note = document.getElementById('modal-note').value;
+    if (note) localStorage.setItem('gre_note_' + currentModalIdx, note);
+    else localStorage.removeItem('gre_note_' + currentModalIdx);
+  }
+  document.getElementById('modal').classList.remove('open');
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function updateStats() {
+  srData = SR.load();
+  const total = WORDS.length;
+  let known = 0, learning = 0, due = 0;
+  const now = Date.now();
+  for (const k in srData) {
+    const s = srData[k];
+    if (s.status === 'known') known++;
+    else if (s.status === 'learning') { learning++; if (now >= s.due) due++; }
+  }
+  document.getElementById('stat-known').textContent = known;
+  document.getElementById('stat-learning').textContent = learning;
+  document.getElementById('stat-today').textContent = todayCount;
+  document.getElementById('stat-streak').textContent = localStorage.getItem('gre_streak') || '1';
+  document.getElementById('stat-total').textContent = known + learning;
+  const pk = Math.round(known/total*100), pl = Math.round(learning/total*100);
+  document.getElementById('overall-progress').style.width = pk + '%';
+  document.getElementById('bar-known').style.width = pk + '%';
+  document.getElementById('bar-learning').style.width = pl + '%';
+  document.getElementById('bar-new').style.width = Math.max(0, 100-pk-pl) + '%';
+  document.getElementById('pct-known').textContent = pk + '%';
+  document.getElementById('pct-learning').textContent = pl + '%';
+  document.getElementById('pct-new').textContent = Math.max(0, 100-pk-pl) + '%';
+}
+
+function updateApiKeyUI() {
+  const key = localStorage.getItem('gre_api_key');
+  const status = document.getElementById('api-key-status');
+  const input = document.getElementById('api-key-input');
+  if (key) {
+    if (status) { status.textContent = '✅ API Key 已保存（' + key.slice(0,8) + '…）'; status.className = 'api-key-status ok'; }
+    if (input) input.placeholder = '已保存，输入新值可替换';
+  } else {
+    if (status) { status.textContent = '未设置 — 设置后可使用AI联想记忆功能'; status.className = 'api-key-status none'; }
+  }
+}
+
+// ============================================================
+// EVENT LISTENERS
+// ============================================================
+let touchStartX = 0, touchStartY = 0;
+
+function setupSwipe() {
+  const card = document.getElementById('card');
+  if (!card) return;
+  card.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, {passive:true});
+  card.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 70) {
+      if (isFlipped) { dx < 0 ? rateWord(1) : rateWord(3); }
+      else flipCard();
+    }
+  }, {passive:true});
+}
+
+function setupCardEvents() {
+  const card = document.getElementById('card');
+  if (!card) return;
+  card.addEventListener('click', e => {
+    // Don't flip if clicking a button inside the card
+    if (e.target.closest('button')) return;
+    if (!isFlipped) flipCard();
+  });
+
+  setupSwipe();
+
+  // Front generate button
+  const frontBtn = document.getElementById('front-gen-btn');
+  if (frontBtn) frontBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const wordIdx = currentQueue[queueIdx];
+    if (wordIdx !== undefined) triggerGenerateMnemonic(wordIdx);
+  });
+
+  // Back regen button
+  const backRegen = document.getElementById('back-regen-btn');
+  if (backRegen) backRegen.addEventListener('click', e => {
+    e.stopPropagation();
+    const wordIdx = currentQueue[queueIdx];
+    if (wordIdx !== undefined) triggerGenerateMnemonic(wordIdx, true);
+  });
+
+  // Back generate button (initially present)
+  const backGen = document.getElementById('back-gen-btn');
+  if (backGen) backGen.addEventListener('click', e => {
+    e.stopPropagation();
+    const wordIdx = currentQueue[queueIdx];
+    if (wordIdx !== undefined) triggerGenerateMnemonic(wordIdx);
+  });
+}
+
+function setupEventListeners() {
+  setupCardEvents();
+
+  document.getElementById('flip-btn').addEventListener('click', flipCard);
+  document.getElementById('btn-again').addEventListener('click', () => rateWord(1));
+  document.getElementById('btn-hard').addEventListener('click', () => rateWord(2));
+  document.getElementById('btn-easy').addEventListener('click', () => rateWord(3));
+  document.getElementById('skip-btn').addEventListener('click', () => { queueIdx++; isFlipped=false; showCard(); });
+  document.getElementById('prev-btn').addEventListener('click', () => { if(queueIdx>0){queueIdx--;isFlipped=false;showCard();} });
+
+  // Nav
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchView(btn.dataset.view));
+  });
+
+  // Search
+  let searchTimer;
+  document.getElementById('search-input').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { browseSearch = e.target.value.trim(); renderWordList(); }, 200);
+  });
+
+  // Filters
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active'); activeFilter = c.dataset.filter; renderWordList();
+    });
+  });
+
+  // Modal
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+  document.getElementById('modal-study-btn').addEventListener('click', () => {
+    if (currentModalIdx >= 0 && !currentQueue.includes(currentModalIdx)) {
+      currentQueue.splice(queueIdx, 0, currentModalIdx);
+    }
+    closeModal(); switchView('study');
+  });
+  document.getElementById('modal-known-btn').addEventListener('click', () => {
+    if (currentModalIdx < 0) return;
+    srData = SR.load();
+    const s = srData[currentModalIdx] || {interval:0, reps:0, ease:2.5, due:Date.now()};
+    s.status = s.status === 'known' ? 'learning' : 'known';
+    s.interval = 21; s.due = Date.now() + 21*86400000;
+    srData[currentModalIdx] = s; SR.save(srData);
+    document.getElementById('modal-known-btn').textContent = s.status==='known' ? '✓ 已掌握' : '标记已掌握';
+    updateStats(); renderWordList();
+  });
+
+  // Session size
+  const sizeRange = document.getElementById('session-size-range');
+  sizeRange.value = sessionSize;
+  document.getElementById('session-size-val').textContent = sessionSize + '词';
+  sizeRange.addEventListener('input', () => {
+    sessionSize = parseInt(sizeRange.value);
+    document.getElementById('session-size-val').textContent = sessionSize + '词';
+    localStorage.setItem('gre_session_size', String(sessionSize));
+  });
+
+  // New words minimum
+  const newWordsRange = document.getElementById('new-words-range');
+  newWordsRange.value = newWordsMin;
+  document.getElementById('new-words-val').textContent = newWordsMin + '词';
+  newWordsRange.addEventListener('input', () => {
+    newWordsMin = parseInt(newWordsRange.value);
+    document.getElementById('new-words-val').textContent = newWordsMin + '词';
+    localStorage.setItem('gre_new_words_min', String(newWordsMin));
+  });
+
+  // API key save
+  document.getElementById('api-key-save').addEventListener('click', () => {
+    const val = document.getElementById('api-key-input').value.trim();
+    if (val && val.startsWith('sk-')) {
+      localStorage.setItem('gre_api_key', val);
+      document.getElementById('api-key-input').value = '';
+      updateApiKeyUI();
+    } else {
+      alert('请输入有效的 API Key（以 sk- 开头）');
+    }
+  });
+
+  // Reset
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    if (confirm('确定要重置所有学习进度？')) {
+      localStorage.removeItem('gre_sr'); localStorage.removeItem('gre_today_count'); localStorage.removeItem('gre_streak');
+      srData = {}; todayCount = 0; buildQueue(); showCard(); updateStats(); renderWordList();
+    }
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+    if (isFlipped) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); rateWord(1); }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); rateWord(2); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); rateWord(3); }
+    }
+    if (e.key === 'Escape') closeModal();
+  });
+}
+
+function switchView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  document.getElementById(view + '-view').classList.remove('hidden');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.nav-btn[data-view="${view}"]`).classList.add('active');
+  if (view === 'stats') updateStats();
+  if (view === 'browse') renderWordList();
+}
+</script>
+</body>
+</html>
