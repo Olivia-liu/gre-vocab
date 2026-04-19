@@ -767,13 +767,18 @@ function showCard() {
 
   if (queueIdx >= currentQueue.length) { showDone(); return; }
 
+  const wordIdx = currentQueue[queueIdx];
+
+  // Always update header/progress regardless of card state
+  document.getElementById('progress-fill').style.width = (queueIdx / currentQueue.length * 100) + '%';
+  document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
+  document.getElementById('header-sub').textContent = `第 ${queueIdx+1}/${currentQueue.length} 词`;
+
   const card = document.getElementById('card');
   if (!card) return;
   card.classList.remove('flipped');
   document.getElementById('flip-row').style.display = '';
   document.getElementById('rate-row').style.display = 'none';
-
-  const wordIdx = currentQueue[queueIdx];
   const word = WORDS[wordIdx];
   const pos = word.p || '';
 
@@ -827,12 +832,6 @@ function showCard() {
   const likeBtn = document.getElementById('back-like-btn');
   if (flagBtn) flagBtn.style.opacity = flagged.has(wordIdx) ? '1' : '0.35';
   if (likeBtn) likeBtn.style.opacity = liked.has(wordIdx) ? '1' : '0.35';
-
-  // Progress + header
-  document.getElementById('progress-fill').style.width = (queueIdx / currentQueue.length * 100) + '%';
-  document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
-  document.getElementById('header-sub').textContent = `第 ${queueIdx+1}/${currentQueue.length} 词`;
-
 }
 
 function setBackMnemonicUI(wordIdx, text, loading) {
