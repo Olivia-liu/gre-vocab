@@ -646,6 +646,17 @@ async function syncPush() {
       method: 'PUT',
       body: JSON.stringify(srData)
     });
+    // Push extras: flagged words + custom mnemonics
+    const flagged = [...getFlagged()];
+    const mnemonics = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('gre_mn_')) mnemonics[k] = localStorage.getItem(k);
+    }
+    await fetch(SYNC_URL + '?token=' + encodeURIComponent(token + '_extras'), {
+      method: 'PUT',
+      body: JSON.stringify({ flagged, mnemonics })
+    });
   } catch(e) {}
 }
 
@@ -662,15 +673,33 @@ async function syncPull() {
     const res = await fetch(SYNC_URL + '?token=' + encodeURIComponent(token));
     if (!res.ok) return;
     const cloud = await res.json();
-    if (!cloud || !Object.keys(cloud).length) return;
-    // Merge: per word, keep whichever was reviewed more recently
-    let changed = false;
-    for (const [k, v] of Object.entries(cloud)) {
-      if (!srData[k] || v.due > srData[k].due) {
-        srData[k] = v; changed = true;
+    if (cloud && Object.keys(cloud).length) {
+      // Merge: per word, keep whichever was reviewed more recently
+      let changed = false;
+      for (const [k, v] of Object.entries(cloud)) {
+        if (!srData[k] || v.due > srData[k].due) {
+          srData[k] = v; changed = true;
+        }
+      }
+      if (changed) SR.save(srData);
+    }
+    // Pull extras: flagged words + custom mnemonics
+    const extRes = await fetch(SYNC_URL + '?token=' + encodeURIComponent(token + '_extras'));
+    if (!extRes.ok) return;
+    const extras = await extRes.json();
+    if (!extras || !Object.keys(extras).length) return;
+    // Merge flagged: union
+    if (extras.flagged && extras.flagged.length) {
+      const local = getFlagged();
+      extras.flagged.forEach(i => local.add(i));
+      localStorage.setItem('gre_flagged', JSON.stringify([...local]));
+    }
+    // Merge mnemonics: cloud wins (allows Claude-generated fixes to propagate)
+    if (extras.mnemonics) {
+      for (const [k, v] of Object.entries(extras.mnemonics)) {
+        if (k.startsWith('gre_mn_')) localStorage.setItem(k, v);
       }
     }
-    if (changed) SR.save(srData);
   } catch(e) {}
 }
 let newWordsMin = parseInt(localStorage.getItem('gre_new_words_min') || '10');
