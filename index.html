@@ -173,9 +173,9 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
   border-radius: 10px; border: 2.5px solid; z-index: 10;
   transition: opacity 0.08s;
 }
-.swipe-label-left  { top: 24px; left: 20px;  color: var(--red);    border-color: var(--red);    transform: rotate(-10deg); }
-.swipe-label-right { top: 24px; right: 20px; color: var(--green);  border-color: var(--green);  transform: rotate(10deg); }
-.swipe-label-down  { bottom: 24px; left: 50%; transform: translateX(-50%); color: var(--orange); border-color: var(--orange); }
+.swipe-label-left  { top: 24px; right: 20px; color: var(--red);    border-color: var(--red);    transform: rotate(10deg); }
+.swipe-label-right { top: 24px; left: 20px;  color: var(--green);  border-color: var(--green);  transform: rotate(-10deg); }
+.swipe-label-down  { top: 24px; left: 50%; transform: translateX(-50%); color: var(--orange); border-color: var(--orange); }
 
 /* Done state */
 .done-card { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 24px; }
@@ -344,9 +344,9 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
             </div>
             <!-- Back -->
             <div class="card-face card-back-face">
-              <div class="swipe-label swipe-label-left" id="swipe-left">← 不会</div>
-              <div class="swipe-label swipe-label-right" id="swipe-right">记住了 →</div>
-              <div class="swipe-label swipe-label-down" id="swipe-down">↓ 模糊</div>
+              <div class="swipe-label swipe-label-left" id="swipe-left">不会 →</div>
+              <div class="swipe-label swipe-label-right" id="swipe-right">← 记住了</div>
+              <div class="swipe-label swipe-label-down" id="swipe-down">模糊 ↑</div>
               <div class="back-top">
                 <span class="back-pos" id="back-pos"></span>
                 <span class="word-num" id="back-num"></span>
