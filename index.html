@@ -362,6 +362,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
                   <div class="mnemonic-header">
                     <span class="mnemonic-label">✨ 联想记忆</span>
                     <div style="display:flex;gap:4px;">
+                      <button class="mnemonic-regen-btn" id="back-like-btn" title="好记！">👍</button>
                       <button class="mnemonic-regen-btn" id="back-flag-btn" title="标记需要改进">👎</button>
                       <!-- <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button> -->
                     </div>
@@ -816,10 +817,13 @@ function showCard() {
     defEn.style.marginBottom = '8px';
   }
 
-  // Flag button state
+  // Like/Flag button state
   const flagged = getFlagged();
+  const liked = getLiked();
   const flagBtn = document.getElementById('back-flag-btn');
+  const likeBtn = document.getElementById('back-like-btn');
   if (flagBtn) flagBtn.style.opacity = flagged.has(wordIdx) ? '1' : '0.35';
+  if (likeBtn) likeBtn.style.opacity = liked.has(wordIdx) ? '1' : '0.35';
 
   // Progress + header
   document.getElementById('progress-fill').style.width = (queueIdx / currentQueue.length * 100) + '%';
@@ -848,6 +852,10 @@ function setBackMnemonicUI(wordIdx, text, loading) {
 
 function getFlagged() {
   try { return new Set(JSON.parse(localStorage.getItem('gre_flagged') || '[]')); }
+  catch { return new Set(); }
+}
+function getLiked() {
+  try { return new Set(JSON.parse(localStorage.getItem('gre_liked') || '[]')); }
   catch { return new Set(); }
 }
 
@@ -959,6 +967,7 @@ function nextRound() {
               <div class="mnemonic-header">
                 <span class="mnemonic-label">✨ 联想记忆</span>
                 <div style="display:flex;gap:4px;">
+                  <button class="mnemonic-regen-btn" id="back-like-btn" title="好记！">👍</button>
                   <button class="mnemonic-regen-btn" id="back-flag-btn" title="标记需要改进">👎</button>
                   <!-- <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button> -->
                 </div>
@@ -1155,6 +1164,30 @@ function setupCardEvents() {
     if (wordIdx !== undefined) triggerGenerateMnemonic(wordIdx);
   });
 
+  // Back like button (no-op, just visual)
+  const backLike = document.getElementById('back-like-btn');
+  if (backLike) backLike.addEventListener('click', e => {
+    e.stopPropagation();
+    const wordIdx = currentQueue[queueIdx];
+    if (wordIdx === undefined) return;
+    const liked = getLiked();
+    if (liked.has(wordIdx)) {
+      liked.delete(wordIdx);
+      backLike.style.opacity = '0.35';
+    } else {
+      liked.add(wordIdx);
+      backLike.style.opacity = '1';
+      // Remove flag if liked
+      const flagged = getFlagged();
+      if (flagged.has(wordIdx)) {
+        flagged.delete(wordIdx);
+        document.getElementById('back-flag-btn').style.opacity = '0.35';
+        localStorage.setItem('gre_flagged', JSON.stringify([...flagged]));
+      }
+    }
+    localStorage.setItem('gre_liked', JSON.stringify([...liked]));
+  });
+
   // Back flag button
   const backFlag = document.getElementById('back-flag-btn');
   if (backFlag) backFlag.addEventListener('click', e => {
@@ -1168,6 +1201,13 @@ function setupCardEvents() {
     } else {
       flagged.add(wordIdx);
       backFlag.style.opacity = '1';
+      // Remove like if flagged
+      const liked = getLiked();
+      if (liked.has(wordIdx)) {
+        liked.delete(wordIdx);
+        document.getElementById('back-like-btn').style.opacity = '0.35';
+        localStorage.setItem('gre_liked', JSON.stringify([...liked]));
+      }
     }
     localStorage.setItem('gre_flagged', JSON.stringify([...flagged]));
   });
