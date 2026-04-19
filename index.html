@@ -644,7 +644,7 @@ const SR = {
       else s.interval = Math.round(s.interval * s.ease);
       s.ease = Math.min(2.5, s.ease + 0.1); s.status = s.interval>=7 ? 'known' : 'learning';
     }
-    s.due = now + s.interval * 86400000; s.reviewed_at = now; d[id] = s; return s;
+    s.due = now + s.interval * 86400000; d[id] = s; return s;
   }
 };
 
@@ -750,17 +750,9 @@ async function syncPush() {
   const token = getSyncToken();
   if (!token) return;
   try {
-    // Embed meta (theme, todayCount, streak) into SR data under __meta__ key
-    const payload = Object.assign({}, srData, { __meta__: {
-      theme: localStorage.getItem('gre_theme') || '',
-      todayCount: parseInt(localStorage.getItem('gre_today_count') || '0'),
-      todayKey: localStorage.getItem('gre_today_key') || '',
-      streak: parseInt(localStorage.getItem('gre_streak') || '0'),
-      lastDay: localStorage.getItem('gre_last_day') || '',
-    }});
     await fetch(SYNC_URL + '?token=' + encodeURIComponent(token), {
       method: 'PUT',
-      body: JSON.stringify(payload)
+      body: JSON.stringify(srData)
     });
     // Push extras: flagged words + custom mnemonics
     const flagged = [...getFlagged()];
@@ -771,15 +763,7 @@ async function syncPush() {
     }
     await fetch(SYNC_URL + '?token=' + encodeURIComponent(token + '_extras'), {
       method: 'PUT',
-      body: JSON.stringify({
-        flagged,
-        mnemonics,
-        theme: localStorage.getItem('gre_theme') || '',
-        todayCount: parseInt(localStorage.getItem('gre_today_count') || '0'),
-        todayKey: localStorage.getItem('gre_today_key') || '',
-        streak: parseInt(localStorage.getItem('gre_streak') || '0'),
-        lastDay: localStorage.getItem('gre_last_day') || '',
-      })
+      body: JSON.stringify({ flagged, mnemonics })
     });
   } catch(e) {}
 }
@@ -798,30 +782,9 @@ async function syncPull() {
     if (!res.ok) return;
     const cloud = await res.json();
     if (cloud && Object.keys(cloud).length) {
-      // Apply meta if present
-      if (cloud.__meta__) {
-        const m = cloud.__meta__;
-        // Theme: cloud wins if local not set
-        if (m.theme !== undefined && !localStorage.getItem('gre_theme')) {
-          localStorage.setItem('gre_theme', m.theme);
-          applyTheme(m.theme);
-        }
-        // Today count: take max (same calendar day only)
-        const localTodayKey = new Date().toDateString();
-        if (m.todayKey === localTodayKey && m.todayCount > todayCount) {
-          todayCount = m.todayCount;
-          localStorage.setItem('gre_today_count', String(todayCount));
-        }
-        // Streak: take max
-        if (m.streak > parseInt(localStorage.getItem('gre_streak') || '0')) {
-          localStorage.setItem('gre_streak', String(m.streak));
-          if (m.lastDay) localStorage.setItem('gre_last_day', m.lastDay);
-        }
-      }
-      // Merge word SR data: per word, keep whichever was reviewed more recently
+      // Merge: per word, keep whichever was reviewed more recently
       let changed = false;
       for (const [k, v] of Object.entries(cloud)) {
-        if (k === '__meta__') continue;
         if (!srData[k] || v.due > srData[k].due) {
           srData[k] = v; changed = true;
         }
@@ -844,22 +807,6 @@ async function syncPull() {
       for (const [k, v] of Object.entries(extras.mnemonics)) {
         if (k.startsWith('gre_mn_')) localStorage.setItem(k, v);
       }
-    }
-    // Theme: cloud wins if local not set
-    if (extras.theme !== undefined && !localStorage.getItem('gre_theme')) {
-      localStorage.setItem('gre_theme', extras.theme);
-      applyTheme(extras.theme);
-    }
-    // Today count: take max (same calendar day only)
-    const todayKey = new Date().toDateString();
-    if (extras.todayKey === todayKey && extras.todayCount > todayCount) {
-      todayCount = extras.todayCount;
-      localStorage.setItem('gre_today_count', String(todayCount));
-    }
-    // Streak: take max
-    if (extras.streak > parseInt(localStorage.getItem('gre_streak') || '0')) {
-      localStorage.setItem('gre_streak', String(extras.streak));
-      if (extras.lastDay) localStorage.setItem('gre_last_day', extras.lastDay);
     }
   } catch(e) {}
 }
@@ -928,19 +875,12 @@ function initTheme() {
 function init() {
   initTheme();
   document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
-  syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); syncPush(); });
+  syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); });
   setupEventListeners();
   updateApiKeyUI();
   fixCardHeight();
   setTimeout(fixCardHeight, 300);
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-    // Auto-reload when a new SW takes over, so users always get fresh code in one refresh
-    let swRefreshing = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!swRefreshing) { swRefreshing = true; window.location.reload(); }
-    });
-  }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
 // ============================================================
@@ -1339,31 +1279,15 @@ function updateStats() {
   const total = WORDS.length;
   let known = 0, learning = 0, due = 0;
   const now = Date.now();
-  const todayStart = new Date(); todayStart.setHours(0,0,0,0);
-  const todayStr = todayStart.toDateString();
-  let computedToday = 0;
-  const reviewDays = new Set();
   for (const k in srData) {
     const s = srData[k];
     if (s.status === 'known') known++;
     else if (s.status === 'learning') { learning++; if (now >= s.due) due++; }
-    if (s.reviewed_at) {
-      const d = new Date(s.reviewed_at);
-      if (d >= todayStart) computedToday++;
-      reviewDays.add(d.toDateString());
-    }
-  }
-  // Compute streak: count consecutive days ending today
-  let streak = 0;
-  const check = new Date(todayStart);
-  while (reviewDays.has(check.toDateString())) {
-    streak++;
-    check.setDate(check.getDate() - 1);
   }
   document.getElementById('stat-known').textContent = known;
   document.getElementById('stat-learning').textContent = learning;
-  document.getElementById('stat-today').textContent = computedToday;
-  document.getElementById('stat-streak').textContent = streak || 0;
+  document.getElementById('stat-today').textContent = todayCount;
+  document.getElementById('stat-streak').textContent = localStorage.getItem('gre_streak') || '1';
   document.getElementById('stat-total').textContent = known + learning;
   const pk = Math.round(known/total*100), pl = Math.round(learning/total*100);
   document.getElementById('overall-progress').style.width = pk + '%';
