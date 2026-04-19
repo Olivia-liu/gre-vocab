@@ -209,7 +209,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .def-en { font-size: 13px; color: var(--text2); line-height: 1.4; border-left: 3px solid var(--sep); padding-left: 10px; flex-shrink: 0; }
 
 /* Mnemonic on back */
-.back-mnemonic-area { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.back-mnemonic-area { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-top: 4px; }
 .back-mnemonic-box {
   flex: 1; background: linear-gradient(135deg, color-mix(in srgb, var(--purple) 10%, transparent), color-mix(in srgb, var(--yellow) 8%, transparent));
   border-radius: 14px; padding: 10px 12px;
@@ -977,10 +977,10 @@ function showCard() {
   if (word.x) {
     document.getElementById('example-inline-text').textContent = word.x;
     exInline.style.display = '';
-    defEn.style.marginBottom = '4px';
+    defEn.style.marginBottom = '8px';
   } else {
     exInline.style.display = 'none';
-    defEn.style.marginBottom = '8px';
+    defEn.style.marginBottom = '14px';
   }
 
   // Like/Flag button state
