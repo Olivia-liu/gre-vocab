@@ -349,7 +349,10 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
                 <div class="back-mnemonic-box">
                   <div class="mnemonic-header">
                     <span class="mnemonic-label">✨ 联想记忆</span>
-                    <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button>
+                    <div style="display:flex;gap:4px;">
+                      <button class="mnemonic-regen-btn" id="back-flag-btn" title="标记需要改进">👎</button>
+                      <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button>
+                    </div>
                   </div>
                   <div id="back-mnemonic-content">
                     <button class="back-mnemonic-generate" id="back-gen-btn">
@@ -801,6 +804,11 @@ function showCard() {
     defEn.style.marginBottom = '8px';
   }
 
+  // Flag button state
+  const flagged = getFlagged();
+  const flagBtn = document.getElementById('back-flag-btn');
+  if (flagBtn) flagBtn.style.opacity = flagged.has(wordIdx) ? '1' : '0.35';
+
   // Progress + header
   document.getElementById('progress-fill').style.width = (queueIdx / currentQueue.length * 100) + '%';
   document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
@@ -824,6 +832,11 @@ function setBackMnemonicUI(wordIdx, text, loading) {
     const btn = document.getElementById('back-gen-btn');
     if (btn) btn.addEventListener('click', e => { e.stopPropagation(); triggerGenerateMnemonic(wordIdx); });
   }
+}
+
+function getFlagged() {
+  try { return new Set(JSON.parse(localStorage.getItem('gre_flagged') || '[]')); }
+  catch { return new Set(); }
 }
 
 function escHtml(s) {
@@ -1134,6 +1147,23 @@ function setupCardEvents() {
     e.stopPropagation();
     const wordIdx = currentQueue[queueIdx];
     if (wordIdx !== undefined) triggerGenerateMnemonic(wordIdx);
+  });
+
+  // Back flag button
+  const backFlag = document.getElementById('back-flag-btn');
+  if (backFlag) backFlag.addEventListener('click', e => {
+    e.stopPropagation();
+    const wordIdx = currentQueue[queueIdx];
+    if (wordIdx === undefined) return;
+    const flagged = getFlagged();
+    if (flagged.has(wordIdx)) {
+      flagged.delete(wordIdx);
+      backFlag.style.opacity = '0.35';
+    } else {
+      flagged.add(wordIdx);
+      backFlag.style.opacity = '1';
+    }
+    localStorage.setItem('gre_flagged', JSON.stringify([...flagged]));
   });
 
   // Back regen button
