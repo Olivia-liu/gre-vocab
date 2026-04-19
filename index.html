@@ -339,6 +339,7 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
                 <span class="word-num" id="back-num"></span>
               </div>
               <div class="def-word-small" id="back-word"></div>
+              <div class="word-ipa" id="back-ipa"></div>
               <div class="def-cn" id="def-cn"></div>
               <div class="def-en" id="def-en"></div>
               <div class="example-inline" id="example-inline" style="display:none">
@@ -762,7 +763,9 @@ function showCard() {
   frontPosEl.textContent = '';
   frontPosEl.style.display = 'none';
   document.getElementById('front-word').textContent = word.w;
-  document.getElementById('front-ipa').textContent = PHONETICS[wordIdx] ? '/' + PHONETICS[wordIdx] + '/' : '';
+  const ipa = PHONETICS[wordIdx] ? '/' + PHONETICS[wordIdx] + '/' : '';
+  document.getElementById('front-ipa').textContent = ipa;
+  document.getElementById('back-ipa').textContent = ipa;
   document.getElementById('front-num').textContent = `${queueIdx + 1}/${currentQueue.length}`;
 
   // Front mnemonic — prefer localStorage override, then bundled
