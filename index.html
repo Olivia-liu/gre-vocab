@@ -644,7 +644,7 @@ const SR = {
       else s.interval = Math.round(s.interval * s.ease);
       s.ease = Math.min(2.5, s.ease + 0.1); s.status = s.interval>=7 ? 'known' : 'learning';
     }
-    s.due = now + s.interval * 86400000; d[id] = s; return s;
+    s.due = now + s.interval * 86400000; s.reviewed_at = now; d[id] = s; return s;
   }
 };
 
@@ -1339,15 +1339,31 @@ function updateStats() {
   const total = WORDS.length;
   let known = 0, learning = 0, due = 0;
   const now = Date.now();
+  const todayStart = new Date(); todayStart.setHours(0,0,0,0);
+  const todayStr = todayStart.toDateString();
+  let computedToday = 0;
+  const reviewDays = new Set();
   for (const k in srData) {
     const s = srData[k];
     if (s.status === 'known') known++;
     else if (s.status === 'learning') { learning++; if (now >= s.due) due++; }
+    if (s.reviewed_at) {
+      const d = new Date(s.reviewed_at);
+      if (d >= todayStart) computedToday++;
+      reviewDays.add(d.toDateString());
+    }
+  }
+  // Compute streak: count consecutive days ending today
+  let streak = 0;
+  const check = new Date(todayStart);
+  while (reviewDays.has(check.toDateString())) {
+    streak++;
+    check.setDate(check.getDate() - 1);
   }
   document.getElementById('stat-known').textContent = known;
   document.getElementById('stat-learning').textContent = learning;
-  document.getElementById('stat-today').textContent = todayCount;
-  document.getElementById('stat-streak').textContent = localStorage.getItem('gre_streak') || '1';
+  document.getElementById('stat-today').textContent = computedToday;
+  document.getElementById('stat-streak').textContent = streak || 0;
   document.getElementById('stat-total').textContent = known + learning;
   const pk = Math.round(known/total*100), pl = Math.round(learning/total*100);
   document.getElementById('overall-progress').style.width = pk + '%';
