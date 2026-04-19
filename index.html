@@ -704,7 +704,10 @@ function fixCardHeight() {
     - nav.getBoundingClientRect().height
     - sessionBar.getBoundingClientRect().height
     - studyActions.getBoundingClientRect().height
-    - 32; // card-area padding + buffer
+    - 16   // study-view padding top(10) + bottom(6)
+    - 10   // session-bar margin-bottom
+    - 24   // card-area padding top(12) + bottom(12)
+    - 8;   // safety buffer
   if (available > 100) {
     document.querySelectorAll('.card-outer').forEach(el => el.style.maxHeight = available + 'px');
   }
