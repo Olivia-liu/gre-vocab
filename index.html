@@ -899,7 +899,7 @@ function initTheme() {
 function init() {
   initTheme();
   document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
-  syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); });
+  syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); syncPush(); });
   setupEventListeners();
   updateApiKeyUI();
   fixCardHeight();
