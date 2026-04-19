@@ -933,7 +933,14 @@ function init() {
   updateApiKeyUI();
   fixCardHeight();
   setTimeout(fixCardHeight, 300);
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+    // Auto-reload when a new SW takes over, so users always get fresh code in one refresh
+    let swRefreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!swRefreshing) { swRefreshing = true; window.location.reload(); }
+    });
+  }
 }
 
 // ============================================================
