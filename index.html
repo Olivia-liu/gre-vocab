@@ -1127,21 +1127,6 @@ function updateApiKeyUI() {
 // ============================================================
 // EVENT LISTENERS
 // ============================================================
-let touchStartX = 0, touchStartY = 0;
-
-function setupSwipe() {
-  const card = document.getElementById('card');
-  if (!card) return;
-  card.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, {passive:true});
-  card.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 70) {
-      if (isFlipped) { dx < 0 ? rateWord(1) : rateWord(3); }
-      else flipCard();
-    }
-  }, {passive:true});
-}
 
 function setupCardEvents() {
   const card = document.getElementById('card');
@@ -1151,8 +1136,6 @@ function setupCardEvents() {
     if (e.target.closest('button')) return;
     if (!isFlipped) flipCard();
   });
-
-  setupSwipe();
 
   // Front generate button
   const frontBtn = document.getElementById('front-gen-btn');
