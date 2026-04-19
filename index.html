@@ -898,6 +898,14 @@ function flipCard() {
   document.getElementById('card').classList.add('flipped');
   document.getElementById('flip-row').style.display = 'none';
   document.getElementById('rate-row').style.display = 'flex';
+  // Refresh like/flag button state for current word
+  const wordIdx = currentQueue[queueIdx];
+  if (wordIdx !== undefined) {
+    const flagBtn = document.getElementById('back-flag-btn');
+    const likeBtn = document.getElementById('back-like-btn');
+    if (flagBtn) flagBtn.style.opacity = getFlagged().has(wordIdx) ? '1' : '0.35';
+    if (likeBtn) likeBtn.style.opacity = getLiked().has(wordIdx) ? '1' : '0.35';
+  }
 }
 
 function rateWord(q) {
