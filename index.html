@@ -750,9 +750,17 @@ async function syncPush() {
   const token = getSyncToken();
   if (!token) return;
   try {
+    // Embed meta (theme, todayCount, streak) into SR data under __meta__ key
+    const payload = Object.assign({}, srData, { __meta__: {
+      theme: localStorage.getItem('gre_theme') || '',
+      todayCount: parseInt(localStorage.getItem('gre_today_count') || '0'),
+      todayKey: localStorage.getItem('gre_today_key') || '',
+      streak: parseInt(localStorage.getItem('gre_streak') || '0'),
+      lastDay: localStorage.getItem('gre_last_day') || '',
+    }});
     await fetch(SYNC_URL + '?token=' + encodeURIComponent(token), {
       method: 'PUT',
-      body: JSON.stringify(srData)
+      body: JSON.stringify(payload)
     });
     // Push extras: flagged words + custom mnemonics
     const flagged = [...getFlagged()];
@@ -790,9 +798,30 @@ async function syncPull() {
     if (!res.ok) return;
     const cloud = await res.json();
     if (cloud && Object.keys(cloud).length) {
-      // Merge: per word, keep whichever was reviewed more recently
+      // Apply meta if present
+      if (cloud.__meta__) {
+        const m = cloud.__meta__;
+        // Theme: cloud wins if local not set
+        if (m.theme !== undefined && !localStorage.getItem('gre_theme')) {
+          localStorage.setItem('gre_theme', m.theme);
+          applyTheme(m.theme);
+        }
+        // Today count: take max (same calendar day only)
+        const localTodayKey = new Date().toDateString();
+        if (m.todayKey === localTodayKey && m.todayCount > todayCount) {
+          todayCount = m.todayCount;
+          localStorage.setItem('gre_today_count', String(todayCount));
+        }
+        // Streak: take max
+        if (m.streak > parseInt(localStorage.getItem('gre_streak') || '0')) {
+          localStorage.setItem('gre_streak', String(m.streak));
+          if (m.lastDay) localStorage.setItem('gre_last_day', m.lastDay);
+        }
+      }
+      // Merge word SR data: per word, keep whichever was reviewed more recently
       let changed = false;
       for (const [k, v] of Object.entries(cloud)) {
+        if (k === '__meta__') continue;
         if (!srData[k] || v.due > srData[k].due) {
           srData[k] = v; changed = true;
         }
