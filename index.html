@@ -175,7 +175,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 }
 .swipe-label-left  { top: 24px; right: 20px; color: var(--red);    border-color: var(--red);    transform: rotate(10deg); }
 .swipe-label-right { top: 24px; left: 20px;  color: var(--green);  border-color: var(--green);  transform: rotate(-10deg); }
-.swipe-label-down  { top: 24px; left: 50%; transform: translateX(-50%); color: var(--orange); border-color: var(--orange); }
+.swipe-label-down  { bottom: 24px; left: 50%; transform: translateX(-50%); color: var(--orange); border-color: var(--orange); }
 
 /* Done state */
 .done-card { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 24px; }
@@ -346,7 +346,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
             <div class="card-face card-back-face">
               <div class="swipe-label swipe-label-left" id="swipe-left">不会 →</div>
               <div class="swipe-label swipe-label-right" id="swipe-right">← 记住了</div>
-              <div class="swipe-label swipe-label-down" id="swipe-down">模糊 ↑</div>
+              <div class="swipe-label swipe-label-down" id="swipe-down">↑ 模糊</div>
               <div class="back-top">
                 <span class="back-pos" id="back-pos"></span>
                 <span class="word-num" id="back-num"></span>
@@ -383,7 +383,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
         </div>
         <div class="rate-row" id="rate-row" style="display:none">
           <button class="rate-btn btn-again" id="btn-again"><span>← 不会</span><small>明天再来</small></button>
-          <button class="rate-btn btn-hard" id="btn-hard"><span>↑↓ 模糊</span><small>2天后</small></button>
+          <button class="rate-btn btn-hard" id="btn-hard"><span>↑ 模糊</span><small>2天后</small></button>
           <button class="rate-btn btn-easy" id="btn-easy"><span>记住了 →</span><small>4天+</small></button>
         </div>
       </div>
@@ -1208,7 +1208,7 @@ function setupSwipeGestures() {
     const prog = v => Math.min(1, Math.max(0, (Math.abs(v) - 15) / (THRESHOLD - 15)));
     document.getElementById('swipe-left').style.opacity  = dx < -15 && ax > ay ? prog(dx) : 0;
     document.getElementById('swipe-right').style.opacity = dx >  15 && ax > ay ? prog(dx) : 0;
-    document.getElementById('swipe-down').style.opacity  = dy >  15 && ay > ax ? prog(dy) : 0;
+    document.getElementById('swipe-down').style.opacity  = dy < -15 && ay > ax ? prog(dy) : 0;
   }
   function clearHint() {
     ['swipe-left','swipe-right','swipe-down'].forEach(id => document.getElementById(id).style.opacity = 0);
@@ -1240,7 +1240,7 @@ function setupSwipeGestures() {
 
     const ax = Math.abs(dx), ay = Math.abs(dy);
     if (ax > THRESHOLD && ax > ay)      flyOff(dx > 0 ? 'right' : 'left', dx, dy);
-    else if (dy > THRESHOLD && ay > ax) flyOff('down', dx, dy);
+    else if (-dy > THRESHOLD && ay > ax) flyOff('up', dx, dy);
     else snapBack();
   }, { passive: true });
 
@@ -1253,7 +1253,7 @@ function setupSwipeGestures() {
 
   function flyOff(dir, dx, dy) {
     const W = window.innerWidth;
-    const map = { left: [-W*1.5, dy, -30], right: [W*1.5, dy, 30], down: [dx, window.innerHeight, dx*0.1] };
+    const map = { left: [-W*1.5, dy, -30], right: [W*1.5, dy, 30], up: [dx, -window.innerHeight, dx*0.1] };
     const [tx, ty, rot] = map[dir];
     cardOuter.style.transition = 'transform 0.32s ease-in, opacity 0.32s ease-in';
     cardOuter.style.transform = `translate(${tx}px,${ty}px) rotate(${rot}deg)`;
@@ -1263,7 +1263,7 @@ function setupSwipeGestures() {
       cardOuter.style.transform = '';
       cardOuter.style.opacity = '1';
       if (dir === 'left')  rateWord(1);
-      else if (dir === 'down') rateWord(2);
+      else if (dir === 'up') rateWord(2);
       else rateWord(3);
     }, 320);
   }
@@ -1383,7 +1383,7 @@ function setupEventListeners() {
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
     if (isFlipped) {
       if (e.key === 'ArrowLeft') { e.preventDefault(); rateWord(1); }
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); rateWord(2); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); rateWord(2); }
       if (e.key === 'ArrowRight') { e.preventDefault(); rateWord(3); }
     }
     if (e.key === 'Escape') closeModal();
