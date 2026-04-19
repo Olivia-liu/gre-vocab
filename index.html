@@ -902,14 +902,13 @@ function rateWord(q) {
   localStorage.setItem('gre_today_count', String(todayCount));
   localStorage.setItem('gre_last_day', new Date().toDateString());
   queueIdx++;
-  setTimeout(() => {
-    const c = document.getElementById('card');
-    c.style.transition = 'none';
-    c.classList.remove('flipped');
-    void c.offsetWidth;
-    c.style.transition = '';
-    showCard();
-  }, 80);
+  isFlipped = false;
+  const c = document.getElementById('card');
+  c.style.transition = 'none';
+  c.classList.remove('flipped');
+  void c.offsetWidth;
+  c.style.transition = '';
+  showCard();
 }
 
 function showDone() {
