@@ -709,7 +709,7 @@ function fixCardHeight() {
   const cardOuter = document.querySelector('.card-outer');
   const studyActions = document.getElementById('study-actions');
   if (!cardOuter || !studyActions) return;
-  const maxH = studyActions.getBoundingClientRect().top - cardOuter.getBoundingClientRect().top - 12;
+  const maxH = studyActions.getBoundingClientRect().top - cardOuter.getBoundingClientRect().top - 44;
   if (maxH > 100) cardOuter.style.maxHeight = maxH + 'px';
 }
 window.addEventListener('resize', fixCardHeight);
