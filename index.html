@@ -166,6 +166,17 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 .btn-hard  { background: color-mix(in srgb, var(--orange) 15%, transparent); color: var(--orange); }
 .btn-easy  { background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green); }
 
+/* Swipe labels */
+.swipe-label {
+  position: absolute; pointer-events: none; opacity: 0;
+  font-size: 18px; font-weight: 800; padding: 5px 14px;
+  border-radius: 10px; border: 2.5px solid; z-index: 10;
+  transition: opacity 0.08s;
+}
+.swipe-label-left  { top: 24px; left: 20px;  color: var(--red);    border-color: var(--red);    transform: rotate(-10deg); }
+.swipe-label-right { top: 24px; right: 20px; color: var(--green);  border-color: var(--green);  transform: rotate(10deg); }
+.swipe-label-down  { bottom: 24px; left: 50%; transform: translateX(-50%); color: var(--orange); border-color: var(--orange); }
+
 /* Done state */
 .done-card { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 24px; }
 .done-icon { font-size: 64px; margin-bottom: 16px; }
@@ -335,6 +346,9 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
             </div>
             <!-- Back -->
             <div class="card-face card-back-face">
+              <div class="swipe-label swipe-label-left" id="swipe-left">← 不会</div>
+              <div class="swipe-label swipe-label-right" id="swipe-right">记住了 →</div>
+              <div class="swipe-label swipe-label-down" id="swipe-down">↓ 模糊</div>
               <div class="back-top">
                 <span class="back-pos" id="back-pos"></span>
                 <span class="word-num" id="back-num"></span>
@@ -1183,8 +1197,85 @@ function setupCardEvents() {
   });
 }
 
+function setupSwipeGestures() {
+  const cardOuter = document.querySelector('.card-outer');
+  const cardArea  = document.querySelector('.card-area');
+  if (!cardOuter || !cardArea) return;
+
+  const THRESHOLD = 75;
+  let startX, startY, dragging = false;
+
+  function setHint(dx, dy) {
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+    const prog = v => Math.min(1, Math.max(0, (Math.abs(v) - 15) / (THRESHOLD - 15)));
+    document.getElementById('swipe-left').style.opacity  = dx < -15 && ax > ay ? prog(dx) : 0;
+    document.getElementById('swipe-right').style.opacity = dx >  15 && ax > ay ? prog(dx) : 0;
+    document.getElementById('swipe-down').style.opacity  = dy >  15 && ay > ax ? prog(dy) : 0;
+  }
+  function clearHint() {
+    ['swipe-left','swipe-right','swipe-down'].forEach(id => document.getElementById(id).style.opacity = 0);
+  }
+
+  cardOuter.addEventListener('touchstart', e => {
+    if (!isFlipped) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragging = true;
+    cardOuter.style.transition = 'none';
+    cardArea.style.overflow = 'visible';
+  }, { passive: true });
+
+  cardOuter.addEventListener('touchmove', e => {
+    if (!dragging || !isFlipped) return;
+    e.preventDefault();
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    cardOuter.style.transform = `translate(${dx}px,${dy}px) rotate(${dx * 0.07}deg)`;
+    setHint(dx, dy);
+  }, { passive: false });
+
+  cardOuter.addEventListener('touchend', e => {
+    if (!dragging || !isFlipped) return;
+    dragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    clearHint();
+
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+    if (ax > THRESHOLD && ax > ay)      flyOff(dx > 0 ? 'right' : 'left', dx, dy);
+    else if (dy > THRESHOLD && ay > ax) flyOff('down', dx, dy);
+    else snapBack();
+  }, { passive: true });
+
+  function snapBack() {
+    cardArea.style.overflow = '';
+    cardOuter.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+    cardOuter.style.transform = '';
+    setTimeout(() => cardOuter.style.transition = '', 400);
+  }
+
+  function flyOff(dir, dx, dy) {
+    const W = window.innerWidth;
+    const map = { left: [-W*1.5, dy, -30], right: [W*1.5, dy, 30], down: [dx, window.innerHeight, dx*0.1] };
+    const [tx, ty, rot] = map[dir];
+    cardOuter.style.transition = 'transform 0.32s ease-in, opacity 0.32s ease-in';
+    cardOuter.style.transform = `translate(${tx}px,${ty}px) rotate(${rot}deg)`;
+    cardOuter.style.opacity = '0';
+    setTimeout(() => {
+      cardOuter.style.transition = 'none';
+      cardOuter.style.transform = '';
+      cardOuter.style.opacity = '1';
+      cardArea.style.overflow = '';
+      if (dir === 'left')  rateWord(1);
+      else if (dir === 'down') rateWord(2);
+      else rateWord(3);
+    }, 320);
+  }
+}
+
 function setupEventListeners() {
   setupCardEvents();
+  setupSwipeGestures();
 
   document.getElementById('flip-btn').addEventListener('click', flipCard);
   document.getElementById('btn-again').addEventListener('click', () => rateWord(1));
