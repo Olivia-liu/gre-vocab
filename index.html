@@ -1253,6 +1253,7 @@ function setupSwipeGestures() {
   }
 
   function flyOff(dir, dx, dy) {
+    cardArea.style.overflow = 'visible';
     const W = window.innerWidth;
     const map = { left: [-W*1.5, dy, -30], right: [W*1.5, dy, 30], up: [dx, -window.innerHeight, dx*0.1] };
     const [tx, ty, rot] = map[dir];
@@ -1260,6 +1261,7 @@ function setupSwipeGestures() {
     cardOuter.style.transform = `translate(${tx}px,${ty}px) rotate(${rot}deg)`;
     cardOuter.style.opacity = '0';
     setTimeout(() => {
+      cardArea.style.overflow = '';
       cardOuter.style.transition = 'none';
       cardOuter.style.transform = '';
       cardOuter.style.opacity = '1';
