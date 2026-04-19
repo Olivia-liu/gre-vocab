@@ -694,23 +694,11 @@ Promise.all([
 }).catch(() => { document.getElementById('front-word').textContent = '加载失败，请检查服务器'; });
 
 function fixCardHeight() {
-  const header = document.getElementById('header');
-  const nav = document.getElementById('nav');
-  const sessionBar = document.querySelector('.session-bar');
+  const cardOuter = document.querySelector('.card-outer');
   const studyActions = document.getElementById('study-actions');
-  if (!header || !nav || !sessionBar || !studyActions) return;
-  const available = window.innerHeight
-    - header.getBoundingClientRect().height
-    - nav.getBoundingClientRect().height
-    - sessionBar.getBoundingClientRect().height
-    - studyActions.getBoundingClientRect().height
-    - 16   // study-view padding top(10) + bottom(6)
-    - 10   // session-bar margin-bottom
-    - 24   // card-area padding top(12) + bottom(12)
-    - 8;   // safety buffer
-  if (available > 100) {
-    document.querySelectorAll('.card-outer').forEach(el => el.style.maxHeight = available + 'px');
-  }
+  if (!cardOuter || !studyActions) return;
+  const maxH = studyActions.getBoundingClientRect().top - cardOuter.getBoundingClientRect().top - 16;
+  if (maxH > 100) cardOuter.style.maxHeight = maxH + 'px';
 }
 window.addEventListener('resize', fixCardHeight);
 
