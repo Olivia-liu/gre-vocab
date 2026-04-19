@@ -763,7 +763,15 @@ async function syncPush() {
     }
     await fetch(SYNC_URL + '?token=' + encodeURIComponent(token + '_extras'), {
       method: 'PUT',
-      body: JSON.stringify({ flagged, mnemonics })
+      body: JSON.stringify({
+        flagged,
+        mnemonics,
+        theme: localStorage.getItem('gre_theme') || '',
+        todayCount: parseInt(localStorage.getItem('gre_today_count') || '0'),
+        todayKey: localStorage.getItem('gre_today_key') || '',
+        streak: parseInt(localStorage.getItem('gre_streak') || '0'),
+        lastDay: localStorage.getItem('gre_last_day') || '',
+      })
     });
   } catch(e) {}
 }
@@ -807,6 +815,22 @@ async function syncPull() {
       for (const [k, v] of Object.entries(extras.mnemonics)) {
         if (k.startsWith('gre_mn_')) localStorage.setItem(k, v);
       }
+    }
+    // Theme: cloud wins if local not set
+    if (extras.theme !== undefined && !localStorage.getItem('gre_theme')) {
+      localStorage.setItem('gre_theme', extras.theme);
+      applyTheme(extras.theme);
+    }
+    // Today count: take max (same calendar day only)
+    const todayKey = new Date().toDateString();
+    if (extras.todayKey === todayKey && extras.todayCount > todayCount) {
+      todayCount = extras.todayCount;
+      localStorage.setItem('gre_today_count', String(todayCount));
+    }
+    // Streak: take max
+    if (extras.streak > parseInt(localStorage.getItem('gre_streak') || '0')) {
+      localStorage.setItem('gre_streak', String(extras.streak));
+      if (extras.lastDay) localStorage.setItem('gre_last_day', extras.lastDay);
     }
   } catch(e) {}
 }
