@@ -716,6 +716,7 @@ function fixCardHeight() {
 window.addEventListener('resize', fixCardHeight);
 
 function init() {
+  document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
   syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); });
   setupEventListeners();
   updateApiKeyUI();
@@ -763,12 +764,14 @@ function shuffle(a) {
 // ============================================================
 function showCard() {
   isFlipped = false;
+
+  if (queueIdx >= currentQueue.length) { showDone(); return; }
+
   const card = document.getElementById('card');
+  if (!card) return;
   card.classList.remove('flipped');
   document.getElementById('flip-row').style.display = '';
   document.getElementById('rate-row').style.display = 'none';
-
-  if (queueIdx >= currentQueue.length) { showDone(); return; }
 
   const wordIdx = currentQueue[queueIdx];
   const word = WORDS[wordIdx];
