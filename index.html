@@ -944,17 +944,25 @@ function nextRound() {
             <button class="ai-generate-btn" id="front-gen-btn"><span>✨</span><span>AI帮我记</span></button>
             <div class="ai-hint-text">生成一个搞笑联想记忆法</div>
           </div>
-          <div class="front-bottom">点击卡片查看释义</div>
         </div>
         <div class="card-face card-back-face">
+          <div class="swipe-label swipe-label-left" id="swipe-left">← 不会</div>
+          <div class="swipe-label swipe-label-right" id="swipe-right">记住了 →</div>
+          <div class="swipe-label swipe-label-down" id="swipe-down">↑ 模糊</div>
           <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="word-num" id="back-num"></span></div>
-          <div class="def-word-small" id="back-word"></div>
+          <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
           <div class="def-cn" id="def-cn"></div>
           <div class="def-en" id="def-en"></div>
           <div class="example-inline" id="example-inline" style="display:none"><div class="example-inline-text" id="example-inline-text"></div></div>
           <div class="back-mnemonic-area">
             <div class="back-mnemonic-box">
-              <div class="mnemonic-header"><span class="mnemonic-label">✨ 联想记忆</span><button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button></div>
+              <div class="mnemonic-header">
+                <span class="mnemonic-label">✨ 联想记忆</span>
+                <div style="display:flex;gap:4px;">
+                  <button class="mnemonic-regen-btn" id="back-flag-btn" title="标记需要改进">👎</button>
+                  <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button>
+                </div>
+              </div>
               <div id="back-mnemonic-content"><button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span>点击生成联想记忆法</span></button></div>
             </div>
           </div>
@@ -963,6 +971,8 @@ function nextRound() {
     </div>`;
   document.getElementById('study-actions').style.display = '';
   setupCardEvents();
+  setupSwipeGestures();
+  fixCardHeight();
   buildQueue();
   showCard();
 }
