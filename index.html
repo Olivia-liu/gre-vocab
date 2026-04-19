@@ -28,6 +28,74 @@
   --safe-top: env(safe-area-inset-top, 44px);
   --safe-bot: env(safe-area-inset-bottom, 34px);
 }
+/* 🌊 深海信笺 */
+[data-theme="ocean"] {
+  --bg: #0d1b2a;
+  --card-bg: #1a2f45;
+  --text: #e8f0f7;
+  --text2: #a8c0d6;
+  --text3: #6a90b0;
+  --sep: #2a4a65;
+  --blue: #4fc3a1;
+  --green: #2ecc71;
+  --orange: #f39c12;
+  --red: #e74c3c;
+  --yellow: #f1c40f;
+  --purple: #9b59b6;
+  --nav-bg: rgba(13,27,42,0.94);
+  --header-bg: rgba(13,27,42,0.94);
+}
+/* 🍵 茶馆午后 */
+[data-theme="teahouse"] {
+  --bg: #f5f0e8;
+  --card-bg: #fffef9;
+  --text: #2c2416;
+  --text2: #5c4f3a;
+  --text3: #9c8e78;
+  --sep: #ddd5c0;
+  --blue: #6b9e6b;
+  --green: #4a9e4a;
+  --orange: #d4832a;
+  --red: #c05a4a;
+  --yellow: #c8a020;
+  --purple: #8a6a9a;
+  --nav-bg: rgba(245,240,232,0.94);
+  --header-bg: rgba(245,240,232,0.94);
+}
+/* 🌙 午夜电台 */
+[data-theme="midnight"] {
+  --bg: #1a1a2e;
+  --card-bg: #242440;
+  --text: #e8e8f0;
+  --text2: #b0b0c8;
+  --text3: #7070a0;
+  --sep: #343460;
+  --blue: #9b8ec4;
+  --green: #5cb87a;
+  --orange: #e8a838;
+  --red: #e05c7a;
+  --yellow: #f0d050;
+  --purple: #c47fa8;
+  --nav-bg: rgba(26,26,46,0.94);
+  --header-bg: rgba(26,26,46,0.94);
+}
+/* 🍑 桃子汽水 */
+[data-theme="peach"] {
+  --bg: #fff0ec;
+  --card-bg: #fff8f6;
+  --text: #2a1a16;
+  --text2: #6a3a2e;
+  --text3: #b07a6e;
+  --sep: #f0d0c8;
+  --blue: #e8785a;
+  --green: #5ab878;
+  --orange: #f0983a;
+  --red: #e05048;
+  --yellow: #e8c030;
+  --purple: #c47aa0;
+  --nav-bg: rgba(255,240,236,0.94);
+  --header-bg: rgba(255,240,236,0.94);
+}
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: var(--bg); color: var(--text); }
 #app { display: flex; flex-direction: column; height: 100%; height: -webkit-fill-available; }
@@ -295,7 +363,16 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 .pulsing { animation: pulse 1.5s ease infinite; }
+.theme-btn { display:flex; align-items:center; gap:6px; background:var(--card-bg); border:1.5px solid var(--sep); border-radius:20px; padding:6px 14px 6px 8px; font-size:13px; color:var(--text2); cursor:pointer; transition:border-color 0.15s; }
+.theme-btn span { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+.theme-btn.active { border-color:var(--blue); color:var(--blue); font-weight:600; }
+.theme-btn:active { opacity:0.7; }
 </style>
+<script>
+  // Apply theme before render to avoid flash
+  const _t = localStorage.getItem('gre_theme');
+  if (_t) document.documentElement.setAttribute('data-theme', _t);
+</script>
 </head>
 <body>
 <div id="app">
@@ -447,6 +524,19 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
             <span class="settings-value" id="new-words-val">10词</span>
           </div>
           <input type="range" id="new-words-range" min="0" max="60" step="5" value="10" style="width:100%">
+        </div>
+
+        <div style="border-top:1px solid var(--sep);"></div>
+
+        <div>
+          <div class="api-key-label" style="margin-bottom:12px;">🎨 主题</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="theme-btn" data-theme="" title="初雪"><span style="background:#b87a90"></span>初雪</button>
+            <button class="theme-btn" data-theme="ocean" title="深海信笺"><span style="background:#4fc3a1"></span>深海信笺</button>
+            <button class="theme-btn" data-theme="teahouse" title="茶馆午后"><span style="background:#6b9e6b"></span>茶馆午后</button>
+            <button class="theme-btn" data-theme="midnight" title="午夜电台"><span style="background:#9b8ec4"></span>午夜电台</button>
+            <button class="theme-btn" data-theme="peach" title="桃子汽水"><span style="background:#e8785a"></span>桃子汽水</button>
+          </div>
         </div>
 
         <div style="border-top:1px solid var(--sep);"></div>
@@ -744,7 +834,28 @@ function fixCardHeight() {
 }
 window.addEventListener('resize', fixCardHeight);
 
+function applyTheme(theme) {
+  if (theme) document.documentElement.setAttribute('data-theme', theme);
+  else document.documentElement.removeAttribute('data-theme');
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === theme);
+  });
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('gre_theme') || '';
+  applyTheme(saved);
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.dataset.theme;
+      localStorage.setItem('gre_theme', theme);
+      applyTheme(theme);
+    });
+  });
+}
+
 function init() {
+  initTheme();
   document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
   syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); });
   setupEventListeners();
