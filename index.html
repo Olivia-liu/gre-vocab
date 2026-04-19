@@ -51,7 +51,7 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
 .view.hidden { opacity: 0; pointer-events: none; transform: translateX(30px); }
 
 /* Study View */
-#study-view { padding: 10px 16px 6px; }
+#study-view { padding: 6px 16px 6px; }
 .session-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .session-count { font-size: 15px; font-weight: 500; color: var(--text2); }
 .session-icons { display: flex; gap: 16px; }
@@ -305,6 +305,11 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
         <div class="header-title">GRE 单词</div>
         <div class="header-sub" id="header-sub">要你命3000</div>
       </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="session-count" id="session-count" style="font-size:13px;color:var(--text2);font-weight:500;"></span>
+        <button class="icon-btn" id="prev-btn" style="font-size:15px">◀</button>
+        <button class="icon-btn" id="skip-btn">⏭</button>
+      </div>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
   </header>
@@ -312,13 +317,6 @@ html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMa
   <div id="content">
     <!-- Study View -->
     <div class="view" id="study-view">
-      <div class="session-bar">
-        <span class="session-count" id="session-count">今日: 0 词</span>
-        <div class="session-icons">
-          <button class="icon-btn" id="prev-btn" style="font-size:16px">◀</button>
-          <button class="icon-btn" id="skip-btn">⏭</button>
-        </div>
-      </div>
       <div class="card-area">
         <div class="card-outer">
           <div class="card" id="card">
@@ -711,7 +709,7 @@ function fixCardHeight() {
   const cardOuter = document.querySelector('.card-outer');
   const studyActions = document.getElementById('study-actions');
   if (!cardOuter || !studyActions) return;
-  const maxH = studyActions.getBoundingClientRect().top - cardOuter.getBoundingClientRect().top - 16;
+  const maxH = studyActions.getBoundingClientRect().top - cardOuter.getBoundingClientRect().top - 12;
   if (maxH > 100) cardOuter.style.maxHeight = maxH + 'px';
 }
 window.addEventListener('resize', fixCardHeight);
