@@ -1189,7 +1189,7 @@ function renderWordList() {
   else if (activeFilter === 'mastered') list = list.filter(w => mastered.has(w.idx));
   else if (['n','v','vt','vi','adj','adv'].includes(activeFilter)) list = list.filter(w => w.p?.startsWith(activeFilter));
 
-  const html = list.slice(0,200).map(w => {
+  const html = list.map(w => {
     const isMastered = mastered.has(w.idx);
     const status = srNow[w.idx]?.status || 'new';
     const bc = isMastered?'badge-mastered':status==='known'?'badge-known':status==='learning'?'badge-learning':'badge-new';
