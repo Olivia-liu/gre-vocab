@@ -1204,7 +1204,7 @@ function renderWordList() {
   }).join('');
 
   document.getElementById('word-list').innerHTML = html +
-    '';
+    `<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">共 ${list.length} 词</div>`;
 }
 
 // ============================================================
