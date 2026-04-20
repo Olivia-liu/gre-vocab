@@ -401,7 +401,6 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
     <div class="header-row">
       <div>
         <div class="header-title">GRE 单词</div>
-        <div class="header-sub" id="header-sub">要你命3000</div>
         <div style="font-size:12px;color:var(--text3);margin-top:1px;" id="session-count"></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
@@ -955,7 +954,6 @@ function showCard() {
   // Always update header/progress regardless of card state
   document.getElementById('progress-fill').style.width = (queueIdx / currentQueue.length * 100) + '%';
   document.getElementById('session-count').textContent = `今日: ${todayCount} 词`;
-  document.getElementById('header-sub').textContent = `第 ${queueIdx+1}/${currentQueue.length} 词`;
 
   const card = document.getElementById('card');
   if (!card) return;
