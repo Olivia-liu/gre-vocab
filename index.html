@@ -282,7 +282,12 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .filter-row::-webkit-scrollbar { display: none; }
 .filter-chip { flex-shrink: 0; padding: 5px 12px; border-radius: 20px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--card-bg); color: var(--text3); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 .filter-chip.active { background: var(--blue); color: #fff; }
-.word-list { flex: 1; overflow-y: auto; padding: 0 16px 8px; -webkit-overflow-scrolling: touch; }
+.word-list-wrap { flex: 1; min-height: 0; position: relative; display: flex; }
+.word-list { flex: 1; overflow-y: auto; padding: 0 16px 8px; -webkit-overflow-scrolling: touch; padding-right: 28px; }
+.section-header { font-size: 12px; font-weight: 700; color: var(--text3); padding: 8px 0 2px; letter-spacing: 0.5px; position: sticky; top: 0; background: var(--bg); z-index: 1; }
+.alpha-bar { position: absolute; right: 0; top: 0; bottom: 0; width: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0; padding: 4px 0; z-index: 10; touch-action: none; }
+.alpha-bar span { font-size: 10px; font-weight: 600; color: var(--blue); line-height: 1.5; width: 20px; text-align: center; cursor: pointer; user-select: none; }
+.alpha-bar span.dim { color: var(--text3); font-weight: 400; }
 .word-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--sep); cursor: pointer; gap: 10px; }
 .word-item:last-child { border-bottom: none; }
 .word-item-left { flex: 1; min-width: 0; }
@@ -505,7 +510,10 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
           <button class="filter-chip" data-filter="adj">形容词</button>
         </div>
       </div>
-      <div class="word-list" id="word-list"></div>
+      <div class="word-list-wrap">
+        <div class="word-list" id="word-list"></div>
+        <div class="alpha-bar" id="alpha-bar"></div>
+      </div>
     </div>
 
     <!-- Stats View -->
@@ -1215,22 +1223,68 @@ function renderWordList() {
   else if (activeFilter === 'mastered') list = list.filter(w => mastered.has(w.idx));
   else if (['n','v','vt','vi','adj','adv'].includes(activeFilter)) list = list.filter(w => w.p?.startsWith(activeFilter));
 
-  const html = list.map(w => {
-    const isMastered = mastered.has(w.idx);
-    const status = srNow[w.idx]?.status || 'new';
-    const bc = isMastered?'badge-mastered':status==='known'?'badge-known':status==='learning'?'badge-learning':'badge-new';
-    const bs = isMastered?'⊘':status==='known'?'✓':status==='learning'?'…':'·';
-    return `<div class="word-item" onclick="openModal(${w.idx})">
-      <div class="word-item-left">
-        <div class="word-item-name">${w.w} <span class="pos-tag">${w.p||''}</span></div>
-        <div class="word-item-cn">${w.c||w.e||''}</div>
-      </div>
-      <div class="word-item-badge ${bc}">${bs}</div>
-    </div>`;
-  }).join('');
+  // Sort alphabetically and group by first letter
+  list.sort((a, b) => a.w.localeCompare(b.w));
+  const groups = {};
+  for (const w of list) {
+    const letter = w.w[0].toUpperCase();
+    if (!groups[letter]) groups[letter] = [];
+    groups[letter].push(w);
+  }
+  const letters = Object.keys(groups).sort();
 
-  document.getElementById('word-list').innerHTML = html +
-    `<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">共 ${list.length} 词</div>`;
+  let html = '';
+  for (const letter of letters) {
+    html += `<div class="section-header" id="section-${letter}">${letter}</div>`;
+    for (const w of groups[letter]) {
+      const isMastered = mastered.has(w.idx);
+      const status = srNow[w.idx]?.status || 'new';
+      const bc = isMastered?'badge-mastered':status==='known'?'badge-known':status==='learning'?'badge-learning':'badge-new';
+      const bs = isMastered?'⊘':status==='known'?'✓':status==='learning'?'…':'·';
+      html += `<div class="word-item" onclick="openModal(${w.idx})">
+        <div class="word-item-left">
+          <div class="word-item-name">${w.w} <span class="pos-tag">${w.p||''}</span></div>
+          <div class="word-item-cn">${w.c||w.e||''}</div>
+        </div>
+        <div class="word-item-badge ${bc}">${bs}</div>
+      </div>`;
+    }
+  }
+  html += `<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">共 ${list.length} 词</div>`;
+  document.getElementById('word-list').innerHTML = html;
+
+  // Build alpha bar
+  const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  document.getElementById('alpha-bar').innerHTML = allLetters.map(l =>
+    `<span class="${letters.includes(l) ? '' : 'dim'}" data-letter="${l}">${l}</span>`
+  ).join('');
+
+  setupAlphaBar();
+}
+
+function setupAlphaBar() {
+  const bar = document.getElementById('alpha-bar');
+  const wordList = document.getElementById('word-list');
+  if (!bar || !wordList) return;
+
+  function scrollToLetter(letter) {
+    const section = document.getElementById('section-' + letter);
+    if (section) wordList.scrollTop = section.offsetTop - wordList.offsetTop;
+  }
+
+  function letterFromTouch(e) {
+    const touch = e.touches[0];
+    const spans = bar.querySelectorAll('span:not(.dim)');
+    for (const s of spans) {
+      const r = s.getBoundingClientRect();
+      if (touch.clientY >= r.top && touch.clientY <= r.bottom) return s.dataset.letter;
+    }
+    return null;
+  }
+
+  bar.addEventListener('touchstart', e => { e.preventDefault(); const l = letterFromTouch(e); if (l) scrollToLetter(l); }, { passive: false });
+  bar.addEventListener('touchmove',  e => { e.preventDefault(); const l = letterFromTouch(e); if (l) scrollToLetter(l); }, { passive: false });
+  bar.addEventListener('click', e => { const l = e.target.dataset?.letter; if (l) scrollToLetter(l); });
 }
 
 // ============================================================
