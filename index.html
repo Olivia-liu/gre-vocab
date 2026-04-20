@@ -292,6 +292,10 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .badge-new { background: color-mix(in srgb, var(--text3) 15%, transparent); color: var(--text3); }
 .badge-learning { background: color-mix(in srgb, var(--orange) 15%, transparent); color: var(--orange); }
 .badge-known { background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green); }
+.badge-mastered { background: color-mix(in srgb, var(--blue) 12%, transparent); color: var(--blue); }
+.skip-hint-row { text-align: center; margin-top: 6px; }
+.skip-hint-btn { background: none; border: none; font-size: 12px; color: var(--text3); cursor: pointer; padding: 4px 10px; border-radius: 8px; border: 1px solid transparent; transition: color 0.15s, border-color 0.15s; }
+.skip-hint-btn:active { color: var(--blue); border-color: color-mix(in srgb, var(--blue) 30%, transparent); }
 .pos-tag { font-size: 11px; color: var(--blue); font-weight: 600; text-transform: uppercase; }
 
 /* Stats View */
@@ -481,6 +485,9 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
           <button class="rate-btn btn-hard" id="btn-hard"><span>↑ 模糊</span><small>2天后</small></button>
           <button class="rate-btn btn-easy" id="btn-easy"><span>记住了 →</span><small>4天+</small></button>
         </div>
+        <div class="skip-hint-row" id="skip-hint-row" style="display:none">
+          <button class="skip-hint-btn" id="btn-skip">已熟悉此词，永久跳过</button>
+        </div>
       </div>
     </div>
 
@@ -493,6 +500,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
           <button class="filter-chip" data-filter="new">未学</button>
           <button class="filter-chip" data-filter="learning">学习中</button>
           <button class="filter-chip" data-filter="known">已掌握</button>
+          <button class="filter-chip" data-filter="mastered">已熟悉</button>
           <button class="filter-chip" data-filter="n">名词</button>
           <button class="filter-chip" data-filter="v">动词</button>
           <button class="filter-chip" data-filter="adj">形容词</button>
@@ -507,6 +515,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-value" id="stat-known">0</div><div class="stat-label">✅ 已掌握</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-learning">0</div><div class="stat-label">📖 学习中</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-mastered">0</div><div class="stat-label">⊘ 已熟悉</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-today">0</div><div class="stat-label">🔥 今日学习</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">⚡ 连续天数</div></div>
         <div class="stat-card wide">
@@ -733,6 +742,8 @@ abhor → "啊！好恶！" 看到一只超大蟑螂，你尖叫"啊！好恶！
 // ============================================================
 let WORDS = [];
 let srData = SR.load();
+let mastered = new Set(JSON.parse(localStorage.getItem('gre_mastered') || '[]'));
+function saveMastered() { localStorage.setItem('gre_mastered', JSON.stringify([...mastered])); }
 let currentQueue = [];
 let queueIdx = 0;
 let isFlipped = false;
@@ -763,7 +774,7 @@ async function syncPush() {
     }
     await fetch(SYNC_URL + '?token=' + encodeURIComponent(token + '_extras'), {
       method: 'PUT',
-      body: JSON.stringify({ flagged, mnemonics })
+      body: JSON.stringify({ flagged, mnemonics, mastered: [...mastered] })
     });
   } catch(e) {}
 }
@@ -807,6 +818,11 @@ async function syncPull() {
       for (const [k, v] of Object.entries(extras.mnemonics)) {
         if (k.startsWith('gre_mn_')) localStorage.setItem(k, v);
       }
+    }
+    // Merge mastered: union
+    if (extras.mastered && extras.mastered.length) {
+      extras.mastered.forEach(i => mastered.add(Number(i)));
+      saveMastered();
     }
   } catch(e) {}
 }
@@ -890,6 +906,7 @@ function buildQueue() {
   const now = Date.now();
   const due = [], newWords = [];
   for (let i = 0; i < WORDS.length; i++) {
+    if (mastered.has(i)) continue;
     const s = srData[i];
     if (!s || s.status === 'new') newWords.push(i);
     else if (s.status !== 'known' || now >= s.due) due.push(i);
@@ -901,7 +918,7 @@ function buildQueue() {
   const combined = [...due.slice(0, dueSlots), ...newWords.slice(0, Math.max(newSlots, sessionSize - dueSlots))].slice(0, sessionSize);
   shuffle(combined);
   if (combined.length === 0) {
-    const known = Object.keys(srData).filter(k => srData[k].status === 'known');
+    const known = Object.keys(srData).filter(k => !mastered.has(Number(k)) && srData[k].status === 'known');
     shuffle(known);
     currentQueue = known.slice(0, sessionSize).map(Number);
   } else {
@@ -937,6 +954,7 @@ function showCard() {
   card.classList.remove('flipped');
   document.getElementById('flip-row').style.display = '';
   document.getElementById('rate-row').style.display = 'none';
+  document.getElementById('skip-hint-row').style.display = 'none';
   const word = WORDS[wordIdx];
   const pos = word.p || '';
 
@@ -1058,6 +1076,7 @@ function flipCard() {
   document.getElementById('card').classList.add('flipped');
   document.getElementById('flip-row').style.display = 'none';
   document.getElementById('rate-row').style.display = 'flex';
+  document.getElementById('skip-hint-row').style.display = '';
   // Refresh like/flag button state for current word
   const wordIdx = currentQueue[queueIdx];
   if (wordIdx !== undefined) {
@@ -1165,15 +1184,17 @@ function renderWordList() {
     const q = browseSearch.toLowerCase();
     list = list.filter(w => w.w.includes(q) || (w.c && w.c.includes(q)) || (w.e && w.e.toLowerCase().includes(q)));
   }
-  if (activeFilter === 'new') list = list.filter(w => !srNow[w.idx] || srNow[w.idx].status === 'new');
-  else if (activeFilter === 'learning') list = list.filter(w => srNow[w.idx]?.status === 'learning');
-  else if (activeFilter === 'known') list = list.filter(w => srNow[w.idx]?.status === 'known');
+  if (activeFilter === 'new') list = list.filter(w => !mastered.has(w.idx) && (!srNow[w.idx] || srNow[w.idx].status === 'new'));
+  else if (activeFilter === 'learning') list = list.filter(w => !mastered.has(w.idx) && srNow[w.idx]?.status === 'learning');
+  else if (activeFilter === 'known') list = list.filter(w => !mastered.has(w.idx) && srNow[w.idx]?.status === 'known');
+  else if (activeFilter === 'mastered') list = list.filter(w => mastered.has(w.idx));
   else if (['n','v','vt','vi','adj','adv'].includes(activeFilter)) list = list.filter(w => w.p?.startsWith(activeFilter));
 
   const html = list.slice(0,200).map(w => {
+    const isMastered = mastered.has(w.idx);
     const status = srNow[w.idx]?.status || 'new';
-    const bc = status==='known'?'badge-known':status==='learning'?'badge-learning':'badge-new';
-    const bs = status==='known'?'✓':status==='learning'?'…':'·';
+    const bc = isMastered?'badge-mastered':status==='known'?'badge-known':status==='learning'?'badge-learning':'badge-new';
+    const bs = isMastered?'⊘':status==='known'?'✓':status==='learning'?'…':'·';
     return `<div class="word-item" onclick="openModal(${w.idx})">
       <div class="word-item-left">
         <div class="word-item-name">${w.w} <span class="pos-tag">${w.p||''}</span></div>
@@ -1209,9 +1230,8 @@ function openModal(idx) {
   // Note
   document.getElementById('modal-note').value = localStorage.getItem('gre_note_' + idx) || '';
 
-  // Known button
-  const s = srData[idx];
-  document.getElementById('modal-known-btn').textContent = s?.status === 'known' ? '✓ 已掌握' : '标记已掌握';
+  // Mastered button
+  document.getElementById('modal-known-btn').textContent = mastered.has(idx) ? '⊘ 已熟悉（点击取消）' : '已熟悉，永久跳过';
 
   document.getElementById('modal').classList.add('open');
 }
@@ -1286,6 +1306,7 @@ function updateStats() {
   }
   document.getElementById('stat-known').textContent = known;
   document.getElementById('stat-learning').textContent = learning;
+  document.getElementById('stat-mastered').textContent = mastered.size;
   document.getElementById('stat-today').textContent = todayCount;
   document.getElementById('stat-streak').textContent = localStorage.getItem('gre_streak') || '1';
   document.getElementById('stat-total').textContent = known + learning;
@@ -1481,6 +1502,14 @@ function setupEventListeners() {
   document.getElementById('btn-again').addEventListener('click', () => rateWord(1));
   document.getElementById('btn-hard').addEventListener('click', () => rateWord(2));
   document.getElementById('btn-easy').addEventListener('click', () => rateWord(3));
+  document.getElementById('btn-skip').addEventListener('click', () => {
+    const wordIdx = currentQueue[queueIdx];
+    if (wordIdx !== undefined) { mastered.add(wordIdx); saveMastered(); syncPushDebounced(); }
+    currentQueue.splice(queueIdx, 1);
+    isFlipped = false;
+    showCard();
+    updateStats(); renderWordList();
+  });
   document.getElementById('skip-btn').addEventListener('click', () => { queueIdx++; isFlipped=false; showCard(); });
   document.getElementById('prev-btn').addEventListener('click', () => { if(queueIdx>0){queueIdx--;isFlipped=false;showCard();} });
 
@@ -1516,12 +1545,10 @@ function setupEventListeners() {
   });
   document.getElementById('modal-known-btn').addEventListener('click', () => {
     if (currentModalIdx < 0) return;
-    srData = SR.load();
-    const s = srData[currentModalIdx] || {interval:0, reps:0, ease:2.5, due:Date.now()};
-    s.status = s.status === 'known' ? 'learning' : 'known';
-    s.interval = 21; s.due = Date.now() + 21*86400000;
-    srData[currentModalIdx] = s; SR.save(srData);
-    document.getElementById('modal-known-btn').textContent = s.status==='known' ? '✓ 已掌握' : '标记已掌握';
+    if (mastered.has(currentModalIdx)) mastered.delete(currentModalIdx);
+    else mastered.add(currentModalIdx);
+    saveMastered(); syncPushDebounced();
+    document.getElementById('modal-known-btn').textContent = mastered.has(currentModalIdx) ? '⊘ 已熟悉（点击取消）' : '已熟悉，永久跳过';
     updateStats(); renderWordList();
   });
 
