@@ -1076,7 +1076,7 @@ function flipCard() {
   document.getElementById('card').classList.add('flipped');
   document.getElementById('flip-row').style.display = 'none';
   document.getElementById('rate-row').style.display = 'flex';
-  document.getElementById('skip-hint-row').style.display = '';
+  document.getElementById('skip-hint-row').style.display = 'none';
   // Refresh like/flag button state for current word
   const wordIdx = currentQueue[queueIdx];
   if (wordIdx !== undefined) {
