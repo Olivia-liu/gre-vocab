@@ -1504,13 +1504,24 @@ function setupEventListeners() {
   document.getElementById('btn-skip').addEventListener('click', () => {
     const wordIdx = currentQueue[queueIdx];
     if (wordIdx !== undefined) { mastered.add(wordIdx); saveMastered(); syncPushDebounced(); }
-    currentQueue.splice(queueIdx, 1);
+    queueIdx++;
     isFlipped = false;
     showCard();
     updateStats(); renderWordList();
   });
   document.getElementById('skip-btn').addEventListener('click', () => { queueIdx++; isFlipped=false; showCard(); });
-  document.getElementById('prev-btn').addEventListener('click', () => { if(queueIdx>0){queueIdx--;isFlipped=false;showCard();} });
+  document.getElementById('prev-btn').addEventListener('click', () => {
+    if (queueIdx > 0) {
+      queueIdx--;
+      // If we're returning to a word that was just skipped, un-master it
+      const wordIdx = currentQueue[queueIdx];
+      if (wordIdx !== undefined && mastered.has(wordIdx)) {
+        mastered.delete(wordIdx); saveMastered(); syncPushDebounced();
+        updateStats(); renderWordList();
+      }
+      isFlipped = false; showCard();
+    }
+  });
 
   // Nav
   document.querySelectorAll('.nav-btn').forEach(btn => {
