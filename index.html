@@ -888,8 +888,23 @@ function initTheme() {
   });
 }
 
+function getSessionEmoji(n) {
+  if (n < 50)  return '🌱';
+  if (n < 100) return '📖';
+  if (n < 150) return '⚡';
+  if (n < 200) return '🔥';
+  if (n < 250) return '🚀';
+  if (n < 300) return '⭐';
+  if (n < 350) return '🌟';
+  if (n < 400) return '💎';
+  if (n < 450) return '👑';
+  if (n < 500) return '🏆';
+  return '🦄';
+}
+
 function updateSessionCount() {
-  document.getElementById('session-count').innerHTML = `🔥 <span style="font-size:16px;font-weight:700;color:var(--text)">${todayCount}</span><span style="font-size:11px;color:var(--text3)"> 词</span>`;
+  const emoji = getSessionEmoji(todayCount);
+  document.getElementById('session-count').innerHTML = `${emoji} <span style="font-size:11px;color:var(--text3)">今日 </span><span style="font-size:16px;font-weight:700;color:var(--text)">${todayCount}</span><span style="font-size:11px;color:var(--text3)"> 词</span>`;
 }
 
 function init() {
