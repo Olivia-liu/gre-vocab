@@ -499,7 +499,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
           <button class="filter-chip active" data-filter="all">全部</button>
           <button class="filter-chip" data-filter="new">未学</button>
           <button class="filter-chip" data-filter="learning">学习中</button>
-          <button class="filter-chip" data-filter="known">已掌握</button>
+          <button class="filter-chip" data-filter="known">已学会</button>
           <button class="filter-chip" data-filter="mastered">已熟悉</button>
           <button class="filter-chip" data-filter="n">名词</button>
           <button class="filter-chip" data-filter="v">动词</button>
@@ -513,7 +513,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
     <div class="view hidden" id="stats-view">
       <div class="stats-title" style="padding:0 4px">学习统计</div>
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-value" id="stat-known">0</div><div class="stat-label">✅ 已掌握</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-known">0</div><div class="stat-label">✅ 已学会</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-learning">0</div><div class="stat-label">📖 学习中</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-mastered">0</div><div class="stat-label">⊘ 已熟悉</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-today">0</div><div class="stat-label">🔥 今日学习</div></div>
@@ -522,7 +522,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
           <div class="stat-label" style="margin-bottom:10px">总进度 (<span id="stat-total">0</span> / 2967词)</div>
           <div class="progress-track" style="height:8px"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
           <div class="progress-rings">
-            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-known" style="background:var(--green);width:0%"></div></div><div class="ring-count" id="pct-known">0%</div><div class="ring-label">已掌握</div></div>
+            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-known" style="background:var(--green);width:0%"></div></div><div class="ring-count" id="pct-known">0%</div><div class="ring-label">已学会</div></div>
             <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-learning" style="background:var(--orange);width:0%"></div></div><div class="ring-count" id="pct-learning">0%</div><div class="ring-label">学习中</div></div>
             <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-new" style="background:var(--sep);width:100%"></div></div><div class="ring-count" id="pct-new">100%</div><div class="ring-label">未学</div></div>
           </div>
@@ -620,7 +620,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
     <textarea class="note-area" id="modal-note" placeholder="写下你自己的联想、造句…"></textarea>
     <div class="modal-actions">
       <button class="modal-btn modal-btn-study" id="modal-study-btn">加入学习队列</button>
-      <button class="modal-btn modal-btn-known" id="modal-known-btn">✓ 已掌握</button>
+      <button class="modal-btn modal-btn-known" id="modal-known-btn">✓ 已学会</button>
     </div>
   </div>
 </div>
