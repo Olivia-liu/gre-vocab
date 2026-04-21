@@ -283,10 +283,11 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .filter-chip { flex-shrink: 0; padding: 5px 12px; border-radius: 20px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--card-bg); color: var(--text3); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 .filter-chip.active { background: var(--blue); color: #fff; }
 .word-list-wrap { flex: 1; min-height: 0; position: relative; display: flex; }
-.word-list { flex: 1; overflow-y: auto; padding: 0 16px 8px; -webkit-overflow-scrolling: touch; padding-right: 28px; }
+.word-list { flex: 1; overflow-y: auto; padding: 0 16px 8px; -webkit-overflow-scrolling: touch; padding-right: 36px; }
 .section-header { font-size: 12px; font-weight: 700; color: var(--text3); padding: 8px 0 2px; letter-spacing: 0.5px; position: sticky; top: 0; background: var(--bg); z-index: 1; }
-.alpha-bar { position: absolute; right: 0; top: 0; bottom: 0; width: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0; padding: 4px 0; z-index: 10; touch-action: none; }
-.alpha-bar span { font-size: 10px; font-weight: 600; color: var(--blue); line-height: 1.5; width: 20px; text-align: center; cursor: pointer; user-select: none; }
+.alpha-bar { position: absolute; right: 0; top: 0; bottom: 0; width: 28px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0; padding: 4px 0; z-index: 10; touch-action: none; opacity: 0; transition: opacity 0.2s; }
+.alpha-bar.visible { opacity: 1; }
+.alpha-bar span { font-size: 10px; font-weight: 600; color: var(--blue); line-height: 1.5; width: 28px; text-align: center; cursor: pointer; user-select: none; }
 .alpha-bar span.dim { color: var(--text3); font-weight: 400; }
 .word-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--sep); cursor: pointer; gap: 10px; }
 .word-item:last-child { border-bottom: none; }
@@ -1269,21 +1270,39 @@ function setupAlphaBar() {
 
   function scrollToLetter(letter) {
     const section = document.getElementById('section-' + letter);
-    if (section) wordList.scrollTop = section.offsetTop - wordList.offsetTop;
+    if (!section) return;
+    const sectionRect = section.getBoundingClientRect();
+    const listRect = wordList.getBoundingClientRect();
+    wordList.scrollTop += sectionRect.top - listRect.top;
   }
 
   function letterFromTouch(e) {
     const touch = e.touches[0];
-    const spans = bar.querySelectorAll('span:not(.dim)');
+    const spans = [...bar.querySelectorAll('span')];
+    let closest = null, minDist = Infinity;
     for (const s of spans) {
       const r = s.getBoundingClientRect();
-      if (touch.clientY >= r.top && touch.clientY <= r.bottom) return s.dataset.letter;
+      const dist = Math.abs(touch.clientY - (r.top + r.bottom) / 2);
+      if (dist < minDist) { minDist = dist; closest = s; }
     }
-    return null;
+    return (closest && !closest.classList.contains('dim')) ? closest.dataset.letter : null;
   }
 
-  bar.addEventListener('touchstart', e => { e.preventDefault(); const l = letterFromTouch(e); if (l) scrollToLetter(l); }, { passive: false });
-  bar.addEventListener('touchmove',  e => { e.preventDefault(); const l = letterFromTouch(e); if (l) scrollToLetter(l); }, { passive: false });
+  let hideTimer = null;
+  function showBar() {
+    bar.classList.add('visible');
+    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+  }
+  function scheduleHide() {
+    hideTimer = setTimeout(() => { bar.classList.remove('visible'); hideTimer = null; }, 1000);
+  }
+
+  // Show bar when scrolling the word list
+  wordList.addEventListener('scroll', () => { showBar(); scheduleHide(); }, { passive: true });
+
+  bar.addEventListener('touchstart', e => { e.preventDefault(); showBar(); const l = letterFromTouch(e); if (l) scrollToLetter(l); }, { passive: false });
+  bar.addEventListener('touchmove',  e => { e.preventDefault(); showBar(); const l = letterFromTouch(e); if (l) scrollToLetter(l); }, { passive: false });
+  bar.addEventListener('touchend',   () => { scheduleHide(); });
   bar.addEventListener('click', e => { const l = e.target.dataset?.letter; if (l) scrollToLetter(l); });
 }
 
