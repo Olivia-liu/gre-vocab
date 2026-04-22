@@ -26,7 +26,7 @@ A mobile-first Progressive Web App for studying the GRE 要你命3000 vocabulary
 
 ```
 index.html          Main app — all UI and logic
-words.json          Word data including mnemonics (single source of truth)
+words.json          Word data (word, part of speech, Chinese def, English def, mnemonic)
 sw.js               Service worker for offline caching
 manifest.json       PWA manifest
 vercel.json         Cache-control headers for sw.js and index.html
