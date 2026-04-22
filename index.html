@@ -1150,6 +1150,9 @@ function showDone() {
 
 function nextRound() {
   document.querySelector('.card-area').innerHTML = `
+    <div class="skip-hint-row" id="skip-hint-row">
+      <button class="skip-hint-btn" id="btn-skip">已熟悉此词，点击永久跳过</button>
+    </div>
     <div class="card-outer">
       <div class="card" id="card">
         <div class="card-face card-front-face">
@@ -1195,6 +1198,15 @@ function nextRound() {
   document.getElementById('study-actions').style.display = '';
   setupCardEvents();
   setupSwipeGestures();
+  // Re-bind btn-skip since card-area DOM was rebuilt
+  document.getElementById('btn-skip').addEventListener('click', () => {
+    const wordIdx = currentQueue[queueIdx];
+    if (wordIdx !== undefined) { mastered.add(wordIdx); saveMastered(); syncPushDebounced(); }
+    queueIdx++;
+    isFlipped = false;
+    showCard();
+    updateStats(); renderWordList();
+  });
   fixCardHeight();
   buildQueue();
   showCard();
