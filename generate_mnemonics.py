@@ -6,7 +6,7 @@
 
 - 并发10个请求，自动限速
 - 增量保存，中断后重新运行只生成未完成的词
-- 完成后输出 mnemonics.json
+- 完成后写入 words.json 的 m 字段
 """
 
 import json
@@ -18,8 +18,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 
 # ── Config ───────────────────────────────────────────────────
-WORDS_FILE   = os.path.join(os.path.dirname(__file__), 'words.json')
-OUTPUT_FILE  = os.path.join(os.path.dirname(__file__), 'mnemonics.json')
+WORDS_FILE    = os.path.join(os.path.dirname(__file__), 'words.json')
 PROGRESS_FILE = os.path.join(os.path.dirname(__file__), 'mnemonics_progress.json')
 
 MODEL        = 'claude-haiku-4-5-20251001'
@@ -155,21 +154,25 @@ def main():
     # Final save of progress
     save_progress()
 
-    # Build final output: array indexed by word position
-    mnemonics = [progress.get(str(i), '') for i in range(total)]
-    failed = sum(1 for m in mnemonics if m.startswith('[生成失败'))
-    empty  = sum(1 for m in mnemonics if not m)
+    # Write results into words.json m field
+    failed = sum(1 for v in progress.values() if v.startswith('[生成失败'))
+    empty  = sum(1 for i in range(total) if not progress.get(str(i)))
 
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        json.dump(mnemonics, f, ensure_ascii=False, separators=(',', ':'))
+    for i, w in enumerate(words):
+        m = progress.get(str(i), '')
+        if m and not m.startswith('[生成失败'):
+            w['m'] = m
 
-    size_kb = os.path.getsize(OUTPUT_FILE) / 1024
+    with open(WORDS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(words, f, ensure_ascii=False, indent=2)
+
+    size_kb = os.path.getsize(WORDS_FILE) / 1024
     elapsed = time.time() - start
     print()
     print(f"✅ 完成！用时 {elapsed/60:.1f} 分钟")
     print(f"   成功: {total - failed - empty} / {total}")
     print(f"   失败: {failed}，空缺: {empty}")
-    print(f"   文件: mnemonics.json ({size_kb:.0f} KB)")
+    print(f"   文件: words.json ({size_kb:.0f} KB)")
 
 if __name__ == '__main__':
     main()

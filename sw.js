@@ -1,5 +1,5 @@
 const CACHE = 'gre-v2';
-const CACHE_FIRST = ['/words.json', '/mnemonics.json', '/phonetics.json', '/manifest.json'];
+const CACHE_FIRST = ['/words.json', '/phonetics.json', '/manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CACHE_FIRST)));
