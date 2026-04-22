@@ -634,6 +634,10 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 </div>
 
 <script>
+// ============================================================
+// BUNDLED MNEMONICS (loaded from mnemonics.json at startup)
+// ============================================================
+let MNEMONICS = [];   // populated by loadAll()
 let PHONETICS = [];   // populated by loadAll()
 
 // ============================================================
@@ -673,7 +677,7 @@ async function generateMnemonic(wordIdx, force = false) {
     const cached = localStorage.getItem(cacheKey);
     if (cached) return cached;
     // Fall back to bundled static mnemonic
-    const bundled = WORDS[wordIdx]?.m;
+    const bundled = MNEMONICS[wordIdx];
     if (bundled) return bundled;
   }
 
@@ -850,14 +854,16 @@ if (localStorage.getItem('gre_today_key') !== todayKey) {
 todayCount = parseInt(localStorage.getItem('gre_today_count') || '0');
 
 // ============================================================
-// LOAD WORDS
+// LOAD WORDS + BUNDLED MNEMONICS
 // ============================================================
 const _v = Date.now();
 Promise.all([
   fetch('words.json?v=' + _v).then(r => r.json()),
+  fetch('mnemonics.json?v=' + _v).then(r => r.json()).catch(() => []),
   fetch('phonetics.json?v=' + _v).then(r => r.json()).catch(() => [])
-]).then(([words, phon]) => {
+]).then(([words, mns, phon]) => {
   WORDS = words;
+  MNEMONICS = mns;
   PHONETICS = phon;
   init();
 }).catch(() => { document.getElementById('front-word').textContent = '加载失败，请检查服务器'; });
@@ -998,7 +1004,7 @@ function showCard() {
 
   // Front mnemonic — prefer localStorage override, then bundled
   const cached = localStorage.getItem('gre_mn_' + wordIdx);
-  const displayed = cached || WORDS[wordIdx]?.m || '';
+  const displayed = cached || MNEMONICS[wordIdx] || '';
   const frontCached = document.getElementById('front-mnemonic-cached');
   const frontAiArea = document.getElementById('front-ai-area');
   frontCached.style.display = 'none';
@@ -1329,7 +1335,7 @@ function openModal(idx) {
 }
 
 function renderModalMnemonic(idx) {
-  const cached = localStorage.getItem('gre_mn_' + idx) || WORDS[idx]?.m || '';
+  const cached = localStorage.getItem('gre_mn_' + idx) || MNEMONICS[idx] || '';
   const section = document.getElementById('modal-mnemonic-section');
 
   if (cached) {
