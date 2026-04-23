@@ -1029,11 +1029,10 @@ function showCard() {
   }
 
   // Like/Flag button state
-  const flagged = getFlagged();
   const liked = getLiked();
   const flagBtn = document.getElementById('back-flag-btn');
   const likeBtn = document.getElementById('back-like-btn');
-  if (flagBtn) flagBtn.style.opacity = flagged.has(wordIdx) ? '1' : '0.35';
+  if (flagBtn) flagBtn.style.opacity = isFlagged(wordIdx) ? '1' : '0.35';
   if (likeBtn) likeBtn.style.opacity = liked.has(wordIdx) ? '1' : '0.35';
 }
 
@@ -1058,6 +1057,24 @@ function setBackMnemonicUI(wordIdx, text, loading) {
 function getFlagged() {
   try { return new Set(JSON.parse(localStorage.getItem('gre_flagged') || '[]')); }
   catch { return new Set(); }
+}
+function getCurrentMnemonic(wordIdx) {
+  return localStorage.getItem('gre_mn_' + wordIdx) || WORDS[wordIdx]?.m || '';
+}
+// Returns true if word is flagged AND the mnemonic hasn't changed since flagging
+function isFlagged(wordIdx) {
+  const flagged = getFlagged();
+  if (!flagged.has(wordIdx)) return false;
+  const stored = JSON.parse(localStorage.getItem('gre_flagged_mn') || '{}');
+  // If no fingerprint stored, treat as still flagged
+  if (!(String(wordIdx) in stored)) return true;
+  // If mnemonic changed, auto-clear the stale flag
+  if (stored[String(wordIdx)] !== getCurrentMnemonic(wordIdx)) {
+    flagged.delete(wordIdx);
+    localStorage.setItem('gre_flagged', JSON.stringify([...flagged]));
+    return false;
+  }
+  return true;
 }
 function getLiked() {
   try { return new Set(JSON.parse(localStorage.getItem('gre_liked') || '[]')); }
@@ -1108,7 +1125,7 @@ function flipCard() {
   if (wordIdx !== undefined) {
     const flagBtn = document.getElementById('back-flag-btn');
     const likeBtn = document.getElementById('back-like-btn');
-    if (flagBtn) flagBtn.style.opacity = getFlagged().has(wordIdx) ? '1' : '0.35';
+    if (flagBtn) flagBtn.style.opacity = isFlagged(wordIdx) ? '1' : '0.35';
     if (likeBtn) likeBtn.style.opacity = getLiked().has(wordIdx) ? '1' : '0.35';
   }
 }
@@ -1487,11 +1504,14 @@ function setupCardEvents() {
     const wordIdx = currentQueue[queueIdx];
     if (wordIdx === undefined) return;
     const flagged = getFlagged();
+    const flaggedMn = JSON.parse(localStorage.getItem('gre_flagged_mn') || '{}');
     if (flagged.has(wordIdx)) {
       flagged.delete(wordIdx);
+      delete flaggedMn[String(wordIdx)];
       backFlag.style.opacity = '0.35';
     } else {
       flagged.add(wordIdx);
+      flaggedMn[String(wordIdx)] = getCurrentMnemonic(wordIdx);
       backFlag.style.opacity = '1';
       // Remove like if flagged
       const liked = getLiked();
@@ -1502,6 +1522,7 @@ function setupCardEvents() {
       }
     }
     localStorage.setItem('gre_flagged', JSON.stringify([...flagged]));
+    localStorage.setItem('gre_flagged_mn', JSON.stringify(flaggedMn));
   });
 
   // Back regen button
