@@ -1699,7 +1699,7 @@
     "w": "bacteria",
     "p": "n",
     "c": "细菌",
-    "e": "decompose = yeast: ferment 细菌用于分解=酵母用于发酵（正面特征）",
+    "e": "microorganisms, especially those causing disease or fermentation",
     "x": "",
     "m": "bacteri(棍形)+a——棍形微生物们，就是bacteria，细菌（复数）。"
   },
@@ -5379,7 +5379,7 @@
     "w": "designate",
     "p": "adj",
     "c": "任命的，指定的",
-    "e": "designate = foreword :introductory 头衔则是用来任命的=前言则是用来介绍的（正面特征）",
+    "e": "to officially appoint someone to a role or identify something by a particular name",
     "x": "",
     "m": "design(指定)+ate——被指定的，designate，任命指定的。"
   },
@@ -13450,8 +13450,8 @@
   {
     "w": "misdemeanor",
     "p": "n",
-    "c": "轻罪a",
-    "e": "crime =decision :commitment 轻罪<罪=决定<投入（程度类比）",
+    "c": "轻罪",
+    "e": "a minor wrongdoing; a criminal offense less serious than a felony",
     "x": "",
     "m": "mis(不对)+demeanor(行为)——行为不对但不太严重——misdemeanor，轻罪。"
   },
@@ -13491,7 +13491,7 @@
     "w": "misrepresent",
     "p": "vt",
     "c": "误传to",
-    "e": "communicate= tamper: adjust 误传是错误的传达=篡改是错误的调整（错误与一般）",
+    "e": "to give a false or misleading account of; to misstate",
     "x": "",
     "m": "mis(错)+represent(代表)——错误地代表——misrepresent，误传歪曲。"
   },
@@ -13514,8 +13514,8 @@
   {
     "w": "mnemonics",
     "p": "n",
-    "c": "记忆法a",
-    "e": "memory= regimen: health 记忆法改善记忆=养生法改善健康（正面特征）",
+    "c": "记忆法",
+    "e": "patterns or techniques used as memory aids",
     "x": "",
     "m": "mnem(记忆/希腊女神)+onics——女神教的记忆技巧——mnemonics，记忆术。"
   },
@@ -13603,7 +13603,7 @@
     "w": "momentum",
     "p": "n",
     "c": "动力",
-    "e": "scooter= oscillation: swing 动力促使滑行车运动=振荡促使秋千运动",
+    "e": "the quantity of motion; impetus or driving force gained from an initial effort",
     "x": "",
     "m": "moment(时刻)+um——时刻积累的推进力——momentum，动力。"
   },
@@ -13650,8 +13650,8 @@
   {
     "w": "montage",
     "p": "n",
-    "c": "蒙太奇，拼集的照片a",
-    "e": "images= zigzag: turns 拼集的照片是由图像组成的=Z 字形是由转变组成的（组成关系）",
+    "c": "蒙太奇，拼集的照片",
+    "e": "a composite made from many images or elements juxtaposed",
     "x": "",
     "m": "montage——法语装配，把镜头剪接拼集——montage，蒙太奇。"
   },
@@ -14131,7 +14131,7 @@
     "w": "nonchalant",
     "p": "adj",
     "c": "冷漠的",
-    "e": "excite= anonymous: identify 冷漠的难以被激起=匿名的难以被识别（对立句子）",
+    "e": "feeling or appearing casually calm; not showing anxiety or enthusiasm",
     "x": "",
     "m": "non(不)+chalant(热情)——不热情淡然——nonchalant，冷漠淡然的。"
   },
@@ -14234,8 +14234,8 @@
   {
     "w": "oasis",
     "p": "n",
-    "c": "沙漠绿洲a",
-    "e": "desert= glade: forest 绿洲是沙漠中的特殊地带=林间空地是树林中的特殊地带（特殊部分）",
+    "c": "沙漠绿洲",
+    "e": "a fertile spot in a desert; a pleasant place amid difficult surroundings",
     "x": "",
     "m": "oasis——沙漠中的希望之地——oasis，绿洲。"
   },
@@ -14522,8 +14522,8 @@
   {
     "w": "oracle",
     "p": "n",
-    "c": "先知a",
-    "e": "prophecy= mentor: guidance 先知给出预言=导师给出指导（正面特征）",
+    "c": "先知",
+    "e": "a person regarded as an infallible source of wisdom or prophecy",
     "x": "",
     "m": "oracl(神谕/说话)+e——神的话语——oracle，先知神谕。"
   },
@@ -14707,7 +14707,7 @@
     "w": "pacify",
     "p": "vt",
     "c": "使平静，安慰to",
-    "e": "anger= solace: grief 平息抚慰减轻愤怒=安慰减轻痛苦（消除关系）",
+    "e": "to quell the anger of; to bring peace or calm to",
     "x": "",
     "m": "谐音「拍死飞(pacify)「——孩子哭闹，妈妈轻轻拍拍他，哭声飞走了，孩子被安抚平静了。——pacify，使平静，安慰。"
   },
@@ -16675,7 +16675,7 @@
     "w": "prophetic",
     "p": "adj",
     "c": "预言的，预示的",
-    "e": "prophecy= mentor: guidance 先知给出预言=导师给出指导（正面特征）",
+    "e": "accurately predicting what will happen; of or relating to a prophet",
     "x": "",
     "m": "prophet(先知)+ic——先知的预言——prophetic，预言的。"
   },
@@ -17115,7 +17115,7 @@
     "w": "quaver",
     "p": "vt",
     "c": "发颤音to",
-    "e": "quaver = hand: tremble 声音颤抖=手发抖（正面特征）",
+    "e": "to tremble or shake; to say something in a trembling voice",
     "x": "",
     "m": "quav(颤)+er——颤颤巍巍地发音——quaver，颤音。"
   },
@@ -17827,7 +17827,7 @@
     "w": "relapse",
     "p": "vi",
     "c": "故态复萌，再犯to",
-    "e": "relapse = pundit: opine 重犯者再犯=权威人士发表主张（正面特征）",
+    "e": "a deterioration after a period of improvement",
     "x": "",
     "m": "re+lapse(错误)——再次犯错——relapse，再犯复发。"
   },
@@ -18459,7 +18459,7 @@
     "w": "ridicule",
     "p": "vt",
     "c": "嘲笑 to",
-    "e": "ridicule = elegy: sorrow 讽刺文学表达嘲讽=哀歌表达悲哀（正面特征）",
+    "e": "to mock or make fun of; subjection to mockery",
     "x": "",
     "m": "ridicul(可笑)+e——可笑地嘲笑——ridicule，嘲笑。"
   },
@@ -18578,7 +18578,7 @@
   {
     "w": "rostrum",
     "p": "n",
-    "c": "讲坛，演讲坛a",
+    "c": "讲坛，演讲坛",
     "e": "rostrum = judge : bench 演讲者在讲坛上=法官在法官席上（位置关系）",
     "x": "",
     "m": "rostr(鸟喙)+um——像鸟喙突出的讲台——rostrum，讲坛。"
@@ -18803,7 +18803,7 @@
     "w": "salve",
     "p": "n",
     "c": "药膏 an",
-    "e": "unctuous= placebo: innocuous 油膏是油的=镇定剂是无害的（正面特征）",
+    "e": "a soothing ointment; to soothe or relieve",
     "x": "",
     "m": "salv(治愈)+e——涂上治愈药膏——salve，药膏安慰。"
   },
@@ -19195,7 +19195,7 @@
     "w": "script",
     "p": "n",
     "c": "手迹，手稿，剧本",
-    "e": "script = music: score 戏剧依照剧本被表演=音乐依据乐谱被演奏（正面特征）",
+    "e": "the written text of a play, film, or broadcast",
     "x": "",
     "m": "script——写(scrib)成的文字——script，剧本手迹。"
   },
@@ -19370,7 +19370,7 @@
   {
     "w": "sensation",
     "p": "n",
-    "c": "感觉，知觉a",
+    "c": "感觉，知觉",
     "e": "sensation = pain: analgesic 麻醉剂使丧失感觉=止痛剂使丧失疼痛（消除关系）",
     "x": "",
     "m": "sens(感觉)+ation——感觉的产生——sensation，感觉。"
@@ -19522,7 +19522,7 @@
   {
     "w": "shale",
     "p": "n",
-    "c": "页岩，泥板岩a",
+    "c": "页岩，泥板岩",
     "e": "a finely stratified rock formed from clay or silt",
     "x": "",
     "m": "shale——shell(贝壳)+ale，像贝壳层叠的岩石——shale，页岩。"
@@ -19610,7 +19610,7 @@
   {
     "w": "shrine",
     "p": "n",
-    "c": "神殿，圣地a",
+    "c": "神殿，圣地",
     "e": "shrine = climber: peak 朝圣者追求圣地=攀登者追求顶峰（追求关系）",
     "x": "",
     "m": "shrine谐音「圣地那「。朝圣者跋山涉水，终于抵达那片圣地，跪地叩首——shrine，圣地神殿。"
@@ -19979,7 +19979,7 @@
     "w": "smother",
     "p": "vt",
     "c": "窒息，压抑to",
-    "e": "choke= invigorate: animate 窒息：窒息=使有活力：使有活力（同义关系）",
+    "e": "to suffocate by covering the nose and mouth; to suppress",
     "x": "",
     "m": "smother——把嘴(mother)捂住——捂住窒息——smother，窒息。"
   },
@@ -20059,7 +20059,7 @@
     "w": "sodden",
     "p": "adj",
     "c": "浑身湿透的",
-    "e": "sodden = desert: arid 沼泽是湿的=沙漠是干燥的（正面特征）",
+    "e": "saturated with water; heavy with moisture",
     "x": "",
     "m": "sodden谐音「沉了「。跌入泥塘，全身湿透，衣服沉得像铅——sodden，湿透的，沉重的。"
   },
@@ -20115,7 +20115,7 @@
     "w": "solitude",
     "p": "n",
     "c": "孤独",
-    "e": "solitude= toady: favor 隐遁者追求孤单=献媚者追求好处（追求关系）",
+    "e": "the state of being alone; a lonely uninhabited place",
     "x": "",
     "m": "solo独自+tude状态——一个人独处的孤独状态——solitude，孤独。"
   },
@@ -20682,7 +20682,7 @@
   {
     "w": "stitch",
     "p": "n",
-    "c": "一针，缝线a",
+    "c": "一针，缝线",
     "e": "sampler = tile: mosaic 针法组成刺绣样本=瓷砖组成镶嵌图案（组成关系）",
     "x": "",
     "m": "stitch谐音「一针「。外婆在灯下一针一线缝补，每一stitch都是爱——stitch，一针，缝线。"
@@ -20770,7 +20770,7 @@
   {
     "w": "strait",
     "p": "n",
-    "c": "海峡a",
+    "c": "海峡",
     "e": "water =isthmus: land 海峡连接水域=地峡连接陆地（连接关系）",
     "x": "",
     "m": "straight直通道(strait)！两边是陆地的狭窄水道——strait，海峡。"
@@ -20899,7 +20899,7 @@
     "w": "stunt",
     "p": "vt",
     "c": "阻碍（成长）to",
-    "e": "growth= obstruct: progress 阻碍发展=阻碍前进 (动宾关系)",
+    "e": "to hinder the growth of; a daring or unusual act",
     "x": "",
     "m": "成长被stunt卡住了——stunt，阻碍成长。"
   },
@@ -21490,7 +21490,7 @@
   {
     "w": "tact",
     "p": "n",
-    "c": "机敏，圆滑a",
+    "c": "机敏，圆滑",
     "e": "tact = poor: money 冒犯的缺乏机敏=贫穷的缺乏钱财（缺乏关系）",
     "x": "",
     "m": "tact机敏——把握时机的touch触感——tact，机敏圆滑。"
@@ -21667,7 +21667,7 @@
     "w": "taut",
     "p": "adj",
     "c": "紧绷的",
-    "e": "tautness= dilute: strength 松弛使紧张度下降=稀释使浓度下降（动宾关系）",
+    "e": "stretched tightly; tense and nervous",
     "x": "",
     "m": "taut谐音「绷「。吉他手拨弦前把弦调到taut绷紧状态——taut，紧绷的，不松弛的。"
   },
@@ -21859,7 +21859,7 @@
     "w": "testimony",
     "p": "n",
     "c": "证词，声明",
-    "e": "testimony= calumny: representation 伪证是假的证词=诬蔑是假的陈述（真假关系）",
+    "e": "a formal statement given as evidence; a public declaration",
     "x": "",
     "m": "谐音「踢死踹摩你」——证人在法庭上被律师踢来踢去，还是坚持口述自己亲眼见到的——testimony，证词、证言。test大家认识（测试），在法庭上「测试」你说的是否属实。"
   },
@@ -21939,7 +21939,7 @@
     "w": "thwart",
     "p": "vt",
     "c": "阻挠to",
-    "e": "thwart= treat: cure 反对导致阻碍=治疗导致治愈（结果关系）",
+    "e": "to prevent someone from accomplishing something; to obstruct",
     "x": "",
     "m": "thwart → 谐音「挡住了」。足球射门最后一刻被门将扑出，计划被thwart——thwart，阻挠、阻挡。想象一根横木「thwart」拦在路中间，what(什么)都过不去。"
   },
@@ -22747,7 +22747,7 @@
     "w": "utter",
     "p": "vt",
     "c": "出声，说话 to",
-    "e": "utter= flit: move 突然说出是突然的说出=:迅速飞过是突然地移动（突然与一般）",
+    "e": "complete and absolute; to say or express aloud",
     "x": "",
     "m": "utter → 双重含义助记：①utter作动词=发出声音，想象把话「吐」出来（out+ter→utter）；②utter作形容词=完全的、彻底的。「utter silence」完全的沉默，「utter nonsense」彻头彻尾的废话。记住两个用法，GRE都考。"
   },
@@ -23067,7 +23067,7 @@
     "w": "veteran",
     "p": "n",
     "c": "老兵，老手an",
-    "e": "veteran= tadpole: frog 学校学生成长为老兵=蝌蚪成长为青蛙（幼体及成年）",
+    "e": "a person with long experience; a former member of the armed forces",
     "x": "",
     "m": "veteran → vet（老手、兽医）大家认识，加eran。vet + eran，老vet（退役军人、老手）经历过无数eran（era时代）的战争洗礼——veteran（老兵、老手、经验丰富的人）。a veteran journalist（资深记者）。"
   },
@@ -23371,7 +23371,7 @@
     "w": "waddle",
     "p": "vi",
     "c": "摇摇摆摆地走 to",
-    "e": "waddle= snake : slither 鸭子蹒跚走动=蛇滑行（正面特征）",
+    "e": "to walk with a clumsy swaying motion",
     "x": "",
     "m": "waddle → wade（涉水）大家认识，加dle。鸭子涉水（wade）时左右摇摆，走路也waddle（摇摆着走、蹒跚而行）。企鹅和孕妇走路都是waddle——重心不稳，迈着小步左右摇晃，憨态可掬。"
   },
