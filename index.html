@@ -213,6 +213,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .kaofa-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 .kaofa-head { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
 .kaofa-num { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; background: var(--blue); color: #fff; border-radius: 9px; font-size: 11px; font-weight: 700; }
+.kaofa-pos { font-size: 12px; color: var(--blue); font-weight: 600; text-transform: lowercase; }
 .kaofa-cn { font-size: 20px; font-weight: 700; line-height: 1.25; letter-spacing: -0.3px; }
 .kaofa-en { font-size: 13px; color: var(--text2); line-height: 1.45; border-left: 3px solid var(--sep); padding-left: 10px; margin-top: 4px; }
 .kaofa-examples { margin-top: 6px; padding-left: 10px; }
@@ -1013,6 +1014,7 @@ function renderKaofaList(word, mode) {
   const exLimit = mode === 'modal' ? 99 : 1;
   return ks.map((k, i) => {
     const numTag = ks.length > 1 ? `<span class="kaofa-num">${i+1}</span>` : '';
+    const pos = k.pos ? `<span class="kaofa-pos">${escHtml(k.pos)}</span>` : '';
     const cn = k.cn ? `<span class="kaofa-cn">${escHtml(k.cn)}</span>` : '';
     const en = k.en ? `<div class="kaofa-en">${escHtml(k.en)}</div>` : '';
     const exs = showExamples && k.ex && k.ex.length
@@ -1024,7 +1026,7 @@ function renderKaofaList(word, mode) {
     const ant = showSynAnt && k.ant ? `<div class="kaofa-ant"><span class="kaofa-tag">反</span> ${escHtml(k.ant)}</div>` : '';
     const der = showSynAnt && k.der ? `<div class="kaofa-der"><span class="kaofa-tag">派</span> ${escHtml(k.der)}</div>` : '';
     return `<div class="kaofa-block">
-      <div class="kaofa-head">${numTag}${cn}</div>
+      <div class="kaofa-head">${numTag}${pos}${cn}</div>
       ${en}${exs}${syn}${ant}${der}
     </div>`;
   }).join('');
@@ -1084,9 +1086,9 @@ function showCard() {
   frontCached.style.display = 'none';
   frontAiArea.style.display = 'none';
 
-  // Back — render all 考法 stacked
-  const allPos = allPosText(word);
-  document.getElementById('back-pos').textContent = allPos ? allPos + '.' : '';
+  // Back — render all 考法 stacked. Per-kaofa POS is shown inline,
+  // so the top-level back-pos is left empty.
+  document.getElementById('back-pos').textContent = '';
   document.getElementById('back-word').textContent = word.w;
   document.getElementById('back-num').textContent = `${queueIdx + 1}/${currentQueue.length}`;
   renderBackDefinitions(word);
@@ -1409,10 +1411,8 @@ function openModal(idx) {
   const word = WORDS[idx];
 
   document.getElementById('modal-word').textContent = word.w;
-  // Top header: all distinct POS + IPA (e.g. "v. / n.  /'ædɪkt/")
-  const mAllPos = allPosText(word);
-  const mIpa = word.ipa ? '/' + word.ipa + '/' : '';
-  document.getElementById('modal-pos').textContent = [mAllPos ? mAllPos + '.' : '', mIpa].filter(Boolean).join('  ');
+  // Top header: just IPA — POS lives per-kaofa
+  document.getElementById('modal-pos').textContent = word.ipa ? '/' + word.ipa + '/' : '';
   // All 考法 with examples + syn/ant rendered into the def-cn slot
   document.getElementById('modal-def-cn').innerHTML = renderKaofaList(word, 'modal');
   document.getElementById('modal-def-en').style.display = 'none';
