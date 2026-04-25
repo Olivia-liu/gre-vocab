@@ -205,8 +205,26 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 }
 .def-word-small { font-size: 15px; font-weight: 600; color: var(--text2); margin-bottom: 4px; flex-shrink: 0; display: flex; align-items: baseline; gap: 8px; }
 .def-word-small .back-ipa { font-size: 13px; font-weight: 400; color: var(--text3); letter-spacing: 0.3px; }
-.def-cn { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; line-height: 1.2; flex-shrink: 0; }
+.def-cn { margin-bottom: 6px; flex-shrink: 0; overflow-y: auto; max-height: 100%; }
 .def-en { font-size: 13px; color: var(--text2); line-height: 1.4; border-left: 3px solid var(--sep); padding-left: 10px; flex-shrink: 0; }
+
+/* Stacked 考法 blocks (multiple definitions per word) */
+.kaofa-block { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--sep); }
+.kaofa-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.kaofa-head { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+.kaofa-num { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; background: var(--blue); color: #fff; border-radius: 9px; font-size: 11px; font-weight: 700; }
+.kaofa-pos { font-size: 12px; color: var(--blue); font-weight: 600; text-transform: lowercase; }
+.kaofa-cn { font-size: 20px; font-weight: 700; line-height: 1.25; letter-spacing: -0.3px; }
+.kaofa-en { font-size: 13px; color: var(--text2); line-height: 1.45; border-left: 3px solid var(--sep); padding-left: 10px; margin-top: 4px; }
+.kaofa-examples { margin-top: 6px; padding-left: 10px; }
+.kaofa-ex { font-size: 12px; color: var(--text3); line-height: 1.5; margin-bottom: 2px; font-style: italic; }
+.kaofa-ex .ex-en { color: var(--text2); }
+.kaofa-ex .ex-cn { color: var(--text3); }
+.kaofa-syn, .kaofa-ant, .kaofa-der { font-size: 12px; line-height: 1.5; margin-top: 4px; color: var(--text2); }
+.kaofa-tag { display: inline-block; min-width: 18px; padding: 0 5px; background: color-mix(in srgb, var(--sep) 80%, transparent); border-radius: 4px; font-size: 11px; color: var(--text2); margin-right: 4px; }
+.kaofa-syn .kaofa-tag { background: color-mix(in srgb, var(--green) 20%, transparent); color: var(--green); }
+.kaofa-ant .kaofa-tag { background: color-mix(in srgb, var(--red) 20%, transparent); color: var(--red); }
+.kaofa-der .kaofa-tag { background: color-mix(in srgb, var(--purple) 20%, transparent); color: var(--purple); }
 
 /* Mnemonic on back */
 .back-mnemonic-area { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-top: 6px; }
@@ -361,8 +379,8 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .modal-overlay.open .modal-sheet { transform: translateY(0); }
 .modal-handle { width: 36px; height: 4px; background: var(--sep); border-radius: 2px; margin: 0 auto 16px; }
 .modal-word { font-size: 34px; font-weight: 700; margin-bottom: 2px; }
-.modal-pos { font-size: 13px; color: var(--blue); font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
-.modal-def-cn { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+.modal-pos { font-size: 13px; color: var(--text3); font-weight: 400; letter-spacing: 0.3px; margin-bottom: 10px; }
+.modal-def-cn { margin-bottom: 14px; }
 .modal-def-en { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 10px; }
 .modal-example { font-size: 13px; color: var(--text3); font-style: italic; line-height: 1.5; margin-bottom: 14px; padding: 10px 12px; background: color-mix(in srgb, var(--sep) 30%, transparent); border-radius: 10px; }
 
@@ -689,7 +707,7 @@ async function generateMnemonic(wordIdx, force = false) {
 
   const prompt = `你是专门帮中国学生记GRE单词的记忆大师，擅长创作让人忍不住笑的联想记忆。
 
-单词：${word.w}（${word.p ? word.p + '.  ' : ''}${word.c || word.e}）
+单词：${word.w}（${mainPos(word) ? mainPos(word) + '  ' : ''}${allCnText(word) || mainEn(word)}）
 
 请创作一个极其有趣、难以忘记的中文联想记忆法。你可以用以下一种或多种方式：
 🔊 谐音梗：这个词读起来像什么中文词或句子？能不能编个段子？
@@ -744,6 +762,29 @@ abhor → "啊！好恶！" 看到一只超大蟑螂，你尖叫"啊！好恶！
 // APP STATE
 // ============================================================
 let WORDS = [];
+
+// New schema (re-要你命3000): w, ipa, k:[{pos,cn,en,ex,syn,ant,der}], m
+// Helpers below abstract the first 考法 so the rest of the app can use
+// simple getters without dealing with the array directly.
+function mainK(word)   { return (word && word.k && word.k[0]) || {}; }
+function mainPos(word) { return mainK(word).pos || ''; }
+function mainCn(word)  { return mainK(word).cn  || ''; }
+function mainEn(word)  { return mainK(word).en  || ''; }
+function firstExample(word) {
+  for (const k of (word.k || [])) {
+    if (k.ex && k.ex.length) {
+      const e = k.ex[0];
+      return (e.en + (e.cn ? ' ' + e.cn : '')).trim();
+    }
+  }
+  return '';
+}
+function allCnText(word) {
+  return (word.k || []).map(k => k.cn || '').filter(Boolean).join('；');
+}
+function allEnText(word) {
+  return (word.k || []).map(k => k.en || '').filter(Boolean).join(' ');
+}
 let srData = SR.load();
 let mastered = new Set(JSON.parse(localStorage.getItem('gre_mastered') || '[]'));
 function saveMastered() { localStorage.setItem('gre_mastered', JSON.stringify([...mastered])); }
@@ -955,6 +996,40 @@ function shuffle(a) {
   }
 }
 
+// Render all 考法 of a word as stacked HTML.
+// `mode` controls density: 'card' (compact, 1-2 examples) or 'modal' (full).
+function renderKaofaList(word, mode) {
+  const ks = word.k || [];
+  if (!ks.length) return '<div class="def-cn-line">（无释义）</div>';
+  const showExamples = true;
+  const showSynAnt = mode === 'modal';
+  const exLimit = mode === 'modal' ? 99 : 1;
+  return ks.map((k, i) => {
+    const numTag = ks.length > 1 ? `<span class="kaofa-num">${i+1}</span>` : '';
+    const pos = k.pos ? `<span class="kaofa-pos">${escHtml(k.pos)}</span>` : '';
+    const cn = k.cn ? `<span class="kaofa-cn">${escHtml(k.cn)}</span>` : '';
+    const en = k.en ? `<div class="kaofa-en">${escHtml(k.en)}</div>` : '';
+    const exs = showExamples && k.ex && k.ex.length
+      ? `<div class="kaofa-examples">${k.ex.slice(0, exLimit).map(e =>
+          `<div class="kaofa-ex"><span class="ex-en">${escHtml(e.en)}</span>${e.cn ? ` <span class="ex-cn">${escHtml(e.cn)}</span>` : ''}</div>`
+        ).join('')}</div>`
+      : '';
+    const syn = showSynAnt && k.syn ? `<div class="kaofa-syn"><span class="kaofa-tag">近</span> ${escHtml(k.syn)}</div>` : '';
+    const ant = showSynAnt && k.ant ? `<div class="kaofa-ant"><span class="kaofa-tag">反</span> ${escHtml(k.ant)}</div>` : '';
+    const der = showSynAnt && k.der ? `<div class="kaofa-der"><span class="kaofa-tag">派</span> ${escHtml(k.der)}</div>` : '';
+    return `<div class="kaofa-block">
+      <div class="kaofa-head">${numTag}${pos}${cn}</div>
+      ${en}${exs}${syn}${ant}${der}
+    </div>`;
+  }).join('');
+}
+
+function renderBackDefinitions(word) {
+  document.getElementById('def-cn').innerHTML = renderKaofaList(word, 'card');
+  document.getElementById('def-en').style.display = 'none';
+  document.getElementById('example-inline').style.display = 'none';
+}
+
 // ============================================================
 // CARD DISPLAY
 // ============================================================
@@ -983,14 +1058,14 @@ function showCard() {
   document.getElementById('rate-row').style.display = 'none';
   document.getElementById('skip-hint-row').style.display = '';
   const word = WORDS[wordIdx];
-  const pos = word.p || '';
+  const pos = mainPos(word);
 
   // Front
   const frontPosEl = document.getElementById('front-pos');
   frontPosEl.textContent = '';
   frontPosEl.style.display = 'none';
   document.getElementById('front-word').textContent = word.w;
-  const ipa = PHONETICS[wordIdx] ? '/' + PHONETICS[wordIdx] + '/' : '';
+  const ipa = PHONETICS[wordIdx] ? '/' + PHONETICS[wordIdx] + '/' : (word.ipa ? '/' + word.ipa + '/' : '');
   document.getElementById('front-ipa').textContent = ipa;
   document.getElementById('back-ipa').textContent = ipa;
   document.getElementById('front-num').textContent = `${queueIdx + 1}/${currentQueue.length}`;
@@ -1003,30 +1078,17 @@ function showCard() {
   frontCached.style.display = 'none';
   frontAiArea.style.display = 'none';
 
-  // Back
-  document.getElementById('back-pos').textContent = pos ? pos + '.' : '';
+  // Back — render all 考法 stacked
+  document.getElementById('back-pos').textContent = pos ? pos.replace(/\.$/, '') + '.' : '';
   document.getElementById('back-word').textContent = word.w;
   document.getElementById('back-num').textContent = `${queueIdx + 1}/${currentQueue.length}`;
-  document.getElementById('def-cn').textContent = word.c || '（无中文释义）';
-
-  const defEnEl = document.getElementById('def-en');
-  if (word.e) { defEnEl.textContent = word.e; defEnEl.style.display = ''; }
-  else defEnEl.style.display = 'none';
+  renderBackDefinitions(word);
 
   // Back mnemonic
   setBackMnemonicUI(wordIdx, displayed, false);
 
-  // Example
-  const exInline = document.getElementById('example-inline');
-  const defEn = document.getElementById('def-en');
-  if (word.x) {
-    document.getElementById('example-inline-text').textContent = word.x;
-    exInline.style.display = '';
-    defEn.style.marginBottom = '12px';
-  } else {
-    exInline.style.display = 'none';
-    defEn.style.marginBottom = '20px';
-  }
+  // Inline single-example block is replaced by per-考法 examples in the stack
+  document.getElementById('example-inline').style.display = 'none';
 
   // Like/Flag button state
   const liked = getLiked();
@@ -1238,13 +1300,17 @@ function renderWordList() {
 
   if (browseSearch) {
     const q = browseSearch.toLowerCase();
-    list = list.filter(w => w.w.includes(q) || (w.c && w.c.includes(q)) || (w.e && w.e.toLowerCase().includes(q)));
+    list = list.filter(w => w.w.includes(q)
+      || allCnText(w).includes(q)
+      || allEnText(w).toLowerCase().includes(q));
   }
   if (activeFilter === 'new') list = list.filter(w => !mastered.has(w.idx) && (!srNow[w.idx] || srNow[w.idx].status === 'new'));
   else if (activeFilter === 'learning') list = list.filter(w => !mastered.has(w.idx) && srNow[w.idx]?.status === 'learning');
   else if (activeFilter === 'known') list = list.filter(w => !mastered.has(w.idx) && srNow[w.idx]?.status === 'known');
   else if (activeFilter === 'mastered') list = list.filter(w => mastered.has(w.idx));
-  else if (['n','v','vt','vi','adj','adv'].includes(activeFilter)) list = list.filter(w => w.p?.startsWith(activeFilter));
+  else if (['n','v','vt','vi','adj','adv'].includes(activeFilter)) {
+    list = list.filter(w => (w.k || []).some(k => (k.pos || '').toLowerCase().startsWith(activeFilter)));
+  }
 
   // Sort alphabetically and group by first letter
   list.sort((a, b) => a.w.localeCompare(b.w));
@@ -1266,8 +1332,8 @@ function renderWordList() {
       const bs = isMastered?'⊘':status==='known'?'✓':status==='learning'?'…':'·';
       html += `<div class="word-item" onclick="openModal(${w.idx})">
         <div class="word-item-left">
-          <div class="word-item-name">${w.w} <span class="pos-tag">${w.p||''}</span></div>
-          <div class="word-item-cn">${w.c||w.e||''}</div>
+          <div class="word-item-name">${w.w} <span class="pos-tag">${escHtml(mainPos(w))}</span></div>
+          <div class="word-item-cn">${escHtml(allCnText(w) || mainEn(w))}</div>
         </div>
         <div class="word-item-badge ${bc}">${bs}</div>
       </div>`;
@@ -1336,13 +1402,12 @@ function openModal(idx) {
   const word = WORDS[idx];
 
   document.getElementById('modal-word').textContent = word.w;
-  document.getElementById('modal-pos').textContent = word.p ? word.p + '.' : '';
-  document.getElementById('modal-def-cn').textContent = word.c || '（无中文释义）';
-  document.getElementById('modal-def-en').textContent = word.e || '';
-
-  const exEl = document.getElementById('modal-example');
-  if (word.x) { exEl.textContent = word.x; exEl.style.display = ''; }
-  else exEl.style.display = 'none';
+  // POS hidden in header now — each kaofa shows its own POS
+  document.getElementById('modal-pos').textContent = word.ipa ? '/' + word.ipa + '/' : '';
+  // All 考法 with examples + syn/ant rendered into the def-cn slot
+  document.getElementById('modal-def-cn').innerHTML = renderKaofaList(word, 'modal');
+  document.getElementById('modal-def-en').style.display = 'none';
+  document.getElementById('modal-example').style.display = 'none';
 
   // Mnemonic section
   renderModalMnemonic(idx);
