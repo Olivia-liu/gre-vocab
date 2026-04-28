@@ -199,6 +199,9 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 /* Card Back */
 .back-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; flex-shrink: 0; }
 .back-top .word-num { margin-left: auto; }
+.back-page-indicator { display: flex; gap: 5px; margin: 0 auto; }
+.page-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sep); transition: background 0.2s; }
+.page-dot.active { background: var(--blue); }
 .back-pos {
   font-size: 12px; font-weight: 600; text-transform: lowercase; letter-spacing: 0.5px;
   color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent);
@@ -475,6 +478,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
               <div class="swipe-label swipe-label-down" id="swipe-down">↑ 模糊</div>
               <div class="back-top">
                 <span class="back-pos" id="back-pos"></span>
+                <span class="back-page-indicator" id="back-page-indicator" style="display:none"></span>
                 <span class="word-num" id="back-num"></span>
               </div>
               <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
@@ -802,6 +806,8 @@ let currentQueue = [];
 let queueIdx = 0;
 let isFlipped = false;
 let isNavigatingBack = false;
+let backPageIdx = 0;     // current page on the card back
+let backPageCount = 1;   // total pages (computed after render)
 let todayCount = 0;
 let sessionSize = parseInt(localStorage.getItem('gre_session_size') || '20');
 
@@ -1035,9 +1041,63 @@ function renderKaofaList(word, mode) {
 }
 
 function renderBackDefinitions(word) {
-  document.getElementById('def-cn').innerHTML = renderKaofaList(word, 'card');
+  const container = document.getElementById('def-cn');
+  container.innerHTML = renderKaofaList(word, 'card');
   document.getElementById('def-en').style.display = 'none';
   document.getElementById('example-inline').style.display = 'none';
+
+  // Reset to page 0 and recompute pagination after layout settles
+  backPageIdx = 0;
+  backPageCount = 1;
+  // Defer to next frame so element heights are measurable
+  requestAnimationFrame(paginateBack);
+}
+
+// Greedy-fit: walk through 考法 blocks, pack as many as fit into each page.
+// Stores page boundaries as a data attribute on each block, then shows page 0.
+function paginateBack() {
+  const container = document.getElementById('def-cn');
+  if (!container) return;
+  const blocks = [...container.querySelectorAll('.kaofa-block')];
+  if (blocks.length === 0) { backPageCount = 1; renderPageIndicator(); return; }
+
+  // Show all temporarily so we can measure intrinsic heights
+  blocks.forEach(b => { b.style.display = ''; });
+
+  const available = container.clientHeight;
+  let page = 0;
+  let used = 0;
+  for (const b of blocks) {
+    const h = b.offsetHeight + parseFloat(getComputedStyle(b).marginBottom || 0);
+    if (used > 0 && used + h > available) {
+      page++;
+      used = 0;
+    }
+    b.dataset.page = String(page);
+    used += h;
+  }
+  backPageCount = page + 1;
+  showBackPage(0);
+  renderPageIndicator();
+}
+
+function showBackPage(idx) {
+  backPageIdx = idx;
+  const blocks = document.querySelectorAll('#def-cn .kaofa-block');
+  blocks.forEach(b => {
+    b.style.display = (parseInt(b.dataset.page || '0', 10) === idx) ? '' : 'none';
+  });
+  renderPageIndicator();
+}
+
+function renderPageIndicator() {
+  const el = document.getElementById('back-page-indicator');
+  if (!el) return;
+  if (backPageCount <= 1) { el.innerHTML = ''; el.style.display = 'none'; return; }
+  el.style.display = '';
+  el.innerHTML = Array.from({length: backPageCount}, (_, i) =>
+    `<span class="page-dot${i === backPageIdx ? ' active' : ''}"></span>`
+  ).join('');
 }
 
 // ============================================================
@@ -1264,7 +1324,7 @@ function nextRound() {
           <div class="swipe-label swipe-label-left" id="swipe-left">← 不会</div>
           <div class="swipe-label swipe-label-right" id="swipe-right">记住了 →</div>
           <div class="swipe-label swipe-label-down" id="swipe-down">↑ 模糊</div>
-          <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="word-num" id="back-num"></span></div>
+          <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="back-page-indicator" id="back-page-indicator" style="display:none"></span><span class="word-num" id="back-num"></span></div>
           <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
           <div class="def-cn" id="def-cn"></div>
           <div class="def-en" id="def-en"></div>
@@ -1538,7 +1598,9 @@ function setupCardEvents() {
   card.addEventListener('click', e => {
     // Don't flip if clicking a button inside the card
     if (e.target.closest('button')) return;
-    if (!isFlipped) flipCard();
+    if (!isFlipped) { flipCard(); return; }
+    // On the back: advance through pages if there are more
+    if (backPageIdx < backPageCount - 1) showBackPage(backPageIdx + 1);
   });
 
   // Front generate button
