@@ -1599,8 +1599,14 @@ function setupCardEvents() {
     // Don't flip if clicking a button inside the card
     if (e.target.closest('button')) return;
     if (!isFlipped) { flipCard(); return; }
-    // On the back: advance through pages if there are more
-    if (backPageIdx < backPageCount - 1) showBackPage(backPageIdx + 1);
+    // On the back: left half = prev page, right half = next page
+    const rect = card.getBoundingClientRect();
+    const onLeft = e.clientX < rect.left + rect.width / 2;
+    if (onLeft) {
+      if (backPageIdx > 0) showBackPage(backPageIdx - 1);
+    } else {
+      if (backPageIdx < backPageCount - 1) showBackPage(backPageIdx + 1);
+    }
   });
 
   // Front generate button
