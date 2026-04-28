@@ -197,9 +197,12 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .front-bottom { flex-shrink: 0; text-align: center; color: var(--text3); font-size: 12px; margin-top: 6px; }
 
 /* Card Back */
-.back-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; flex-shrink: 0; }
+.back-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; flex-shrink: 0; position: relative; }
 .back-top .word-num { margin-left: auto; }
-.back-page-indicator { display: flex; gap: 5px; margin: 0 auto; }
+.back-page-indicator {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: flex; gap: 5px;
+}
 .page-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sep); transition: background 0.2s; }
 .page-dot.active { background: var(--blue); }
 .back-pos {
