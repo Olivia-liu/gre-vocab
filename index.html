@@ -1090,6 +1090,9 @@ function showBackPage(idx) {
   blocks.forEach(b => {
     b.style.display = (parseInt(b.dataset.page || '0', 10) === idx) ? '' : 'none';
   });
+  // Mnemonic only on the last page (after the last 考法)
+  const mn = document.querySelector('.back-mnemonic-area');
+  if (mn) mn.style.display = (idx === backPageCount - 1) ? '' : 'none';
   renderPageIndicator();
 }
 
