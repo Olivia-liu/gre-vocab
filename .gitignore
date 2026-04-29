@@ -4,3 +4,4 @@ __pycache__/
 *.log
 .claude/
 *.bak
+new_mnemonics.json
