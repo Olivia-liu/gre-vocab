@@ -1,50 +1,21 @@
 # Mnemonic Writing Guide
 
-Guidelines for writing Chinese mnemonics for GRE vocabulary in this app.
+Guidelines for writing mnemonics for GRE vocabulary in this app.
+
+The audience is anyone learning the word — write whatever helps a single learner remember the word. Don't pre-target an audience.
 
 ---
 
-## Core principle: 谐音优先，故事兜底
+## Direct over narrative
 
-**Step 1 — Try 谐音 first**: Find a Chinese word/phrase that sounds like the English word AND carries its own real meaning. Build an absurd or funny scene around it.
+**Lead with the anchor and stop.** A short pointer — "X contains Y", "X sounds like Y", "X = prefix + Y" — sticks better than a multi-sentence scene. Skip "picture a..." / "imagine X happens" setups. 1–2 sentences is usually plenty.
 
-**Step 2 — If no good 谐音 exists**: Use a vivid visual story connecting a memorable image to the word's meaning.
+Use whatever language has the cleanest hook for **this specific word**:
+- Pure English (sound-alikes, wordplay, contained words)
+- Pure Chinese (when a clean 谐音 actually exists with real meaning)
+- Mixed English/Chinese (often the most natural)
 
-**Never force bad 谐音** — if the Chinese phrase doesn't genuinely sound like the English, skip it entirely and go with a story.
-
-**Critical rule**: A mnemonic needs both an image AND a sound/spelling hook. A vivid image alone is not enough — without something tying the word's sound or shape to the image, the word won't be retrievable.
-
----
-
-## What makes a GOOD 谐音
-
-The Chinese phrase must:
-1. **Actually sound like the English word** (not just vaguely similar)
-2. **Have its own real meaning** in Chinese — not just phonetic transliteration
-
-**Good examples:**
-- `abhor` → "啊好恶！看到大蟑螂从泡面爬出，从灵魂深处作呕" — 好恶 = disgust/loathing
-- `bribe` → "爸来了！官员把钱偷偷塞进口袋" — 爸来了 is funny and sounds like bribe
-- `penchant` → "喷香！喷香的东西停不下来" — 喷香 sounds like pen-chant and means fragrant
-- `malaise` → "毛了个贼！浑身毛躁不舒服" — 毛了个贼 sounds like ma-laise
-
-**Bad examples:**
-- `harangue` → "哈朗克" — no meaning, just reads out the syllables
-- `aberrant` → "啊别然特" — pure phonetic transliteration with no semantic content
-- `rift` → "听起来像裂了" — rift /rɪft/ doesn't actually sound like 裂了 /liè le/
-
----
-
-## What makes a GOOD story mnemonic
-
-- **Specific, visual, absurd**: a concrete scene with characters, actions, consequences
-- **Connects image → meaning**: the scene should directly evoke the word's definition
-- **Emotional hook**: funny, gross, dramatic, or surprising scenes stick better
-
-**Good examples:**
-- `abscission` → "想象一把大剪刀「咔嚓」一声，把枯叶从枝条上整齐剪离"
-- `impend` → "巨石悬在头顶随时坠落"
-- `incessant` → "楼上装修队永不停歇的噪音"
+The mnemonic needs a sound/spelling hook tied to the meaning. A vivid image alone is not enough — without something tying the word's sound or shape to the image, the word won't be retrievable.
 
 ---
 
@@ -54,50 +25,75 @@ When a GRE word sounds like or contains a common word, use it as the hook:
 
 | GRE word | Anchor | Hook |
 |---|---|---|
-| `bolster` | booster | 火箭booster助推→bolster增强/支撑 |
-| `tardy` | retarded | retarded去掉re-和-ed，中间就是tardy |
-| `spurious` | curious | 「让我curious一下……果然是spurious！」 |
-| `inaugurate` | 一诺 | inaug ≈ 一诺：「一诺千金！」总统宣誓就职 |
-| `foible` | foil | foible里有foil(铝箔)，铝箔最薄处一戳就破 = 弱点 |
-| `serried` | series | serried里有series，一系列密密麻麻排列 |
+| `bolster` | booster | a rocket booster props you up — bolster = support |
+| `tardy` | retarded | strip "re-" and "-ed" from retarded, you get tardy |
+| `spurious` | curious | "let me get curious about this… ah, it's spurious!" |
+| `inaugurate` | 一诺 | inaug ≈ 一诺: 「一诺千金！」 — sworn in |
+| `foible` | foil | foible contains foil — aluminum foil tears at its weak point |
+| `serried` | series | serried contains series — a tight series of ranks |
+| `verdant` | verde | verde + land = green land (verde from salsa verde / restaurant menus) |
+| `apophasis` | oppose | "I oppose saying it… but I just said it" (apo ≈ oppose, phasis ≈ saying) |
+| `sanctify` | saint | saint-ify = make into a saint = make holy |
+| `mendacious` | mend | swears he'll MEND but really MEND-acious — full of lies |
+| `cajole` | jolly | be all jolly and sweet to coax someone — ca-JOLLY |
 
 ---
 
 ## Patterns to AVOID
 
-### 1. 生僻词根拆解
-Breaking words into Latin/Greek roots that Chinese students don't know.
+### 1. Obscure roots
+Breaking words into Latin/Greek roots that the average learner doesn't know.
 
-**Bad:** `plod(沉重走)+ding`, `dicate(统治)+or`, `sciss(剪)+ion`
+**Bad:** `plod(heavy walk)+ding`, `dicate(rule)+or`, `sciss(cut)+ion`
 
-**OK:** Common prefixes everyone knows: `un-`, `re-`, `anti-`, `dis-`, `inter-`, `over-`
+**OK:** Common prefixes everyone knows: `un-`, `re-`, `anti-`, `dis-`, `inter-`, `over-`, `pre-`, `mis-`, etc.
 
-### 2. 纯音译
+### 2. Circular definitions (the most common failure)
+The mnemonic just restates the definition — no memory hook at all.
+
+**Bad:**
+- `incessant` → "something that doesn't stop is incessant" (just the definition)
+- `dally` → "to dally = to dawdle, waste time" (one synonym for another)
+- `dandy` → "a dandy is a man who dresses elegantly" (just the definition)
+- `condemn` → "to condemn = to officially declare wrong" (just the definition)
+- `confine` → "to confine = to keep within limits" (just the definition)
+
+**Good (each ties a sound/spelling hook to the meaning):**
+- `dally` → "DILLY-DALLY" (idiom contains the word)
+- `condemn` → "contains DAMN — to con-DEMN = to DAMN officially"
+- `confine` → "shares FIN- with FINITE / FINISH — set the end-bounds"
+
+**Self-check rule:** before writing a mnemonic, point to the *exact* sound, letter group, or contained word that makes it stick. If you can't, the mnemonic is circular — keep brainstorming or leave the entry empty.
+
+### 3. Fake sound-alikes
+Claiming a word sounds like X when the sounds don't actually match.
+
+**Bad:** `rift` → "听起来像裂了" — rift /rɪft/ doesn't actually sound like 裂了 /liè le/.
+
+### 4. Truncated / incomplete
+Mnemonic cuts off mid-sentence or omits the actual meaning hook.
+
+### 5. Forced phonetic transliteration
 Chinese characters that just phonetically spell the English word with no semantic content.
 
-### 3. 假谐音
-Claiming "听起来像X" when the sounds don't genuinely match.
-
-### 4. 循环定义
-Mnemonic just restates the definition — no memory hook at all.
-
-### 5. 残缺/截断
-Mnemonic cuts off mid-sentence.
+**Bad:** `harangue` → "哈朗克"; `aberrant` → "啊别然特".
 
 ---
 
-## Roots/words to avoid (user doesn't know these)
+## Roots/words to avoid (most learners don't know these)
 
-- `antho-` (flower, Greek) — use a story for *anthology* instead
-- `verde` / `vert` (green, Latin/French/Spanish) — use a visual scene for *verdant* instead
-- `feeble` — not a known word, don't use as anchor for *foible*
-- `immaculate` — if the user doesn't know *maculate*, they won't know *immaculate* either
+- `antho-` (flower, Greek) — use an anchor for *anthology* instead (e.g. "Anthony's-logy")
+- `feeble` — don't use as an anchor for *foible*
+- `immaculate` — don't use as an anchor for *maculate* (and vice versa)
+
+`verde` is OK to use — it's a common restaurant-menu word ("salsa verde"), not an obscure root.
 
 ---
 
 ## Format
 
-- End each mnemonic with `——word，中文释义。`
-- Use `「」` for quotes inside mnemonics (not `"`)
 - Keep to 1–3 sentences
+- Lead with the mnemonic itself — no preamble like "to memorize this word…" or "you can think of…"
+- Use `「」` for quoted phrases inside Chinese mnemonics (not straight `"`)
 - Humor is encouraged — mnemonics that make you laugh are more memorable
+- End with the word and its core meaning so the connection is explicit, e.g. `— word, meaning.` or `——word，中文释义。`
