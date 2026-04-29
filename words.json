@@ -6291,7 +6291,7 @@
         "ant": ""
       }
     ],
-    "m": "base(底部)+board(板)——贴在墙底部的板，就是baseboard，护壁板。"
+    "m": "BASE + BOARD — the board running along the BASE of the wall. — baseboard, the trim board at floor level."
   },
   {
     "w": "batch",
@@ -6322,7 +6322,7 @@
         ]
       }
     ],
-    "m": "爸，吃(batch)！妈妈一炉烤出一批饼干给爸吃——一批一炉。"
+    "m": "a BATCH of cookies — one round baked together. — batch, a group produced together."
   },
   {
     "w": "bathetic",
@@ -6343,7 +6343,7 @@
         ]
       }
     ],
-    "m": "想象悲剧最后变成洗澡戏，矫情突兀——bathetic，从崇高跌落低俗。"
+    "m": "from BATHOS (anticlimax) — bathetic writing collapses into the trite and dull. — bathetic, anticlimactic / overly sentimental."
   },
   {
     "w": "bawdy",
@@ -6367,7 +6367,7 @@
         ]
       }
     ],
-    "m": "这太低俗了(bawdy)！父母拿遥控器换台——下流猥亵的。"
+    "m": "rhymes with NAUGHTY — BAWDY humor is naughty, lewd. — bawdy, lewd / indecent."
   },
   {
     "w": "bedeck",
@@ -6391,7 +6391,7 @@
         ]
       }
     ],
-    "m": "be+deck(甲板)——把甲板装饰一新，就是bedeck，华丽装饰。"
+    "m": "BE + DECK — to deck out, decorate fully. — bedeck, to adorn."
   },
   {
     "w": "belabor",
@@ -6424,7 +6424,7 @@
         ]
       }
     ],
-    "m": "belabor → be + labor，labor「劳动、努力」学生认识。把一件事情反复「劳动」地讲、锤打不停——belabor，喋喋不休地重复强调；过分详述。"
+    "m": "BE + LABOR — to labor on excessively, over-explain. — belabor, to overdo / harp on."
   },
   {
     "w": "beleaguer",
@@ -6458,7 +6458,7 @@
         ]
       }
     ],
-    "m": "beleaguer → be + leaguer，league「联盟」学生认识。被整个联盟的人包围骚扰——beleaguer，使困扰、使烦恼、包围。"
+    "m": "BE + LEAGUER (besieger) — surrounded by leaguers (besiegers). — beleaguer, to besiege / harass."
   },
   {
     "w": "belie",
@@ -6517,7 +6517,7 @@
         ]
       }
     ],
-    "m": "be+lie(谎言)——让真相变成谎言，就是belie，掩盖事实。"
+    "m": "BE + LIE — to LIE about, contradict, or disguise. Her smile BELIES her sadness. — belie, to contradict / disguise."
   },
   {
     "w": "bellwether",
@@ -6537,7 +6537,7 @@
         ]
       }
     ],
-    "m": "bell(铃)+wether(公羊)——脖子挂铃的领头羊，就是bellwether，风向标。"
+    "m": "BELL + WETHER (a castrated ram with a bell) — the lead sheep with the bell that the flock follows. — bellwether, a leader / trend indicator."
   },
   {
     "w": "beneficent",
@@ -6571,7 +6571,7 @@
         ]
       }
     ],
-    "m": "bene（好）听起来像「便宜「——乐善好施的人总是把便宜让给别人，慷慨仁慈。——beneficent，仁慈的。"
+    "m": "contains BENE (good) + FIC (do) — doing good. — beneficent, kind / charitable."
   },
   {
     "w": "benign",
@@ -6604,7 +6604,7 @@
         ]
       }
     ],
-    "m": "bene(好)+ign——好的善意的，就是benign。肿瘤benign就是良性。"
+    "m": "BEN- (good, as in \"benefit\") — good-natured / harmless. — benign, harmless / kindly."
   },
   {
     "w": "berate",
@@ -6624,7 +6624,7 @@
         ]
       }
     ],
-    "m": "be+rate(评级)——给极低评级并大声说——berate，怒骂严厉指责。"
+    "m": "BE + RATE — to RATE someone (low) sternly = to scold. — berate, to scold harshly."
   },
   {
     "w": "beseech",
@@ -6644,7 +6644,7 @@
         ]
       }
     ],
-    "m": "beseech → be + seech，seech像seek「寻找」的变形。迫切地寻找、苦苦请求——beseech，恳求、哀求。"
+    "m": "BE + SEECH (seek) — to seek earnestly, beg. — beseech, to beg urgently."
   },
   {
     "w": "besmirch",
@@ -6677,7 +6677,7 @@
         ]
       }
     ],
-    "m": "besmirch → be + smirch，smirch像smear「抹」+ smudge「污迹」的合体。把脏东西全都抹到某人身上——besmirch，诽谤、玷污名誉。"
+    "m": "BE + SMIRCH (smudge) — to smudge someone's reputation. — besmirch, to dirty / slander."
   },
   {
     "w": "bibliography",
@@ -6692,7 +6692,7 @@
         "ant": ""
       }
     ],
-    "m": "biblio(书)+graphy(写)——把书都列出来，就是bibliography，书目。"
+    "m": "BIBLI- (book) + GRAPHY (writing) — the list of books cited. — bibliography, a list of books / sources."
   },
   {
     "w": "bifurcate",
@@ -6712,7 +6712,7 @@
         ]
       }
     ],
-    "m": "bi(两)+furc(叉)+ate——一路分成两叉，就是bifurcate，分叉。"
+    "m": "BI- (two) + FURC (fork) — to fork into two. — bifurcate, to split into two branches."
   },
   {
     "w": "bigot",
@@ -6733,7 +6733,7 @@
         ]
       }
     ],
-    "m": "比鸽子(bigot)还认死理！鸽子靠磁场导航绝不偏向——偏执顽固者。"
+    "m": "a BIGOT clings rigidly to prejudice. — bigot, an intolerant prejudiced person."
   },
   {
     "w": "bland",
@@ -6783,7 +6783,7 @@
         ]
       }
     ],
-    "m": "白烂(bland)！食物淡而无味，太没滋味了——乏味无趣。"
+    "m": "BLAND food has no flavor; a bland personality has no edge. — bland, dull / unflavored."
   },
   {
     "w": "blandishment",
@@ -6815,7 +6815,7 @@
         ]
       }
     ],
-    "m": "bland(温和)+ishment——用温和甜言蜜语哄骗，就是blandishment。"
+    "m": "from BLAND — sweet bland flattery used to coax. — blandishment, flattering coaxing."
   },
   {
     "w": "blast",
@@ -6884,7 +6884,7 @@
         ]
       }
     ],
-    "m": "爆了斯特(blast)！轰的一声爆炸，强力冲击——猛烈强风爆炸。"
+    "m": "a BLAST — explosion, blast of wind, blast of criticism. — blast, an explosion / sharp gust / harsh attack."
   },
   {
     "w": "blatant",
@@ -6921,7 +6921,7 @@
         ]
       }
     ],
-    "m": "不来遮掩(blatant)一下？厚颜无耻——明目张胆的。"
+    "m": "rhymes with FLAGRANT — both mean glaringly obvious. — blatant, glaringly obvious."
   },
   {
     "w": "blazon",
@@ -6954,7 +6954,7 @@
         ]
       }
     ],
-    "m": "blaz(火焰)+on——像火焰一样燃烧展示，就是blazon，炫耀。"
+    "m": "contains BLAZE — to BLAZE forth on a banner; to display prominently. — blazon, to display prominently."
   },
   {
     "w": "blemish",
@@ -6987,7 +6987,7 @@
         ]
       }
     ],
-    "m": "皮肤上的小污点，让人一直盯着——blemish，缺陷瑕疵。"
+    "m": "a BLEMISH is a small flaw on the skin or surface. — blemish, a small flaw."
   },
   {
     "w": "blight",
@@ -7015,7 +7015,7 @@
         ]
       }
     ],
-    "m": "不来了(blight)！庄稼被枯萎病摧毁，收成不来了——枯萎病害。"
+    "m": "BLIGHT destroys crops; metaphorically, anything that ruins. — blight, to ruin / destroy."
   },
   {
     "w": "bliss",
@@ -7049,7 +7049,7 @@
         ]
       }
     ],
-    "m": "不累死(bliss)！幸福到软绵绵——极乐幸福。"
+    "m": "BLISS — pure ecstatic happiness. — bliss, supreme happiness."
   },
   {
     "w": "blithe",
@@ -7082,7 +7082,7 @@
         ]
       }
     ],
-    "m": "不理他(blithe)！无忧无虑，根本不在乎——快活漫不经心。"
+    "m": "BLITHE rhymes with LITHE — light, carefree, breezy. — blithe, carefree / casual."
   },
   {
     "w": "blueprint",
@@ -7113,7 +7113,7 @@
         ]
       }
     ],
-    "m": "blue(蓝)+print(印刷)——印在蓝纸上的详细计划，就是blueprint，蓝图。"
+    "m": "a BLUEPRINT is the architect's detailed plan, drawn in blue. — blueprint, a detailed plan."
   },
   {
     "w": "blunder",
@@ -7152,7 +7152,7 @@
         ]
       }
     ],
-    "m": "爸，乱了(blunder)！犯了个傻乎乎的大错——重大失误。"
+    "m": "a BLUNDER is a stupid mistake — to BLUNDER = stumble clumsily. — blunder, a serious clumsy mistake."
   },
   {
     "w": "blunt",
@@ -7192,7 +7192,7 @@
         ]
       }
     ],
-    "m": "不拐弯(blunt)！刀刃钝了，说话也直来直去——钝的直率的。"
+    "m": "a BLUNT knife isn't sharp; a blunt person says it straight. — blunt, dull / direct."
   },
   {
     "w": "blur",
@@ -7226,7 +7226,7 @@
         ]
       }
     ],
-    "m": "爸了(blur)！照片拍虚了，模模糊糊——模糊。"
+    "m": "a BLUR — out-of-focus image; or to blur the truth. — blur, to make unclear."
   },
   {
     "w": "blurb",
@@ -7241,7 +7241,7 @@
         "ant": ""
       }
     ],
-    "m": "blur(模糊)+b——书背面那段简短模糊的介绍——blurb，书腰广告。"
+    "m": "a BLURB on a book jacket — a short promotional summary. — blurb, a short promotional notice."
   },
   {
     "w": "blurt",
@@ -7261,7 +7261,7 @@
         ]
       }
     ],
-    "m": "话像炮弹直射出口，没经过大脑——blurt，脱口而出。"
+    "m": "to BLURT = let it out suddenly without thinking. — blurt, to say impulsively."
   },
   {
     "w": "bluster",
@@ -7301,7 +7301,7 @@
         ]
       }
     ],
-    "m": "爸，乱嚷嚷(bluster)！虚张声势大声说空话——狂风咆哮虚张声势。"
+    "m": "a BLUSTERY wind is loud and showy — bluster = loud bragging or empty threat. — bluster, loud blustery talk / boasting."
   },
   {
     "w": "bodyguard",
@@ -7316,7 +7316,7 @@
         "ant": ""
       }
     ],
-    "m": "body(身体)+guard(保护)——保护身体的人，就是bodyguard，保镖。"
+    "m": "BODY + GUARD — guards a body. — bodyguard, a personal guard."
   },
   {
     "w": "boggle",
@@ -7347,7 +7347,7 @@
         ]
       }
     ],
-    "m": "bog(泥沼)+gle——陷入泥沼一样脑子卡壳——boggle，使困惑茫然。"
+    "m": "the mind BOGGLES — hesitates / falters in confusion. — boggle, to hesitate in confusion."
   },
   {
     "w": "boisterous",
@@ -7372,7 +7372,7 @@
         ]
       }
     ],
-    "m": "爸，乱死了(boisterous)！一群孩子闹得天翻地覆——喧嚣吵闹。"
+    "m": "rhymes with ROISTEROUS — BOISTEROUS kids are loudly rambunctious. — boisterous, noisily rowdy."
   },
   {
     "w": "bolster",
@@ -7404,7 +7404,7 @@
         ]
       }
     ],
-    "m": "booster(助推器)→ bolster，两词发音相近，火箭加装booster「增压加力」——bolster，支撑/增强。"
+    "m": "sounds like BOOSTER — both prop things up. — bolster, to support / prop up."
   },
   {
     "w": "bombast",
@@ -7425,7 +7425,7 @@
         ]
       }
     ],
-    "m": "bomb(炸弹)+ast——像炸弹一样响亮的大话——bombast，夸夸其谈。"
+    "m": "contains BOMB + BAST — bombastic speech is bombarded with inflated words. — bombast, pompous inflated speech."
   },
   {
     "w": "bonhomie",
@@ -7440,7 +7440,7 @@
         "ex": []
       }
     ],
-    "m": "bon(好法语)+homie(哥们)——对所有人都好像老友一样亲切——bonhomie。"
+    "m": "from French BON (good) + HOMIE — \"good homie\" vibes — friendly cheer. — bonhomie, good-natured friendliness."
   },
   {
     "w": "boo",
@@ -7460,7 +7460,7 @@
         ]
       }
     ],
-    "m": "不(boo)！表达不满时的那声不——嘘喝倒彩。"
+    "m": "to BOO at a bad performance. — boo, to jeer."
   },
   {
     "w": "boon",
@@ -7488,7 +7488,7 @@
         "ex": []
       }
     ],
-    "m": "爸嗯(boon)！爸爸点头说嗯，认可这是个好处——福气好事。"
+    "m": "a BOON is a blessing / benefit (\"this rain is a boon to farmers\"). — boon, a blessing / benefit."
   },
   {
     "w": "boor",
@@ -7508,7 +7508,7 @@
         ]
       }
     ],
-    "m": "爸，粗了(boor)！举止粗鲁令人皱眉——粗鄙没教养的人。"
+    "m": "a BOOR is a rude lout — \"BOORish\" behavior at the dinner table. — boor, a rude person."
   },
   {
     "w": "bootless",
@@ -7528,7 +7528,7 @@
         ]
       }
     ],
-    "m": "boot(靴子)+less——连靴子都没有，穷困无用——bootless，徒劳的。"
+    "m": "BOOT + LESS — without boots, you can't walk; bootless = futile, useless. — bootless, useless."
   },
   {
     "w": "bound",
@@ -7575,7 +7575,7 @@
         ]
       }
     ],
-    "m": "bound → 谐音「绑的」！一道界限像绳子把你绑住，只能在这个范围内行动——bound，界限；也是「跳跃」和「bound for前往」。"
+    "m": "BOUND has many uses: tied, leaping, or determined to do (\"bound for glory\"). — bound, tied / leaping / committed."
   },
   {
     "w": "bouquet",
@@ -7590,7 +7590,7 @@
         "ant": ""
       }
     ],
-    "m": "一束花(bouquet)，法语词，送花香气弥漫——花束芳香。"
+    "m": "a BOUQUET — a bunch of flowers. — bouquet, a bunch of flowers."
   },
   {
     "w": "boycott",
@@ -7610,7 +7610,7 @@
         ]
       }
     ],
-    "m": "源于Charles Boycott，被集体孤立的爱尔兰地主——boycott，抵制。"
+    "m": "named after Captain Boycott, an Irish land agent everyone refused to deal with — to BOYCOTT = collectively shun. — boycott, to refuse to participate as protest."
   },
   {
     "w": "bracing",
@@ -7631,7 +7631,7 @@
         ]
       }
     ],
-    "m": "brace(支架)+ing——像支架支撑精神振奋——bracing，振奋清新的。"
+    "m": "a BRACING wind sharpens you up; bracing = invigorating. — bracing, refreshingly invigorating."
   },
   {
     "w": "bracket",
@@ -7646,7 +7646,7 @@
         "ant": ""
       }
     ],
-    "m": "brac(支撑)+ket——L形支撑架，就是bracket，括号托架。"
+    "m": "a BRACKET is the L-shaped support holding up a shelf. — bracket, an L-shaped support."
   },
   {
     "w": "braided",
@@ -7661,7 +7661,7 @@
         "ant": ""
       }
     ],
-    "m": "braid(辫子)+ed——头发编成辫子，就是braided，编织的。"
+    "m": "BRAIDED hair — woven in three strands. — braided, woven / interlaced."
   },
   {
     "w": "brake",
@@ -7681,7 +7681,7 @@
         ]
       }
     ],
-    "m": "爸，踩(brake)！紧急刹车！——刹车。"
+    "m": "step on the BRAKE to stop. — brake, a stopping mechanism."
   },
   {
     "w": "brash",
@@ -7714,7 +7714,7 @@
         ]
       }
     ],
-    "m": "爸冲动(brash)！冲动鲁莽决定后悔了——草率仓促。"
+    "m": "BRASH — rashly bold without thinking. — brash, rashly impudent."
   },
   {
     "w": "brassy",
@@ -7741,7 +7741,7 @@
         "ex": []
       }
     ],
-    "m": "brass(铜)+y——铜皮铁骨的厚脸皮——brassy，厚颜无耻。"
+    "m": "BRASSY — like loud cheap brass — shamelessly bold. — brassy, shamelessly bold / showy."
   },
   {
     "w": "brattish",
@@ -7756,7 +7756,7 @@
         "ant": ""
       }
     ],
-    "m": "brat(熊孩子)+ish——有点熊孩子气质——brattish，被宠坏淘气。"
+    "m": "from BRAT — a brattish kid acts spoiled and rude. — brattish, like a spoiled brat."
   },
   {
     "w": "bravado",
@@ -7785,7 +7785,7 @@
         ]
       }
     ],
-    "m": "brave(勇)+ado——表演出来的假勇气——bravado，虚张声势。"
+    "m": "from BRAVE — exaggerated false bravery, all show. — bravado, showy false courage."
   },
   {
     "w": "bravura",
@@ -7805,7 +7805,7 @@
         ]
       }
     ],
-    "m": "brave(勇)+ura——勇气十足的精彩表演——bravura，炫技精彩。"
+    "m": "from BRAVO — a BRAVURA performance earns shouts of \"bravo!\" — bravura, brilliant technical display."
   },
   {
     "w": "brazen",
@@ -7842,7 +7842,7 @@
         ]
       }
     ],
-    "m": "brass(铜)+en——铜皮铁骨的脸——brazen，厚颜无耻的。"
+    "m": "BRAZEN means \"made of brass\" — bold and shameless like loud brass. — brazen, shamelessly bold."
   },
   {
     "w": "breach",
@@ -7874,7 +7874,7 @@
         ]
       }
     ],
-    "m": "爸，裂(breach)了！防线出现缺口——违背突破。"
+    "m": "BREACH the dam — break through. A breach of contract = a break. — breach, to break through / a breaking."
   },
   {
     "w": "breezeway",
@@ -7889,7 +7889,7 @@
         "ant": ""
       }
     ],
-    "m": "breeze(微风)+way——有微风吹过的通道，就是breezeway。"
+    "m": "BREEZE + WAY — a covered breezy passage between two buildings. — breezeway, a covered open-sided passage."
   },
   {
     "w": "brevity",
@@ -7922,7 +7922,7 @@
         ]
       }
     ],
-    "m": "brev(短)+ity——Shakespeare说Brevity is the soul of wit——简洁。"
+    "m": "from BRIEF — the quality of being brief. — brevity, conciseness."
   },
   {
     "w": "bribe",
@@ -7941,7 +7941,7 @@
         ]
       }
     ],
-    "m": "爸来了(bribe)！官员把钱偷偷塞进口袋——贿赂收买。"
+    "m": "「爸来了」(bribe) — 官员偷偷把钱塞进口袋。— bribe, money paid to corrupt."
   },
   {
     "w": "bridle",
@@ -7960,7 +7960,7 @@
         ]
       }
     ],
-    "m": "bridle(马笼头)——套住马嘴加以控制，就是bridle，限制克制。"
+    "m": "a horse's BRIDLE restrains it; to bridle = to restrain or curb. — bridle, to restrain."
   },
   {
     "w": "brisk",
@@ -7991,7 +7991,7 @@
         ]
       }
     ],
-    "m": "brisk → 谐音「不理死的」！精力充沛、动作麻利，不理那些懒散的人——brisk，轻快的、活泼的、使人振奋的。"
+    "m": "a BRISK walk is quick and lively; a brisk reply is sharp. — brisk, lively / sharp."
   },
   {
     "w": "bristle",
@@ -8023,7 +8023,7 @@
         ]
       }
     ],
-    "m": "爸死了(bristle)！愤怒到头发都竖起来——怒发冲冠。"
+    "m": "a BRISTLE is a stiff hair — to bristle = to bristle with anger (hairs raised). — bristle, to react angrily / be densely set."
   },
   {
     "w": "brittle",
@@ -8055,7 +8055,7 @@
         ]
       }
     ],
-    "m": "brit(碎裂)+le——一碰就碎裂，brittle，易碎脆弱的。"
+    "m": "BRITTLE bones snap easily; a brittle smile lacks warmth. — brittle, fragile / unfeeling."
   },
   {
     "w": "broach",
@@ -8087,7 +8087,7 @@
         ]
       }
     ],
-    "m": "broach → 谐音「播出」！主持人正式「播出」今天的第一个话题——broach，提出（话题）、开启；也指开瓶。"
+    "m": "to BROACH a topic = to open it for discussion (originally: to pierce a cask to start it pouring). — broach, to bring up for discussion."
   },
   {
     "w": "bromide",
@@ -8106,7 +8106,7 @@
         ]
       }
     ],
-    "m": "溴(brom)+ide——溴化物曾用来镇静，bromide，陈词滥调无聊套话。"
+    "m": "a BROMIDE was a sedative — figuratively a tired clichéd remark that puts you to sleep. — bromide, a trite remark."
   },
   {
     "w": "brook",
@@ -8137,7 +8137,7 @@
         ]
       }
     ],
-    "m": "小溪(brook)容忍石头流过——brook，忍受容许。"
+    "m": "an old usage: \"I'll BROOK no insolence\" = I won't tolerate it. — brook, to tolerate."
   },
   {
     "w": "browbeat",
@@ -8156,7 +8156,7 @@
         ]
       }
     ],
-    "m": "brow(眉毛)+beat(打)——用眼神和眉毛狠狠吓人——browbeat，恐吓威胁。"
+    "m": "BROW + BEAT — to beat someone down with a furrowed brow / intimidate. — browbeat, to intimidate."
   },
   {
     "w": "bruit",
@@ -8176,7 +8176,7 @@
         ]
       }
     ],
-    "m": "不让人知(bruit)？消息偏偏到处散播——bruit，广泛传播消息。"
+    "m": "rhymes with FRUIT — to BRUIT it about = to spread (as gossip). — bruit, to spread (a rumor)."
   },
   {
     "w": "buck",
@@ -8208,7 +8208,7 @@
         ]
       }
     ],
-    "m": "雄鹿(buck)用角顶开——buck，阻止反对。"
+    "m": "to BUCK a trend = to push back against it; a horse bucks = throws off its rider. — buck, to resist / oppose."
   },
   {
     "w": "budge",
@@ -8239,7 +8239,7 @@
         ]
       }
     ],
-    "m": "芽(bud)+ge——芽才能破土而出，budge，稍微移动改变立场。"
+    "m": "the stubborn mule won't BUDGE — won't move an inch. — budge, to move / yield."
   },
   {
     "w": "buffoon",
@@ -8254,7 +8254,7 @@
         "ant": ""
       }
     ],
-    "m": "爸疯了(buffoon)！穿小丑服乱蹦——小丑笑柄。"
+    "m": "a BUFFOON is a clown — a comically foolish person. — buffoon, a foolish clown."
   },
   {
     "w": "bulge",
@@ -8315,7 +8315,7 @@
         ]
       }
     ],
-    "m": "球(bul)+ge——球形鼓起来，bulge，凸起鼓胀。"
+    "m": "a BULGE — a visible swelling outward. — bulge, a swelling."
   },
   {
     "w": "bully",
@@ -8347,7 +8347,7 @@
         ]
       }
     ],
-    "m": "霸凌(bully)——以大欺小，欺凌弱小者。"
+    "m": "a BULLY pushes others around; \"bully for you!\" = excellent. — bully, an aggressor / excellent."
   },
   {
     "w": "bumptious",
@@ -8371,7 +8371,7 @@
         ]
       }
     ],
-    "m": "bump(撞)+tious——到处撞人横行霸道——bumptious，专横傲慢的。"
+    "m": "from BUMP — pushing your way around with arrogance. — bumptious, obnoxiously self-assertive."
   },
   {
     "w": "bungle",
@@ -8391,7 +8391,7 @@
         ]
       }
     ],
-    "m": "bungle → 谐音「搬乱了」！搬家工人把所有东西搬得乱七八糟，活儿全搞砸了——bungle，笨手笨脚地搞糟、把事情弄坏。"
+    "m": "to BUNGLE the job = botch it badly. — bungle, to botch."
   },
   {
     "w": "buoy",
@@ -8411,7 +8411,7 @@
         ]
       }
     ],
-    "m": "buoy → 谐音「抱哟」！落水者死死抱住海上的浮标，大声喊：抱哟！——buoy，浮标；（动词）支撑、鼓励、使振奋。"
+    "m": "a BUOY floats — to buoy spirits = lift them up. — buoy, to lift up / encourage."
   },
   {
     "w": "buoyant",
@@ -8443,7 +8443,7 @@
         ]
       }
     ],
-    "m": "buoy(浮标)+ant——浮着飘起来，buoyant，有浮力乐观的。"
+    "m": "from BUOY — floating, light-hearted. — buoyant, floating / cheerful."
   },
   {
     "w": "burgeon",
@@ -8463,7 +8463,7 @@
         ]
       }
     ],
-    "m": "burg(城镇)+eon——新城镇快速扩张，burgeon，蓬勃发展。"
+    "m": "rhymes with SURGEON, but for growth — to BURGEON = to grow rapidly. — burgeon, to grow rapidly."
   },
   {
     "w": "burlesque",
@@ -8482,7 +8482,7 @@
         ]
       }
     ],
-    "m": "burlesque → bur + lesque，lesque像grotesque「奇形怪状的」的后半段。奇形怪状地模仿嘲弄——burlesque，滑稽讽刺的恶搞作品。"
+    "m": "a BURLESQUE is a parody — exaggerated, ridiculous mockery. — burlesque, a comic parody."
   },
   {
     "w": "burnish",
@@ -8501,7 +8501,7 @@
         ]
       }
     ],
-    "m": "burn(燃)+ish——燃烧后发亮，burnish，擦亮磨光。"
+    "m": "to BURNISH = to polish to a bright shine. — burnish, to polish."
   },
   {
     "w": "butter",
@@ -8516,7 +8516,7 @@
         "ant": ""
       }
     ],
-    "m": "butter(黄油)——抹面包也可以抹人——butter，黄油，奉承。"
+    "m": "BUTTER — also \"to butter someone up\" = flatter. — butter, dairy spread / to flatter."
   },
   {
     "w": "buttress",
@@ -8543,7 +8543,7 @@
         ]
       }
     ],
-    "m": "butt(屁股)+ress——用屁股顶住墙支撑，buttress，扶壁支撑。"
+    "m": "a BUTTRESS is a stone support against a cathedral wall — to buttress = to support / reinforce. — buttress, to support."
   },
   {
     "w": "byline",
@@ -76081,7 +76081,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "BASH — to whack hard, or to verbally trash someone. — bash, to strike / criticize harshly."
   },
   {
     "w": "bask",
@@ -76101,7 +76101,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "to BASK in the sun = lounge in warm pleasure. — bask, to lounge enjoyably."
   },
   {
     "w": "beholden",
@@ -76120,7 +76120,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "BE + HOLDEN (held) — held in someone's debt, obliged to them. — beholden, indebted."
   },
   {
     "w": "behoove",
@@ -76139,7 +76139,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "BE + HOOVE — sounds like \"it BE-HOOVES you\" = it's fitting / proper for you. — behoove, to be appropriate for."
   },
   {
     "w": "beige",
@@ -76159,7 +76159,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "BEIGE — that bland tan color, also \"beige personality\" = featureless. — beige, a featureless tan / dull."
   },
   {
     "w": "belligerence",
@@ -76179,7 +76179,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "contains BELLI (war, as in \"rebellion\") — warlike attitude. — belligerence, aggressive hostility."
   },
   {
     "w": "belligerent",
@@ -76200,7 +76200,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "from BELLIGERENCE — warlike, eager to fight. — belligerent, hostile / warlike."
   },
   {
     "w": "beset",
@@ -76237,7 +76237,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "BE + SET — set upon by attackers / problems. — beset, to harass / attack."
   },
   {
     "w": "bewitching",
@@ -76257,7 +76257,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "contains WITCH — bewitched as if by a witch's spell — irresistible. — bewitching, enchanting."
   },
   {
     "w": "blackmail",
@@ -76276,7 +76276,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "BLACK + MAIL — sending dark threatening mail to extort someone. — blackmail, to extort with threats."
   },
   {
     "w": "bluff",
@@ -76309,7 +76309,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "to BLUFF in poker = to bold-face deceive; or BLUFF = blunt and direct. — bluff, to deceive boldly / blunt and frank."
   },
   {
     "w": "bogus",
@@ -76342,7 +76342,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "BOGUS — phony, fake (as in \"bogus claim\"). — bogus, fake."
   },
   {
     "w": "bore",
@@ -76375,7 +76375,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "a BORE talks endlessly about dull things; to BORE = to weary. — bore, a tedious person / to weary."
   },
   {
     "w": "brandish",
@@ -76395,7 +76395,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "to BRANDISH a sword = wave it threateningly. — brandish, to wave menacingly."
   },
   {
     "w": "brim",
@@ -76445,7 +76445,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "the BRIM of a hat or cup — also \"brimming with joy\" = full to the edge. — brim, edge / to be full."
   },
   {
     "w": "bumble",
@@ -76478,7 +76478,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "from BUMBLEBEE — to bumble around clumsily. — bumble, to act clumsily."
   },
   {
     "w": "bustle",
@@ -76515,7 +76515,7 @@
         ]
       }
     ],
-    "m": ""
+    "m": "a BUSTLING street — busy, full of activity. — bustle, busy activity."
   },
   {
     "w": "calamity",
