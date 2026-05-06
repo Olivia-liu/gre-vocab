@@ -213,7 +213,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .back-pos:empty { display: none; }
 .def-word-small { font-size: 18px; font-weight: 600; color: var(--text2); margin-bottom: 6px; flex-shrink: 0; display: flex; align-items: baseline; gap: 8px; }
 .def-word-small .back-ipa { font-size: 15px; font-weight: 400; color: var(--text3); letter-spacing: 0.3px; }
-.def-cn { margin-bottom: 6px; flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+.def-cn { margin-bottom: 6px; flex: 0 1 auto; min-height: 0; overflow-y: auto; }
 .def-en { font-size: 13px; color: var(--text2); line-height: 1.4; border-left: 3px solid var(--sep); padding-left: 10px; flex-shrink: 0; }
 
 /* Stacked 考法 blocks (multiple definitions per word) */
@@ -1076,9 +1076,17 @@ function paginateBack() {
   // that would be there if mnemonic were display:none.
   const mn = document.querySelector('.back-mnemonic-area');
   if (mn) mn.style.visibility = '';
+
+  // Temporarily allow def-cn to grow to fill remaining space so we can
+  // measure the *ceiling* of available kaofa space. CSS keeps def-cn
+  // content-sized normally (flex: 0 1 auto) so short content doesn't
+  // leave a giant gap before the mnemonic.
+  const oldFlex = container.style.flex;
+  container.style.flex = '1 1 auto';
   void container.offsetHeight; // force a reflow before measuring
 
   const available = container.clientHeight;
+  container.style.flex = oldFlex; // revert
   let page = 0;
   let used = 0;
   for (const b of blocks) {
