@@ -1071,34 +1071,65 @@ function paginateBack() {
   // Show all blocks for height measurement
   blocks.forEach(b => { b.style.display = ''; });
 
-  // Make sure mnemonic is in layout (visible) so def-cn's clientHeight
-  // reflects the actual kaofa space available — not the squished space
-  // that would be there if mnemonic were display:none.
   const mn = document.querySelector('.back-mnemonic-area');
-  if (mn) mn.style.visibility = '';
 
-  // Temporarily allow def-cn to grow to fill remaining space so we can
-  // measure the *ceiling* of available kaofa space. CSS keeps def-cn
-  // content-sized normally (flex: 0 1 auto) so short content doesn't
-  // leave a giant gap before the mnemonic.
+  // Temporarily flex def-cn to fill so we can measure the ceiling.
   const oldFlex = container.style.flex;
   container.style.flex = '1 1 auto';
-  void container.offsetHeight; // force a reflow before measuring
 
-  const available = container.clientHeight;
-  container.style.flex = oldFlex; // revert
-  let page = 0;
-  let used = 0;
-  for (const b of blocks) {
-    const h = b.offsetHeight + parseFloat(getComputedStyle(b).marginBottom || 0);
-    if (used > 0 && used + h > available) {
-      page++;
-      used = 0;
+  // tightAvailable = def-cn space WITH mnemonic in layout (last-page space)
+  if (mn) { mn.style.display = ''; mn.style.visibility = ''; }
+  void container.offsetHeight;
+  const tightAvailable = container.clientHeight;
+
+  // spaciousAvailable = def-cn space WITHOUT mnemonic (non-last-page space)
+  if (mn) mn.style.display = 'none';
+  void container.offsetHeight;
+  const spaciousAvailable = container.clientHeight;
+
+  // Restore — showBackPage will set the correct per-page state below.
+  if (mn) mn.style.display = '';
+  container.style.flex = oldFlex;
+
+  const heights = blocks.map(b =>
+    b.offsetHeight + parseFloat(getComputedStyle(b).marginBottom || 0)
+  );
+  const totalKaofa = heights.reduce((a, b) => a + b, 0);
+
+  // Pagination strategy:
+  //  - If everything fits on a single page WITH the mnemonic, use one page.
+  //  - Otherwise, pack kaofas using spacious (no-mnemonic) space, then check
+  //    if the mnemonic fits with the last kaofa page. If not, give it its
+  //    own dedicated page.
+  let pages; // pages[p] = array of block indices
+  if (totalKaofa <= tightAvailable) {
+    pages = [blocks.map((_, i) => i)];
+  } else {
+    pages = [];
+    let cur = [], used = 0;
+    for (let i = 0; i < blocks.length; i++) {
+      if (used > 0 && used + heights[i] > spaciousAvailable) {
+        pages.push(cur);
+        cur = [];
+        used = 0;
+      }
+      cur.push(i);
+      used += heights[i];
     }
-    b.dataset.page = String(page);
-    used += h;
+    if (cur.length) pages.push(cur);
+
+    const lastPageHeight = pages[pages.length - 1].reduce((s, i) => s + heights[i], 0);
+    if (lastPageHeight > tightAvailable) {
+      pages.push([]); // mnemonic gets its own page
+    }
   }
-  backPageCount = page + 1;
+
+  for (let p = 0; p < pages.length; p++) {
+    for (const idx of pages[p]) {
+      blocks[idx].dataset.page = String(p);
+    }
+  }
+  backPageCount = pages.length;
   showBackPage(0);
 }
 
@@ -1108,11 +1139,18 @@ function showBackPage(idx) {
   blocks.forEach(b => {
     b.style.display = (parseInt(b.dataset.page || '0', 10) === idx) ? '' : 'none';
   });
-  // Mnemonic content visible only on the last page, but its layout space
-  // is always reserved (visibility, not display) so kaofa pagination is
-  // consistent across pages and the mnemonic never gets squeezed.
+  // Mnemonic only on the last page. On non-last pages it's display:none
+  // (not just hidden) so def-cn gets the full spacious space — matching
+  // the pagination math above.
   const mn = document.querySelector('.back-mnemonic-area');
-  if (mn) mn.style.visibility = (idx === backPageCount - 1) ? '' : 'hidden';
+  if (mn) {
+    if (idx === backPageCount - 1) {
+      mn.style.display = '';
+      mn.style.visibility = '';
+    } else {
+      mn.style.display = 'none';
+    }
+  }
   renderPageIndicator();
 }
 
