@@ -213,7 +213,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .back-pos:empty { display: none; }
 .def-word-small { font-size: 18px; font-weight: 600; color: var(--text2); margin-bottom: 6px; flex-shrink: 0; display: flex; align-items: baseline; gap: 8px; }
 .def-word-small .back-ipa { font-size: 15px; font-weight: 400; color: var(--text3); letter-spacing: 0.3px; }
-.def-cn { margin-bottom: 6px; flex-shrink: 0; overflow-y: auto; max-height: 100%; }
+.def-cn { margin-bottom: 6px; flex: 1 1 auto; min-height: 0; overflow-y: auto; }
 .def-en { font-size: 13px; color: var(--text2); line-height: 1.4; border-left: 3px solid var(--sep); padding-left: 10px; flex-shrink: 0; }
 
 /* Stacked 考法 blocks (multiple definitions per word) */
@@ -235,7 +235,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .kaofa-der .kaofa-tag { background: color-mix(in srgb, var(--purple) 20%, transparent); color: var(--purple); }
 
 /* Mnemonic on back */
-.back-mnemonic-area { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-top: 6px; }
+.back-mnemonic-area { flex: 0 0 auto; display: flex; flex-direction: column; margin-top: 6px; }
 .back-mnemonic-box {
   flex: 1; background: linear-gradient(135deg, color-mix(in srgb, var(--purple) 10%, transparent), color-mix(in srgb, var(--yellow) 8%, transparent));
   border-radius: 14px; padding: 10px 12px;
@@ -714,26 +714,30 @@ async function generateMnemonic(wordIdx, force = false) {
     updateApiKeyUI();
   }
 
-  const prompt = `你是专门帮中国学生记GRE单词的记忆大师，擅长创作让人忍不住笑的联想记忆。
+  const prompt = `How would you memorize the English word "${word.w}"?
 
-单词：${word.w}（${mainPos(word) ? mainPos(word) + '  ' : ''}${allCnText(word) || mainEn(word)}）
+Definition: ${mainPos(word) ? mainPos(word) + ' ' : ''}${allCnText(word) || mainEn(word)}
 
-请创作一个极其有趣、难以忘记的中文联想记忆法。你可以用以下一种或多种方式：
-🔊 谐音梗：这个词读起来像什么中文词或句子？能不能编个段子？
-🖼️ 夸张画面：想象一个荒诞、视觉冲击强的场景，包含这个词的读音或含义
-😂 搞笑故事：用两三句话讲一个傻乎乎但好记的故事
-🧩 词形拆解：把单词拆成像中文读音的片段，赋予含义
+Write a SHORT, DIRECT mnemonic. Lead with the anchor and stop — short pointers like "X contains Y", "X sounds like Y", or "X = prefix + Y" stick better than multi-sentence narrative scenes. Aim for 1–2 sentences.
 
-要求：
-- 越荒诞夸张越好，要让人印象深刻
-- 不超过3句话
-- 直接给联想内容，不要说"这个词…"或"可以联想…"之类的开头
-- 最后可以用一句话点出这个词的核心意思
+Use whatever language has the cleanest hook for THIS specific word — pure English, pure Chinese, or a mix.
 
-示例风格参考（你要比这个更有创意）：
-abandon → "阿～班顿！（停！）" 想象班主任对一个叫阿班的学生大吼让他停下，结果阿班直接撒腿跑掉了——他放弃了一切，abandon了！
-garrulous → "哥儿们嘴巴从来没停过" ——那个无话不说的"哥儿们"就是garrulous（话痨）的化身。
-abhor → "啊！好恶！" 看到一只超大蟑螂，你尖叫"啊！好恶！" ——abhor就是极度厌恶的意思。`;
+Anchor patterns that work:
+- A common English word contained in or sounding like the target ("foible" contains "foil"; "spurious" contains "curious"; "bolster" sounds like "booster")
+- A clean Chinese 谐音 — only when the sounds genuinely match AND the Chinese phrase has its own real meaning ("penchant" ≈ 喷香; "bribe" ≈ 爸来了)
+- A common prefix + a known word ("incessant" = in- not + cease; "malaise" = mal- bad + ease)
+- Restaurant-menu words like "verde" (green) are fair game
+
+NEVER:
+- Use obscure Latin/Greek roots (anth-, sciss-, plod-, dicate-, jure-, rogate-, quot-)
+- Restate the definition (circular)
+- Force a Chinese 谐音 if the sounds don't actually match (e.g. "rift" does NOT sound like 裂了)
+- Use pure phonetic transliteration with no meaning (e.g. "啊别然特" for aberrant)
+- Anchor "foible" to "feeble", or "maculate" to "immaculate"
+- Write a "picture a..." / "imagine X happens..." story scene
+- Write a preamble like "to memorize this word..." / "you can think of..."
+
+Format: 1–2 sentences (max 3). Lead directly. End with: \`— word, meaning.\` or \`——word，中文释义。\`. Output ONLY the mnemonic.`;
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1062,10 +1066,17 @@ function paginateBack() {
   const container = document.getElementById('def-cn');
   if (!container) return;
   const blocks = [...container.querySelectorAll('.kaofa-block')];
-  if (blocks.length === 0) { backPageCount = 1; renderPageIndicator(); return; }
+  if (blocks.length === 0) { backPageCount = 1; showBackPage(0); return; }
 
-  // Show all temporarily so we can measure intrinsic heights
+  // Show all blocks for height measurement
   blocks.forEach(b => { b.style.display = ''; });
+
+  // Make sure mnemonic is in layout (visible) so def-cn's clientHeight
+  // reflects the actual kaofa space available — not the squished space
+  // that would be there if mnemonic were display:none.
+  const mn = document.querySelector('.back-mnemonic-area');
+  if (mn) mn.style.visibility = '';
+  void container.offsetHeight; // force a reflow before measuring
 
   const available = container.clientHeight;
   let page = 0;
@@ -1081,7 +1092,6 @@ function paginateBack() {
   }
   backPageCount = page + 1;
   showBackPage(0);
-  renderPageIndicator();
 }
 
 function showBackPage(idx) {
@@ -1090,9 +1100,11 @@ function showBackPage(idx) {
   blocks.forEach(b => {
     b.style.display = (parseInt(b.dataset.page || '0', 10) === idx) ? '' : 'none';
   });
-  // Mnemonic only on the last page (after the last 考法)
+  // Mnemonic content visible only on the last page, but its layout space
+  // is always reserved (visibility, not display) so kaofa pagination is
+  // consistent across pages and the mnemonic never gets squeezed.
   const mn = document.querySelector('.back-mnemonic-area');
-  if (mn) mn.style.display = (idx === backPageCount - 1) ? '' : 'none';
+  if (mn) mn.style.visibility = (idx === backPageCount - 1) ? '' : 'hidden';
   renderPageIndicator();
 }
 
