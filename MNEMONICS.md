@@ -36,6 +36,19 @@ When a GRE word sounds like or contains a common word, use it as the hook:
 | `sanctify` | saint | saint-ify = make into a saint = make holy |
 | `mendacious` | mend | swears he'll MEND but really MEND-acious — full of lies |
 | `cajole` | jolly | be all jolly and sweet to coax someone — ca-JOLLY |
+| `harangue` | "he rang you" | angrily yelling at you on the phone |
+| `macabre` | "my cab broke" | …near a graveyard — eerie ride home |
+| `probity` | pro + (a)bility | "the ability to be good" = probity |
+
+### Strongest sub-pattern: phrase decomposition
+
+Break the word's syllables into a complete English phrase or sentence whose meaning matches the word. The phrase IS the sound of the word — extremely sticky.
+
+- `harangue` → "**he rang you**" (3 syllables = 3 short words; matches the angry-phone-call vibe of the meaning)
+- `macabre` → "**my cab broke**" (3 syllables = 3 short words; the scene matches "death-themed/gruesome")
+- `probity` → "**pro + (a)bility**" — meaning that *describes the meaning itself* ("the ability to be good")
+
+Use this whenever a word's syllables can be parsed as plausible English words AND those words form a phrase that fits the meaning. Stronger than "rhymes with X but Y" because the phrase **is** the word's pronunciation.
 
 ---
 
