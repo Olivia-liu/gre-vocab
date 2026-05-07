@@ -6800,10 +6800,15 @@
             "cn": "纵使甜言蜜语她也无动于衷。"
           }
         ]
-      },
+      }
+    ],
+    "m": "from BLAND — sweet bland flattery used to coax. — blandishment, flattering coaxing."
+  },
+  {
+    "w": "blase",
+    "ipa": "blɑ:'zeɪ",
+    "k": [
       {
-        "syn": "indifferent, jaded, unconcerned, world-weary",
-        "ant": "zealous, fanatic 狂热的；curious 好奇的",
         "pos": "adj.",
         "cn": "（过度放纵之后）厌倦享乐的，腻烦的",
         "en": "apathetic to pleasure or excitement as a result of excessive indulgence or enjoyment",
@@ -6812,10 +6817,12 @@
             "en": "Years of extravagance has made him totally blasé.",
             "cn": "长期的奢华生活已使他彻底麻木。"
           }
-        ]
+        ],
+        "syn": "indifferent, jaded, unconcerned, world-weary",
+        "ant": "zealous, fanatic 狂热的；curious 好奇的"
       }
     ],
-    "m": "from BLAND — sweet bland flattery used to coax. — blandishment, flattering coaxing."
+    "m": "BLASE rhymes with PHASE — past the PHASE of being thrilled by anything. (French \"blasé\" = sated by indulgence.) — blasé, jaded."
   },
   {
     "w": "blast",
@@ -10731,22 +10738,29 @@
             "cn": "夏威夷以它宜人的温和气候著称。"
           }
         ]
-      },
+      }
+    ],
+    "m": "from CLEMENCY — merciful, also (of weather) mild. — clement, merciful / mild."
+  },
+  {
+    "w": "cliche",
+    "ipa": "kli:'∫eɪ",
+    "k": [
       {
-        "syn": "banality, bromide, platitude; trite, bathetic, hackneyed, stereotypical",
-        "ant": "fresh, new, original, creative 新的，创造性的",
-        "pos": "n.",
-        "cn": "/adj. 陈词滥调（的）",
+        "pos": "n./adj.",
+        "cn": "陈词滥调（的）",
         "en": "a hackneyed theme, characterization, or situation",
         "ex": [
           {
             "en": "Cliché is a feature of bad news.",
             "cn": "拙劣新闻的特征是使用陈词滥调。"
           }
-        ]
+        ],
+        "syn": "banality, bromide, platitude; trite, bathetic, hackneyed",
+        "ant": ""
       }
     ],
-    "m": "from CLEMENCY — merciful, also (of weather) mild. — clement, merciful / mild."
+    "m": "CLICHÉ — French; originally a printing-press \"stereotype\" plate that stamped the same phrase repeatedly. Now: any phrase stamped out so often it's stale. — cliché, an overused expression."
   },
   {
     "w": "clique",
