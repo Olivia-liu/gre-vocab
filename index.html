@@ -1427,8 +1427,19 @@ function nextRound() {
     if (wordIdx !== undefined) { mastered.add(wordIdx); saveMastered(); syncPushDebounced(); }
     queueIdx++;
     isFlipped = false;
-    showCard();
-    updateStats(); renderWordList();
+    // Kill the flip transition so the next card's back face doesn't flash
+    // during the rotateY animation back to front (same trick rateWord uses).
+    requestAnimationFrame(() => {
+      const c = document.getElementById('card');
+      if (c) {
+        c.style.transition = 'none';
+        c.classList.remove('flipped');
+        void c.offsetWidth;
+        c.style.transition = '';
+      }
+      showCard();
+      updateStats(); renderWordList();
+    });
   });
   fixCardHeight();
   buildQueue();
@@ -1848,8 +1859,19 @@ function setupEventListeners() {
     if (wordIdx !== undefined) { mastered.add(wordIdx); saveMastered(); syncPushDebounced(); }
     queueIdx++;
     isFlipped = false;
-    showCard();
-    updateStats(); renderWordList();
+    // Kill the flip transition so the next card's back face doesn't flash
+    // during the rotateY animation back to front (same trick rateWord uses).
+    requestAnimationFrame(() => {
+      const c = document.getElementById('card');
+      if (c) {
+        c.style.transition = 'none';
+        c.classList.remove('flipped');
+        void c.offsetWidth;
+        c.style.transition = '';
+      }
+      showCard();
+      updateStats(); renderWordList();
+    });
   });
   document.getElementById('skip-btn').addEventListener('click', () => { queueIdx++; isFlipped=false; showCard(); });
   document.getElementById('prev-btn').addEventListener('click', () => {
