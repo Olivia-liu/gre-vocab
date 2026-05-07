@@ -21364,22 +21364,24 @@
             "cn": "行为怪异的百万富翁"
           }
         ]
-      },
-      {
-        "syn": "fame, renown, brilliance, triumph",
-        "ant": "debacle, fiasco 惨败",
-        "pos": "n.",
-        "cn": "辉煌成就",
-        "en": "brilliant or conspicuous success",
-        "ex": [
-          {
-            "en": "The premier of Mozart's Le Nozze di Figaro enjoyed a great éclat in 1786.",
-            "cn": "莫扎特歌剧《费加罗的婚礼》于1786年的首演获得了极大的成功。"
-          }
-        ]
       }
     ],
     "m": "EC- (out of) + CENTRIC (center) — off-center, unconventional. — eccentric, unconventional."
+  },
+  {
+    "w": "eclat",
+    "ipa": "eɪ'klɑ:",
+    "k": [
+      {
+        "pos": "n.",
+        "cn": "辉煌成就；炫耀；赞誉",
+        "en": "brilliant or conspicuous success; ostentatious display; acclamation",
+        "ex": [],
+        "syn": "",
+        "ant": ""
+      }
+    ],
+    "m": "ECLAT contains CLAT ≈ \"clatter of applause\" — sudden brilliant success met with showy acclaim. — éclat, brilliant success / showy display."
   },
   {
     "w": "eclipse",
