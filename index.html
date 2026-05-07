@@ -235,7 +235,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .kaofa-der .kaofa-tag { background: color-mix(in srgb, var(--purple) 20%, transparent); color: var(--purple); }
 
 /* Mnemonic on back */
-.back-mnemonic-area { flex: 0 0 auto; display: flex; flex-direction: column; margin-top: 6px; }
+.back-mnemonic-area { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; margin-top: 6px; }
 .back-mnemonic-box {
   flex: 1; background: linear-gradient(135deg, color-mix(in srgb, var(--purple) 10%, transparent), color-mix(in srgb, var(--yellow) 8%, transparent));
   border-radius: 14px; padding: 10px 12px;
@@ -1073,9 +1073,13 @@ function paginateBack() {
 
   const mn = document.querySelector('.back-mnemonic-area');
 
-  // Temporarily flex def-cn to fill so we can measure the ceiling.
-  const oldFlex = container.style.flex;
+  // Temporarily make def-cn flex-grow and mnemonic-area NOT flex-grow,
+  // so def-cn fills the ceiling space and we can measure it cleanly.
+  // (Default CSS: def-cn 0 1 auto, mnemonic-area 1 1 auto.)
+  const oldDefFlex = container.style.flex;
+  const oldMnFlex = mn ? mn.style.flex : '';
   container.style.flex = '1 1 auto';
+  if (mn) mn.style.flex = '0 0 auto';
 
   // tightAvailable = def-cn space WITH mnemonic in layout (last-page space)
   if (mn) { mn.style.display = ''; mn.style.visibility = ''; }
@@ -1088,8 +1092,8 @@ function paginateBack() {
   const spaciousAvailable = container.clientHeight;
 
   // Restore — showBackPage will set the correct per-page state below.
-  if (mn) mn.style.display = '';
-  container.style.flex = oldFlex;
+  if (mn) { mn.style.display = ''; mn.style.flex = oldMnFlex; }
+  container.style.flex = oldDefFlex;
 
   const heights = blocks.map(b =>
     b.offsetHeight + parseFloat(getComputedStyle(b).marginBottom || 0)
