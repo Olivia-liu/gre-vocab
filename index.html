@@ -1203,7 +1203,12 @@ function showCard() {
   frontPosEl.textContent = '';
   frontPosEl.style.display = 'none';
   document.getElementById('front-word').textContent = word.w;
-  const ipa = PHONETICS[wordIdx] ? '/' + PHONETICS[wordIdx] + '/' : (word.ipa ? '/' + word.ipa + '/' : '');
+  // Prefer word.ipa (sourced from the new book PDF, authoritative).
+  // PHONETICS is now a word-keyed dict — used as fallback for the ~425
+  // words that don't have ipa from the book.
+  const fallbackIpa = (PHONETICS && PHONETICS[word.w?.toLowerCase()]) || '';
+  const ipaRaw = word.ipa || fallbackIpa;
+  const ipa = ipaRaw ? '/' + ipaRaw + '/' : '';
   document.getElementById('front-ipa').textContent = ipa;
   document.getElementById('back-ipa').textContent = ipa;
   document.getElementById('front-num').textContent = `${queueIdx + 1}/${currentQueue.length}`;
