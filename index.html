@@ -1542,21 +1542,36 @@ function setupAlphaBar() {
   function scrollToLetter(letter) {
     const section = document.getElementById('section-' + letter);
     if (!section) return;
-    const sectionRect = section.getBoundingClientRect();
-    const listRect = wordList.getBoundingClientRect();
-    wordList.scrollTop += sectionRect.top - listRect.top;
+    // Use scrollIntoView for symmetric behavior in both directions —
+    // the previous relative `scrollTop += rect.top - listRect.top` drifted
+    // when sticky headers were involved, breaking upward scrolling.
+    section.scrollIntoView({ block: 'start' });
   }
 
   function letterFromTouch(e) {
-    const touch = e.touches[0];
+    const touch = e.touches && e.touches[0];
+    if (!touch) return null;
     const spans = [...bar.querySelectorAll('span')];
-    let closest = null, minDist = Infinity;
-    for (const s of spans) {
-      const r = s.getBoundingClientRect();
+    // Pick the closest letter to the finger; skip dim ones by walking
+    // outward to the nearest non-dim neighbor, so dragging through gaps
+    // (e.g., a letter with no entries) doesn't stall the scroll.
+    let closestIdx = -1, minDist = Infinity;
+    for (let i = 0; i < spans.length; i++) {
+      const r = spans[i].getBoundingClientRect();
       const dist = Math.abs(touch.clientY - (r.top + r.bottom) / 2);
-      if (dist < minDist) { minDist = dist; closest = s; }
+      if (dist < minDist) { minDist = dist; closestIdx = i; }
     }
-    return (closest && !closest.classList.contains('dim')) ? closest.dataset.letter : null;
+    if (closestIdx < 0) return null;
+    if (!spans[closestIdx].classList.contains('dim')) {
+      return spans[closestIdx].dataset.letter;
+    }
+    // closest is dim — scan outward for nearest non-dim
+    for (let d = 1; d < spans.length; d++) {
+      const a = spans[closestIdx - d], b = spans[closestIdx + d];
+      if (a && !a.classList.contains('dim')) return a.dataset.letter;
+      if (b && !b.classList.contains('dim')) return b.dataset.letter;
+    }
+    return null;
   }
 
   let hideTimer = null;
