@@ -1,4 +1,4 @@
-const CACHE = 'gre-v4';
+const CACHE = 'gre-v5';
 const CACHE_FIRST = ['/words.json', '/phonetics.json', '/manifest.json'];
 
 self.addEventListener('install', e => {
