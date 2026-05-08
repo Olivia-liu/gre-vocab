@@ -30401,9 +30401,44 @@
         "cn": "雇佣文人",
         "en": "a writer who aims solely for commercial",
         "ex": []
+      },
+      {
+        "pos": "v.",
+        "cn": "乱砍；开辟",
+        "en": "to cut or chop with repeated and irregular blows",
+        "ex": [
+          {
+            "en": "hacking out new election districts",
+            "cn": "开辟新的选区"
+          }
+        ]
+      },
+      {
+        "syn": "address, contend with, cope with, manage, maneuver, manipulate",
+        "pos": "vt.",
+        "cn": "成功完成",
+        "en": "to deal with（something）usually skillfully or efficiently",
+        "ex": [
+          {
+            "en": "just couldn't hack the new job",
+            "cn": "无法搞定新工作"
+          }
+        ]
+      },
+      {
+        "syn": "abide, bide, brook, endure, handle, stand, stomach, sustain, tolerate",
+        "pos": "v.",
+        "cn": "忍受",
+        "en": "to put up with（something painful or difficult）",
+        "ex": [
+          {
+            "en": "She's not sure she can hack that miserable job much longer.",
+            "cn": "她不知道还能忍受那项苦逼的工作多久。"
+          }
+        ]
       }
     ],
-    "m": "a HACK writer HACKs out routine work like chopping wood — uninspired. (Also: HACK = chop / a taxi.) — hack, a routine writer-for-hire."
+    "m": "HACK = chop with rough blows; a HACK writer HACKs out routine work like chopping wood; \"can't HACK it\" = can't cope/endure. — hack, to chop / a routine writer / to manage / to endure."
   },
   {
     "w": "hackneyed",
@@ -72476,48 +72511,6 @@
       }
     ],
     "m": "to GULL someone = make them swallow it like a gullible seabird (the GULL). — gull, to deceive."
-  },
-  {
-    "w": "success",
-    "ipa": "",
-    "k": [
-      {
-        "pos": "v.",
-        "cn": "乱砍；开辟",
-        "en": "to cut or chop with repeated and irregular blows",
-        "ex": [
-          {
-            "en": "hacking out new election districts",
-            "cn": "开辟新的选区"
-          }
-        ]
-      },
-      {
-        "syn": "address, contend with, cope with, manage, maneuver, manipulate",
-        "pos": "vt.",
-        "cn": "成功完成",
-        "en": "to deal with（something）usually skillfully or efficiently",
-        "ex": [
-          {
-            "en": "just couldn't hack the new job",
-            "cn": "无法搞定新工作"
-          }
-        ]
-      },
-      {
-        "syn": "abide, bide, brook, endure, handle, stand, stomach, sustain, tolerate",
-        "pos": "v.",
-        "cn": "忍受",
-        "en": "to put up with（something painful or difficult）",
-        "ex": [
-          {
-            "en": "She's not sure she can hack that miserable job much longer.",
-            "cn": "她不知道还能忍受那项苦逼的工作多久。"
-          }
-        ]
-      }
-    ],
-    "m": "to SUCCESS through difficulty = succeed (cut through). (Latin SUCCEDERE = come up after.) — success, achievement / cutting through."
   },
   {
     "w": "half-baked",
