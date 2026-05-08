@@ -10096,6 +10096,19 @@
             "cn": "易怒的人喜欢踢和打碎东西。"
           }
         ]
+      },
+      {
+        "syn": "angered, apoplectic, ballistic, enraged, furious, incensed, inflamed, enflamed, infuriated, irate, ireful, outraged, rankled, riled, wrathful",
+        "ant": "angerless, delighted, pleased 不生气的；高兴的",
+        "pos": "adj.",
+        "cn": "生气的",
+        "en": "feeling or showing anger: angry, irate",
+        "ex": [
+          {
+            "en": "I absolutely get choleric when a salesman calls during the dinner hour.",
+            "cn": "当一个推销员午休时间打来电话的时候，我彻底愤怒了。"
+          }
+        ]
       }
     ],
     "m": "from CHOLERA — but the temperament: hot-tempered, easily angered (one of the four humors). — choleric, hot-tempered."
@@ -10792,9 +10805,35 @@
             "cn": "用障碍物阻止"
           }
         ]
+      },
+      {
+        "syn": "encumber, fetter, hinder, hold back, hold up, impede, inhibit, interfere with, obstruct, shackle, stymie, tie up, trammel",
+        "ant": "aid, assist, help 帮助；facilitate 促进",
+        "pos": "v.",
+        "cn": "阻碍",
+        "en": "to create difficulty for the work or activity of",
+        "ex": [
+          {
+            "en": "They always clog the courts.",
+            "cn": "他们一直阻挠法庭工作。"
+          }
+        ]
+      },
+      {
+        "syn": "block, choke, clot, gum up, jam, obstruct, occlude, stop up, stuff",
+        "ant": "clear, free, open up, unblock, unclog, unstop 清除，排除障碍",
+        "pos": "v.",
+        "cn": "堵塞",
+        "en": "to prevent passage through by filling with something",
+        "ex": [
+          {
+            "en": "Within a few years the pipe began to clog up.",
+            "cn": "没有几年，管子就开始堵塞了。"
+          }
+        ]
       }
     ],
-    "m": "CLOG rhymes with FOG — both block flow (clog blocks pipes, fog blocks vision). — clog, an obstruction."
+    "m": "CLOG rhymes with FOG — both block flow. To CLOG = to block / clog up; a CLOG = a blockage or hindrance. — clog, to block / a hindrance."
   },
   {
     "w": "clot",
@@ -20094,9 +20133,22 @@
             "cn": "物种的多样性"
           }
         ]
+      },
+      {
+        "syn": "contrast, disagreement, discrepancy, disparateness, disparity, dissimilarity, dissimilitude, distinction, otherness, unlikeness",
+        "ant": "alikeness, analogy, likeness, resemblance, sameness, similarity 相同，相似",
+        "pos": "n.",
+        "cn": "分歧，不同点",
+        "en": "the quality or state of being different",
+        "ex": [
+          {
+            "en": "There is no fundamental diversity between the two ideologies.",
+            "cn": "这两种思想意识之间并没有根本的分歧。"
+          }
+        ]
       }
     ],
-    "m": "from DIVERSE — variety. — diversity, variety."
+    "m": "from DIVERSE — variety; by extension, points of disagreement (different views = differences). — diversity, variety / disagreement."
   },
   {
     "w": "divert",
@@ -24326,9 +24378,21 @@
             "cn": "他作为医疗志愿者为社区起到了模范的作用。"
           }
         ]
+      },
+      {
+        "syn": "admonishing, admonitory, monitory, premonitory, warning",
+        "pos": "adj.",
+        "cn": "作为警告的",
+        "en": "serving as or offering a warning",
+        "ex": [
+          {
+            "en": "Armies have traditionally used public execution as an exemplary punishment for the crime of desertion.",
+            "cn": "军队通常将公开处决作为玩忽职守罪的惩罚，以儆效尤。"
+          }
+        ]
       }
     ],
-    "m": "from EXAMPLE — serving as a model. — exemplary, model / outstanding."
+    "m": "from EXAMPLE — serving as a model OR as a warning (a punishment \"made an example of\" someone). — exemplary, model / cautionary."
   },
   {
     "w": "exempt",
@@ -32933,9 +32997,48 @@
             "cn": "一个很喜欢发布措辞严厉的命令的国防部长"
           }
         ]
+      },
+      {
+        "syn": "compulsory, forced, involuntary, obligatory, peremptory, required",
+        "ant": "optional 可选择的；voluntary 志愿性的",
+        "pos": "adj.",
+        "cn": "命令的，强制性的",
+        "en": "forcing one's compliance or participation by or as if by law",
+        "ex": [
+          {
+            "en": "requests that grew more and more imperative",
+            "cn": "命令性越来越强的请求"
+          }
+        ]
+      },
+      {
+        "syn": "clamant, compelling, critical, crying, emergent, exigent, imperious, importunate, pressing, urgent",
+        "ant": "noncritical, unimportant 不重要的",
+        "pos": "adj.",
+        "cn": "迫切的",
+        "en": "needing immediate attention",
+        "ex": [
+          {
+            "en": "an imperative need for medical supplies in the earthquake-ravaged country",
+            "cn": "地震灾区国家对于医疗物资的迫切需求"
+          }
+        ]
+      },
+      {
+        "syn": "indispensable, necessary, necessitous, requisite, vital",
+        "ant": "dispensable, inessential, needless, unnecessary 非必须的",
+        "pos": "adj.",
+        "cn": "必要的",
+        "en": "impossible to do without",
+        "ex": [
+          {
+            "en": "Proper equipment is imperative for the success of this chemical experiment.",
+            "cn": "合适的仪器是这个化学实验成功必不可少的条件。"
+          }
+        ]
       }
     ],
-    "m": "IMPERATIVE contains IMPER- (command, Latin IMPERARE) — a commanded order. — imperative, a command."
+    "m": "IMPERATIVE contains IMPER- (command, Latin IMPERARE) — a command (n.); commanding/urgent/essential (adj.). — imperative, command / urgent."
   },
   {
     "w": "imperious",
@@ -32952,9 +33055,35 @@
             "cn": "一个爱发号施令的小男孩，总是喜欢指挥别的童子军做事"
           }
         ]
+      },
+      {
+        "syn": "arrogant, bumptious, haughty, lofty, lordly, peremptory, pompous, presumptuous, supercilious, superior",
+        "ant": "humble, lowly, modest 谦逊的",
+        "pos": "adj.",
+        "cn": "傲慢的，专横的",
+        "en": "arrogantly domineering or overbearing",
+        "ex": [
+          {
+            "en": "an imperious movie star who thinks she's some sort of goddess",
+            "cn": "一个把自己当成某种女神的傲慢的影星"
+          }
+        ]
+      },
+      {
+        "syn": "clamant, compelling, critical, crying, dire, emergent, exigent, imperative, importunate, pressing, urgent",
+        "ant": "noncritical, unimportant 不重要的",
+        "pos": "adj.",
+        "cn": "迫切的",
+        "en": "intensely compelling",
+        "ex": [
+          {
+            "en": "As war casualties mounted, the need for trained nurses became imperious.",
+            "cn": "随着战争伤亡人数的攀升，对于受训护士的需求变得愈发迫切。"
+          }
+        ]
       }
     ],
-    "m": "from IMPERIAL — emperor-like, commanding. — imperious, domineering."
+    "m": "from IMPERIAL — emperor-like: commanding (domineering) and pressing (urgent). — imperious, domineering / urgent."
   },
   {
     "w": "impertinent",
@@ -33636,6 +33765,19 @@
           {
             "en": "behind-the-scenes incendiaries who were intending to overthrow the government",
             "cn": "企图推翻政府的幕后煽动者"
+          }
+        ]
+      },
+      {
+        "syn": "agitational, instigative, provocative, seditious",
+        "ant": "conciliatory, pacific 安抚性的",
+        "pos": "adj.",
+        "cn": "煽动性的",
+        "en": "tending to inflame",
+        "ex": [
+          {
+            "en": "an incendiary speech",
+            "cn": "煽动性的演说"
           }
         ]
       }
@@ -46094,9 +46236,21 @@
             "cn": "突然一阵咳嗽"
           }
         ]
+      },
+      {
+        "syn": "bouleversement, cataclysm, earthquake, hurricane, storm, tempest, tumult, upheaval, uproar",
+        "pos": "n.",
+        "cn": "（政治、社会领域的）大动荡",
+        "en": "a violent disturbance（as of the political or social order）",
+        "ex": [
+          {
+            "en": "Darwin's introduction of the theory of evolution created paroxysms in both religion and science that are still being felt today.",
+            "cn": "达尔文提出的进化论给宗教界和科学界都带来了巨大的冲击，时至今日我们仍然能感觉到。"
+          }
+        ]
       }
     ],
-    "m": "PAROXYSM contains PAROXY ≈ \"sharp + spasm\" (Greek PAROXYSMOS) — sudden sharp burst. — paroxysm, a sudden outburst."
+    "m": "PAROXYSM contains PAROXY ≈ \"sharp + spasm\" — a sudden violent burst (of emotion, or of political/social upheaval). — paroxysm, sudden outburst / convulsion."
   },
   {
     "w": "parquetry",
@@ -50123,9 +50277,21 @@
             "cn": "第一只知更鸟的出现总是迎接春天到来的象征。"
           }
         ]
+      },
+      {
+        "syn": "adumbrate, augur, forecast, foretell, portend, predict, prognosticate, prophesy",
+        "pos": "vt.",
+        "cn": "预示，预言",
+        "en": "to foretell or predict",
+        "ex": [
+          {
+            "en": "The incident may presage war.",
+            "cn": "这个事件可能是战争的征兆"
+          }
+        ]
       }
     ],
-    "m": "PRESAGE contains PRE (before) + SAGE (wise) — wisely predicted in advance. — presage, an omen."
+    "m": "PRESAGE = PRE (before) + SAGE (wise) — wisely sensed in advance; an omen (n.) or to foretell (v.). — presage, an omen / to foretell."
   },
   {
     "w": "prescience",
@@ -51573,9 +51739,21 @@
         "cn": "梅干",
         "en": "a plum dried or capable of drying without",
         "ex": []
+      },
+      {
+        "syn": "shave, shear, snip, trim",
+        "pos": "vt.",
+        "cn": "修剪；修整",
+        "en": "to cut off or remove dead or living parts or branches of（a plant, for example）to improve shape or growth",
+        "ex": [
+          {
+            "en": "The students were asked to prune their essays.",
+            "cn": "学生们被要求修改文章。"
+          }
+        ]
       }
     ],
-    "m": "to PRUNE = cut back (as you cut PRUNES from a tree). — prune, to trim."
+    "m": "A PRUNE is a dried plum (shriveled). To PRUNE = to cut back / shrivel down (as a gardener PRUNEs branches). — prune, dried plum / to trim."
   },
   {
     "w": "pry",
@@ -55411,9 +55589,22 @@
             "cn": "恩将仇报"
           }
         ]
+      },
+      {
+        "syn": "avenge, redress, retaliate, revenge",
+        "ant": "absolve, condone, forgive, pardon 饶恕，宽恕",
+        "pos": "vt.",
+        "cn": "报仇",
+        "en": "to punish in kind the wrongdoer responsible for",
+        "ex": [
+          {
+            "en": "The future writer would later requite the abuse he suffered at the hands of his classmates by creating scathing portraits of them in his novels.",
+            "cn": "未来的作家会把在同学那里受了委屈的帐算清的——他会在小说中把他们描绘成恶人。"
+          }
+        ]
       }
     ],
-    "m": "RE + QUITE ≈ \"reply / repay\" (Latin QUIETUS = at rest) — settle the score. — requite, to repay."
+    "m": "RE + QUITE ≈ \"reply / repay\" (Latin QUIETUS = settle) — settle the score, whether by repaying kindness or revenge. — requite, to repay / retaliate."
   },
   {
     "w": "rescind",
@@ -58269,9 +58460,21 @@
         "cn": "用力擦洗",
         "en": "to clean, polish, or wash by scrubbing",
         "ex": []
+      },
+      {
+        "syn": "comb, dig through, dredge, hunt through, rake, ransack, rifle, rummage, sort through, troll",
+        "pos": "vt.",
+        "cn": "搜查",
+        "en": "to look through（as a place）carefully or thoroughly in an effort to find or discover something",
+        "ex": [
+          {
+            "en": "The police scoured the city for the criminal.",
+            "cn": "警方全城搜索罪犯。"
+          }
+        ]
       }
     ],
-    "m": "SCOUR rhymes with SOUR but the action is harsh — scrub harshly. — scour, to scrub vigorously."
+    "m": "SCOUR rhymes with SOUR but the action is harsh — scrub harshly OR search exhaustively (scour the city). — scour, to scrub / search vigorously."
   },
   {
     "w": "scowl",
@@ -60802,6 +61005,23 @@
           {
             "en": "caught in the snare of drug addiction",
             "cn": "处于吸毒上瘾的困境之中"
+          }
+        ]
+      },
+      {
+        "syn": "catch, enmesh, ensnare, ensnarl, entrap, tangle",
+        "ant": "disentangle 解开；free, liberate 释放",
+        "pos": "vt.",
+        "cn": "捕捉",
+        "en": "to capture by or as if by use of a snare",
+        "ex": [
+          {
+            "en": "They snared a rabbit earlier in the day.",
+            "cn": "今天的早些时候他们捕获了一只兔子。"
+          },
+          {
+            "en": "The car salesman successfully snared three potential customers.",
+            "cn": "汽车销售员成功地让三个潜在客户上钩了。"
           }
         ]
       }
@@ -67653,9 +67873,22 @@
             "cn": "一个以超大量尖酸刻薄言论著称的话剧评论家"
           }
         ]
+      },
+      {
+        "syn": "belligerent, bellicose, combative, militant, aggressive, feisty",
+        "ant": "nonaggressive, nonbelligerent, pacific, peaceable, peaceful, uncombative, uncontentious 好和平的",
+        "pos": "adj.",
+        "cn": "好战的，好斗的",
+        "en": "feeling or displaying eagerness to fight",
+        "ex": [
+          {
+            "en": "in an aggressively truculent manner",
+            "cn": "以好斗的、进攻性的方式"
+          }
+        ]
       }
     ],
-    "m": "TRUCULENT contains TRUC ≈ \"savage\" (Latin TRUX = fierce). — truculent, aggressively defiant."
+    "m": "TRUCULENT contains TRUC ≈ \"savage\" (Latin TRUX = fierce) — savagely belligerent or scathing. — truculent, aggressively defiant / scathing."
   },
   {
     "w": "trudge",
@@ -71971,14 +72204,7 @@
         "cn": "镂雕（金属）以装饰",
         "en": "to decorate（metal）by engraving",
         "ex": []
-      }
-    ],
-    "m": "to CHASE silver = to engrave decoratively — different sense from chase = pursue. The engraver CHASES patterns into the metal. — chase, to engrave decoratively."
-  },
-  {
-    "w": "or embossing",
-    "ipa": "",
-    "k": [
+      },
       {
         "syn": "banish, dismiss, expel, extrude, kick out, cast out",
         "pos": "v.",
@@ -71992,60 +72218,7 @@
         ]
       }
     ],
-    "m": "to drive cattle is to OB-EMBOSS them with shouts and prods, urging them on. — or embossing, to drive (cattle, etc.)."
-  },
-  {
-    "w": "anger",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "angered, apoplectic, ballistic, enraged, furious, incensed, inflamed, enflamed, infuriated, irate, ireful, outraged, rankled, riled, wrathful",
-        "ant": "angerless, delighted, pleased 不生气的；高兴的",
-        "pos": "adj.",
-        "cn": "生气的",
-        "en": "feeling or showing anger: angry, irate",
-        "ex": [
-          {
-            "en": "I absolutely get choleric when a salesman calls during the dinner hour.",
-            "cn": "当一个推销员午休时间打来电话的时候，我彻底愤怒了。"
-          }
-        ]
-      }
-    ],
-    "m": "rhymes with DANGER — A-NGER is a step from DANGER. — anger, intense displeasure."
-  },
-  {
-    "w": "trammel",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "encumber, fetter, hinder, hold back, hold up, impede, inhibit, interfere with, obstruct, shackle, stymie, tie up, trammel",
-        "ant": "aid, assist, help 帮助；facilitate 促进",
-        "pos": "v.",
-        "cn": "阻碍",
-        "en": "to create difficulty for the work or activity of",
-        "ex": [
-          {
-            "en": "They always clog the courts.",
-            "cn": "他们一直阻挠法庭工作。"
-          }
-        ]
-      },
-      {
-        "syn": "block, choke, clot, gum up, jam, obstruct, occlude, stop up, stuff",
-        "ant": "clear, free, open up, unblock, unclog, unstop 清除，排除障碍",
-        "pos": "v.",
-        "cn": "堵塞",
-        "en": "to prevent passage through by filling with something",
-        "ex": [
-          {
-            "en": "Within a few years the pipe began to clog up.",
-            "cn": "没有几年，管子就开始堵塞了。"
-          }
-        ]
-      }
-    ],
-    "m": "TRAMMEL contains TRAM ≈ \"trap\" — a TRAM-net traps fish; figuratively, restraint. — trammel, to restrain."
+    "m": "to CHASE silver = to engrave decoratively — different sense from chase = pursue. The engraver CHASES patterns into the metal. — chase, to engrave decoratively."
   },
   {
     "w": "coagulate",
@@ -72132,26 +72305,6 @@
       }
     ],
     "m": "CON- (together) + VERGE — come to a single point. — converge, to come together."
-  },
-  {
-    "w": "miscellaneousness",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "contrast, disagreement, discrepancy, disparateness, disparity, dissimilarity, dissimilitude, distinction, otherness, unlikeness",
-        "ant": "alikeness, analogy, likeness, resemblance, sameness, similarity 相同，相似",
-        "pos": "n.",
-        "cn": "分歧，不同点",
-        "en": "the quality or state of being different",
-        "ex": [
-          {
-            "en": "There is no fundamental diversity between the two ideologies.",
-            "cn": "这两种思想意识之间并没有根本的分歧。"
-          }
-        ]
-      }
-    ],
-    "m": "MISCELLANEOUS + NESS — the state of being mixed. (Latin MISCELLUS = mixed.) — miscellaneousness, a mixed assortment."
   },
   {
     "w": "dominant",
@@ -72244,25 +72397,6 @@
       }
     ],
     "m": "EMI- (out) + NENT — standing out, prominent. — eminent, distinguished."
-  },
-  {
-    "w": "example",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "admonishing, admonitory, monitory, premonitory, warning",
-        "pos": "adj.",
-        "cn": "作为警告的",
-        "en": "serving as or offering a warning",
-        "ex": [
-          {
-            "en": "Armies have traditionally used public execution as an exemplary punishment for the crime of desertion.",
-            "cn": "军队通常将公开处决作为玩忽职守罪的惩罚，以儆效尤。"
-          }
-        ]
-      }
-    ],
-    "m": "EXAMPLE contains EX + AMPLE — sample EXposed, AMPLE proof. — example, a model."
   },
   {
     "w": "fallacious",
@@ -72712,52 +72846,6 @@
     "m": "from IMPEND — about to happen. — impending, imminent."
   },
   {
-    "w": "word",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "compulsory, forced, involuntary, obligatory, peremptory, required",
-        "ant": "optional 可选择的；voluntary 志愿性的",
-        "pos": "adj.",
-        "cn": "命令的，强制性的",
-        "en": "forcing one's compliance or participation by or as if by law",
-        "ex": [
-          {
-            "en": "requests that grew more and more imperative",
-            "cn": "命令性越来越强的请求"
-          }
-        ]
-      },
-      {
-        "syn": "clamant, compelling, critical, crying, emergent, exigent, imperious, importunate, pressing, urgent",
-        "ant": "noncritical, unimportant 不重要的",
-        "pos": "adj.",
-        "cn": "迫切的",
-        "en": "needing immediate attention",
-        "ex": [
-          {
-            "en": "an imperative need for medical supplies in the earthquake-ravaged country",
-            "cn": "地震灾区国家对于医疗物资的迫切需求"
-          }
-        ]
-      },
-      {
-        "syn": "indispensable, necessary, necessitous, requisite, vital",
-        "ant": "dispensable, inessential, needless, unnecessary 非必须的",
-        "pos": "adj.",
-        "cn": "必要的",
-        "en": "impossible to do without",
-        "ex": [
-          {
-            "en": "Proper equipment is imperative for the success of this chemical experiment.",
-            "cn": "合适的仪器是这个化学实验成功必不可少的条件。"
-          }
-        ]
-      }
-    ],
-    "m": "WORD has the older sense of \"command\" / pledge (\"my word is my bond\"). — word, a command / pledge."
-  },
-  {
     "w": "imperial",
     "ipa": "ɪm'pɪriəl",
     "k": [
@@ -72788,39 +72876,6 @@
       }
     ],
     "m": "IMPERIAL contains IMPER- (rule, as in EMPEROR) — befitting an empire. — imperial, of an empire / majestic."
-  },
-  {
-    "w": "tyrannical",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "arrogant, bumptious, haughty, lofty, lordly, peremptory, pompous, presumptuous, supercilious, superior",
-        "ant": "humble, lowly, modest 谦逊的",
-        "pos": "adj.",
-        "cn": "傲慢的，专横的",
-        "en": "arrogantly domineering or overbearing",
-        "ex": [
-          {
-            "en": "an imperious movie star who thinks she's some sort of goddess",
-            "cn": "一个把自己当成某种女神的傲慢的影星"
-          }
-        ]
-      },
-      {
-        "syn": "clamant, compelling, critical, crying, dire, emergent, exigent, imperative, importunate, pressing, urgent",
-        "ant": "noncritical, unimportant 不重要的",
-        "pos": "adj.",
-        "cn": "迫切的",
-        "en": "intensely compelling",
-        "ex": [
-          {
-            "en": "As war casualties mounted, the need for trained nurses became imperious.",
-            "cn": "随着战争伤亡人数的攀升，对于受训护士的需求变得愈发迫切。"
-          }
-        ]
-      }
-    ],
-    "m": "from TYRANT — tyrant-like. — tyrannical, oppressive."
   },
   {
     "w": "impious",
@@ -72888,26 +72943,6 @@
       }
     ],
     "m": "INCANTATION contains CANT (sing, as in CHANT) — magical sung words. — incantation, a magical chant."
-  },
-  {
-    "w": "provocateur",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "agitational, instigative, provocative, seditious",
-        "ant": "conciliatory, pacific 安抚性的",
-        "pos": "adj.",
-        "cn": "煽动性的",
-        "en": "tending to inflame",
-        "ex": [
-          {
-            "en": "an incendiary speech",
-            "cn": "煽动性的演说"
-          }
-        ]
-      }
-    ],
-    "m": "PROVOCATEUR — one who PROVOKEs (French agitator). — provocateur, an inciter."
   },
   {
     "w": "incubate",
@@ -73562,25 +73597,6 @@
     "m": "from PARANOIA — irrationally suspicious. — paranoid, distrustful."
   },
   {
-    "w": "storm",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "bouleversement, cataclysm, earthquake, hurricane, storm, tempest, tumult, upheaval, uproar",
-        "pos": "n.",
-        "cn": "（政治、社会领域的）大动荡",
-        "en": "a violent disturbance（as of the political or social order）",
-        "ex": [
-          {
-            "en": "Darwin's introduction of the theory of evolution created paroxysms in both religion and science that are still being felt today.",
-            "cn": "达尔文提出的进化论给宗教界和科学界都带来了巨大的冲击，时至今日我们仍然能感觉到。"
-          }
-        ]
-      }
-    ],
-    "m": "a STORM of protest = sudden violent surge. (Same word as the weather storm.) — storm, an upheaval."
-  },
-  {
     "w": "parsimonious",
     "ipa": "ˌpɑ:rsə'moʊniəs",
     "k": [
@@ -73738,25 +73754,6 @@
     "m": "PLOD rhymes with TROD — heavy slow trudging. — plod, to trudge slowly."
   },
   {
-    "w": "prefiguring",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "adumbrate, augur, forecast, foretell, portend, predict, prognosticate, prophesy",
-        "pos": "vt.",
-        "cn": "预示，预言",
-        "en": "to foretell or predict",
-        "ex": [
-          {
-            "en": "The incident may presage war.",
-            "cn": "这个事件可能是战争的征兆"
-          }
-        ]
-      }
-    ],
-    "m": "PRE (before) + FIGUR (shape) — shaping ahead of time, hinting at what's to come. — prefiguring, foreshadowing."
-  },
-  {
     "w": "profligate",
     "ipa": "'prɑ:flɪgət",
     "k": [
@@ -73800,25 +73797,6 @@
       }
     ],
     "m": "PRO + FLIGATE (overthrown, Latin PROFLIGARE) — utterly thrown down (morally / financially). — profligate, recklessly extravagant."
-  },
-  {
-    "w": "fermentation",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "shave, shear, snip, trim",
-        "pos": "vt.",
-        "cn": "修剪；修整",
-        "en": "to cut off or remove dead or living parts or branches of（a plant, for example）to improve shape or growth",
-        "ex": [
-          {
-            "en": "The students were asked to prune their essays.",
-            "cn": "学生们被要求修改文章。"
-          }
-        ]
-      }
-    ],
-    "m": "FERMENTATION contains FERMENT — like yeast bubbling and reorganizing matter. — fermentation, breakdown / restructuring."
   },
   {
     "w": "pucker",
@@ -73971,26 +73949,6 @@
     "m": "from RELENT + LESS — without softening, unyielding. — relentless, unyielding."
   },
   {
-    "w": "repay",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "avenge, redress, retaliate, revenge",
-        "ant": "absolve, condone, forgive, pardon 饶恕，宽恕",
-        "pos": "vt.",
-        "cn": "报仇",
-        "en": "to punish in kind the wrongdoer responsible for",
-        "ex": [
-          {
-            "en": "The future writer would later requite the abuse he suffered at the hands of his classmates by creating scathing portraits of them in his novels.",
-            "cn": "未来的作家会把在同学那里受了委屈的帐算清的——他会在小说中把他们描绘成恶人。"
-          }
-        ]
-      }
-    ],
-    "m": "RE + PAY — pay back. — repay, to compensate / take revenge."
-  },
-  {
     "w": "restless",
     "ipa": "'restləs",
     "k": [
@@ -74049,25 +74007,6 @@
       }
     ],
     "m": "SANITARY contains SANIT (health, Latin SANITAS) — health-related. — sanitary, hygienic."
-  },
-  {
-    "w": "vigorously",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "comb, dig through, dredge, hunt through, rake, ransack, rifle, rummage, sort through, troll",
-        "pos": "vt.",
-        "cn": "搜查",
-        "en": "to look through（as a place）carefully or thoroughly in an effort to find or discover something",
-        "ex": [
-          {
-            "en": "The police scoured the city for the criminal.",
-            "cn": "警方全城搜索罪犯。"
-          }
-        ]
-      }
-    ],
-    "m": "from VIGOROUS — with great energy. — vigorously, energetically."
   },
   {
     "w": "self-abasement",
@@ -74245,30 +74184,6 @@
       }
     ],
     "m": "from SMUGGLE — illegal importation. — smuggling, illegal import / export."
-  },
-  {
-    "w": "trap",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "catch, enmesh, ensnare, ensnarl, entrap, tangle",
-        "ant": "disentangle 解开；free, liberate 释放",
-        "pos": "vt.",
-        "cn": "捕捉",
-        "en": "to capture by or as if by use of a snare",
-        "ex": [
-          {
-            "en": "They snared a rabbit earlier in the day.",
-            "cn": "今天的早些时候他们捕获了一只兔子。"
-          },
-          {
-            "en": "The car salesman successfully snared three potential customers.",
-            "cn": "汽车销售员成功地让三个潜在客户上钩了。"
-          }
-        ]
-      }
-    ],
-    "m": "TRAP — a snaring device; to trap = catch. — trap, to capture."
   },
   {
     "w": "solid",
@@ -74527,26 +74442,6 @@
     "m": "TOPSY + TURVY — TOPS turned over (TURVY = turned). — topsy-turvy, in disorder."
   },
   {
-    "w": "vituperative",
-    "ipa": "",
-    "k": [
-      {
-        "syn": "belligerent, bellicose, combative, militant, aggressive, feisty",
-        "ant": "nonaggressive, nonbelligerent, pacific, peaceable, peaceful, uncombative, uncontentious 好和平的",
-        "pos": "adj.",
-        "cn": "好战的，好斗的",
-        "en": "feeling or displaying eagerness to fight",
-        "ex": [
-          {
-            "en": "in an aggressively truculent manner",
-            "cn": "以好斗的、进攻性的方式"
-          }
-        ]
-      }
-    ],
-    "m": "from VITUPERATE — abusive in language / aggressive. — vituperative, fault-finding / aggressive."
-  },
-  {
     "w": "turpitude",
     "ipa": "'tɜ:rpətu:d",
     "k": [
@@ -74722,14 +74617,7 @@
             "cn": "许许多多的人都参与了搜救行动，但是只有真正找到那个迷失的小女孩的人才受到了称赞。"
           }
         ]
-      }
-    ],
-    "m": "contains CLAIM — when many people CLAIM you're great = acclaim. — acclaim, public praise."
-  },
-  {
-    "w": "laurels",
-    "ipa": "",
-    "k": [
+      },
       {
         "syn": "accredit, applaud, cheer, commend, endorse, exalt, hail, praise, salute, tout",
         "ant": "castigate, excoriate, lambaste, pan, slam 猛烈抨击",
@@ -74744,7 +74632,7 @@
         ]
       }
     ],
-    "m": "LAURELS = leaves of the laurel tree, awarded as crown to victors in ancient Greece — \"resting on one's laurels\". — laurels, honors / recognition."
+    "m": "contains CLAIM — when many people CLAIM you're great = acclaim (n. praise / vt. to praise publicly). — acclaim, public praise."
   },
   {
     "w": "accomplish",
@@ -75575,14 +75463,7 @@
             "cn": "在该作者的论述中出现了若干逻辑谬误，从而降低了它的论证力度。"
           }
         ]
-      }
-    ],
-    "m": "shares ARGU- with ARGUE — an ARGUMENT is what you ARGUE. — argument, dispute / line of reasoning."
-  },
-  {
-    "w": "reasoning",
-    "ipa": "",
-    "k": [
+      },
       {
         "syn": "assertion, point, position, stand, thesis",
         "pos": "n.",
@@ -75596,7 +75477,7 @@
         ]
       }
     ],
-    "m": "REASONING contains REASON — the process of reasoning. — reasoning, logical argument."
+    "m": "shares ARGU- with ARGUE — an ARGUMENT is what you ARGUE. — argument, dispute / line of reasoning."
   },
   {
     "w": "arid",
