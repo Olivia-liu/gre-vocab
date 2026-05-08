@@ -1542,22 +1542,19 @@ function setupAlphaBar() {
   function scrollToLetter(letter) {
     const section = document.getElementById('section-' + letter);
     if (!section) return;
-    // Compute section's offset relative to wordList content (NOT relative
-    // position — absolute scroll target). Walks up the offsetParent chain
-    // since wordList isn't section's direct offsetParent (word-list-wrap is).
-    let target = 0;
-    let el = section;
-    let safety = 0;
-    while (el && el !== wordList && safety++ < 10) {
-      target += el.offsetTop;
-      const next = el.offsetParent;
-      if (!next || !wordList.contains(next)) break;
-      if (next === wordList) { el = next; break; }
-      el = next;
-    }
-    // Direct assignment — more reliable on iOS than scrollIntoView for
-    // upward scrolling when sticky section-headers are present.
+    const before = wordList.scrollTop;
+    const target = section.offsetTop;
     wordList.scrollTop = target;
+    const after = wordList.scrollTop;
+    // Visible debug — remove once bug is understood
+    let dbg = document.getElementById('alpha-debug');
+    if (!dbg) {
+      dbg = document.createElement('div');
+      dbg.id = 'alpha-debug';
+      dbg.style.cssText = 'position:fixed;bottom:80px;left:8px;right:8px;background:rgba(0,0,0,0.85);color:#fff;font:11px monospace;padding:6px 10px;border-radius:6px;z-index:99999;pointer-events:none;';
+      document.body.appendChild(dbg);
+    }
+    dbg.textContent = `${letter}: target=${target} before=${before} after=${after} | scrollH=${wordList.scrollHeight} clientH=${wordList.clientHeight} | offsetParent=${section.offsetParent?.id||section.offsetParent?.className||'?'}`;
   }
 
   function letterFromTouch(e) {
