@@ -197,8 +197,16 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .front-bottom { flex-shrink: 0; text-align: center; color: var(--text3); font-size: 12px; margin-top: 6px; }
 
 /* Card Back */
-.back-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; flex-shrink: 0; position: relative; }
+.back-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; flex-shrink: 0; position: relative; gap: 8px; }
 .back-top .word-num { margin-left: auto; }
+.back-extras-toggle {
+  background: none; border: 1px solid var(--sep); border-radius: 6px;
+  font-size: 11px; color: var(--text3); padding: 2px 8px;
+  cursor: pointer; transition: color 0.15s, border-color 0.15s, background 0.15s;
+  font-family: inherit; flex-shrink: 0;
+}
+.back-extras-toggle:active { color: var(--blue); border-color: color-mix(in srgb, var(--blue) 30%, transparent); }
+.back-extras-toggle.on { color: var(--blue); border-color: color-mix(in srgb, var(--blue) 40%, transparent); background: color-mix(in srgb, var(--blue) 8%, transparent); }
 .back-page-indicator {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   display: flex; gap: 5px;
@@ -482,6 +490,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
               <div class="back-top">
                 <span class="back-pos" id="back-pos"></span>
                 <span class="back-page-indicator" id="back-page-indicator" style="display:none"></span>
+                <button class="back-extras-toggle" id="back-extras-toggle" type="button">近反派</button>
                 <span class="word-num" id="back-num"></span>
               </div>
               <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
@@ -815,6 +824,7 @@ let isFlipped = false;
 let isNavigatingBack = false;
 let backPageIdx = 0;     // current page on the card back
 let backPageCount = 1;   // total pages (computed after render)
+let showCardExtras = localStorage.getItem('gre_show_extras') === '1'; // 近/反/派 toggle
 let todayCount = 0;
 let sessionSize = parseInt(localStorage.getItem('gre_session_size') || '20');
 
@@ -1021,11 +1031,13 @@ function shuffle(a) {
 
 // Render all 考法 of a word as stacked HTML.
 // `mode` controls density: 'card' (compact, 1-2 examples) or 'modal' (full).
+// In 'card' mode, the user-toggled `showCardExtras` flag controls whether
+// 近/反/派 appear (off by default, persisted in localStorage).
 function renderKaofaList(word, mode) {
   const ks = word.k || [];
   if (!ks.length) return '<div class="def-cn-line">（无释义）</div>';
   const showExamples = true;
-  const showSynAnt = mode === 'modal';
+  const showSynAnt = (mode === 'modal') || (mode === 'card' && showCardExtras);
   const exLimit = mode === 'modal' ? 99 : 1;
   return ks.map((k, i) => {
     const numTag = ks.length > 1 ? `<span class="kaofa-num">${i+1}</span>` : '';
@@ -1053,11 +1065,27 @@ function renderBackDefinitions(word) {
   document.getElementById('def-en').style.display = 'none';
   document.getElementById('example-inline').style.display = 'none';
 
+  // Sync the 近反派 toggle button state to whatever the saved pref is
+  const tog = document.getElementById('back-extras-toggle');
+  if (tog) tog.classList.toggle('on', showCardExtras);
+
   // Reset to page 0 and recompute pagination after layout settles
   backPageIdx = 0;
   backPageCount = 1;
   // Defer to next frame so element heights are measurable
   requestAnimationFrame(paginateBack);
+}
+
+// Toggle 近/反/派 visibility on the card back (saved to localStorage).
+function toggleCardExtras() {
+  showCardExtras = !showCardExtras;
+  localStorage.setItem('gre_show_extras', showCardExtras ? '1' : '0');
+  const wordIdx = currentQueue[queueIdx];
+  if (wordIdx === undefined) return;
+  const word = WORDS[wordIdx];
+  if (!word) return;
+  // Re-render def-cn with new flag, button class follows
+  renderBackDefinitions(word);
 }
 
 // Greedy-fit: walk through 考法 blocks, pack as many as fit into each page.
@@ -1397,7 +1425,7 @@ function nextRound() {
           <div class="swipe-label swipe-label-left" id="swipe-left">← 不会</div>
           <div class="swipe-label swipe-label-right" id="swipe-right">记住了 →</div>
           <div class="swipe-label swipe-label-down" id="swipe-down">↑ 模糊</div>
-          <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="back-page-indicator" id="back-page-indicator" style="display:none"></span><span class="word-num" id="back-num"></span></div>
+          <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="back-page-indicator" id="back-page-indicator" style="display:none"></span><button class="back-extras-toggle" id="back-extras-toggle" type="button">近反派</button><span class="word-num" id="back-num"></span></div>
           <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
           <div class="def-cn" id="def-cn"></div>
           <div class="def-en" id="def-en"></div>
@@ -1699,6 +1727,13 @@ function setupCardEvents() {
     e.stopPropagation();
     const wordIdx = currentQueue[queueIdx];
     if (wordIdx !== undefined) triggerGenerateMnemonic(wordIdx);
+  });
+
+  // 近反派 toggle on the card back
+  const extrasBtn = document.getElementById('back-extras-toggle');
+  if (extrasBtn) extrasBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleCardExtras();
   });
 
   // Back like button (no-op, just visual)
