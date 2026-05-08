@@ -1542,25 +1542,19 @@ function setupAlphaBar() {
   function scrollToLetter(letter) {
     const section = document.getElementById('section-' + letter);
     if (!section) return;
-    const before = wordList.scrollTop;
+    // Chrome's position:sticky implementation reports offsetTop (and rect.top)
+    // as the *stuck* position for any sticky element that's been scrolled past
+    // — making upward navigation impossible via offsetTop alone.
+    // Workaround: synchronously un-sticky all section-headers, read offsetTop
+    // (now the natural position), then restore. The browser doesn't paint
+    // within this synchronous block, so there's no visible flicker.
+    const sections = wordList.querySelectorAll('.section-header');
+    const saved = [];
+    sections.forEach(s => { saved.push(s.style.position); s.style.position = 'static'; });
+    void wordList.offsetHeight; // force layout
     const target = section.offsetTop;
+    sections.forEach((s, i) => { s.style.position = saved[i]; });
     wordList.scrollTop = target;
-    const after = wordList.scrollTop;
-    // Visible debug — also show offsetTop of A, F, K, P, U for comparison
-    let dbg = document.getElementById('alpha-debug');
-    if (!dbg) {
-      dbg = document.createElement('div');
-      dbg.id = 'alpha-debug';
-      dbg.style.cssText = 'position:fixed;bottom:80px;left:8px;right:8px;background:rgba(0,0,0,0.85);color:#fff;font:11px monospace;padding:6px 10px;border-radius:6px;z-index:99999;pointer-events:none;line-height:1.4;';
-      document.body.appendChild(dbg);
-    }
-    const others = ['A','F','K','P','U'].map(l => {
-      const s = document.getElementById('section-' + l);
-      return s ? `${l}=${s.offsetTop}` : `${l}=?`;
-    }).join(' ');
-    const sect_btop = section.getBoundingClientRect().top;
-    const list_btop = wordList.getBoundingClientRect().top;
-    dbg.innerHTML = `clicked ${letter}: target=${target} before=${before} after=${after}<br>rect.top: section=${sect_btop.toFixed(0)} list=${list_btop.toFixed(0)} diff=${(sect_btop-list_btop).toFixed(0)}<br>others: ${others}`;
   }
 
   function letterFromTouch(e) {
