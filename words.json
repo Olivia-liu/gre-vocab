@@ -10795,7 +10795,7 @@
     "ipa": "klɑ:g",
     "k": [
       {
-        "syn": "balk, bar, block, deterrent, drag, fetter, holdback, hurdle, impediment, inhibition, interference, obstacle, obstruction, shackles, stop, stumbling block,",
+        "syn": "balk, bar, block, deterrent, drag, fetter, holdback, hurdle, impediment, inhibition, interference, obstacle, obstruction, shackles, stop, stumbling block, trammel",
         "pos": "n.",
         "cn": "阻碍物",
         "en": "something that makes movement or progress difficult",
@@ -20123,7 +20123,7 @@
     "ipa": "daɪ'vɜ:rsəti",
     "k": [
       {
-        "syn": "diverseness, multifariousness, multiplicity, variousness,",
+        "syn": "diverseness, multifariousness, multiplicity, variousness, miscellaneousness",
         "pos": "n.",
         "cn": "多样性",
         "en": "variety or multiformity",
@@ -32987,7 +32987,7 @@
     "ipa": "ɪm'perətɪv",
     "k": [
       {
-        "syn": "command, decree, dictate, direction, directive, instruction, order,",
+        "syn": "command, decree, dictate, direction, directive, instruction, order, word",
         "pos": "n.",
         "cn": "命令",
         "en": "a statement of what to do that must be obeyed by those concerned",
@@ -33045,7 +33045,7 @@
     "ipa": "ɪm'pɪriəs",
     "k": [
       {
-        "syn": "authoritarian, autocratic, despotic, dictatorial, domineering, masterful,",
+        "syn": "authoritarian, autocratic, despotic, dictatorial, domineering, masterful, tyrannical",
         "pos": "adj.",
         "cn": "爱发号施令的",
         "en": "fond of ordering people around",
@@ -33757,7 +33757,7 @@
     "ipa": "ɪn'sendieri",
     "k": [
       {
-        "syn": "demagogue, exciter, firebrand, fomenter, inciter, instigator, kindler,",
+        "syn": "demagogue, exciter, firebrand, fomenter, inciter, instigator, kindler, provocateur",
         "pos": "n.",
         "cn": "煽动者",
         "en": "a person who stirs up public feelings especially of discontent",
@@ -46226,7 +46226,7 @@
     "ipa": "'pærəksɪzəm",
     "k": [
       {
-        "syn": "burst, ebullition, eruption, explosion, flare, flash, flush, gush, outburst,",
+        "syn": "burst, ebullition, eruption, explosion, flare, flash, flush, gush, outburst, storm",
         "pos": "n.",
         "cn": "（感情、动作的）突发",
         "en": "a sudden outburst of emotion or action",
@@ -50267,7 +50267,7 @@
     "ipa": "'presɪʤ",
     "k": [
       {
-        "syn": "augury, auspice, boding, foreboding, foreshadowing, portent,",
+        "syn": "augury, auspice, boding, foreboding, foreshadowing, portent, prefiguring",
         "pos": "n.",
         "cn": "征兆",
         "en": "something believed to be a sign or warning of a future event",
@@ -55579,7 +55579,7 @@
     "ipa": "rɪ'kwaɪt",
     "k": [
       {
-        "syn": "indemnify, reciprocate, recompense, recoup, reimburse, remunerate,",
+        "syn": "indemnify, reciprocate, recompense, recoup, reimburse, remunerate, repay",
         "pos": "vt.",
         "cn": "酬谢，报答",
         "en": "to make repayment or return for",
@@ -60993,7 +60993,7 @@
     "ipa": "sner",
     "k": [
       {
-        "syn": "entanglement, mesh, morass, net, noose, quagmire, quicksand, toil,",
+        "syn": "entanglement, mesh, morass, net, noose, quagmire, quicksand, toil, trap",
         "pos": "n.",
         "cn": "无法逃脱的困境",
         "en": "something that catches and holds",
@@ -67863,7 +67863,7 @@
     "ipa": "'trʌkjələnt",
     "k": [
       {
-        "syn": "contumelious, invective, opprobrious, scurrilous, vitriolic,",
+        "syn": "contumelious, invective, opprobrious, scurrilous, vitriolic, vituperative",
         "pos": "adj.",
         "cn": "尖酸刻薄的",
         "en": "marked by harsh insulting language",
@@ -74607,7 +74607,7 @@
     "ipa": "ə'kleɪm",
     "k": [
       {
-        "syn": "accolade, applause, credit, distinction, homage, honor, kudos, laud,",
+        "syn": "accolade, applause, credit, distinction, homage, honor, kudos, laud, laurels",
         "pos": "n.",
         "cn": "称赞",
         "en": "public acknowledgment or admiration for an achievement",
@@ -75453,7 +75453,7 @@
         ]
       },
       {
-        "syn": "account, accounting, argumentation, case, explanation, rationale,",
+        "syn": "account, accounting, argumentation, case, explanation, rationale, reasoning",
         "pos": "n.",
         "cn": "（逻辑上的）论证",
         "en": "a coherent series of statements leading from a premise to a conclusion",
