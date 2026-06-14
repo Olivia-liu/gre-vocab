@@ -27,6 +27,10 @@
   --header-bg: rgba(249,249,249,0.94);
   --safe-top: env(safe-area-inset-top, 44px);
   --safe-bot: env(safe-area-inset-bottom, 34px);
+  /* Progress bar palette: mastered (deepest) → known → learning (most active) */
+  --prog-mastered: #8a4a68;
+  --prog-known: #c47fa8;
+  --prog-learning: #e8a890;
 }
 /* 🌌 星际漫游 */
 [data-theme="ocean"] {
@@ -44,6 +48,9 @@
   --purple: #c084fc;
   --nav-bg: rgba(5,5,7,0.96);
   --header-bg: rgba(5,5,7,0.96);
+  --prog-mastered: #a78bfa;
+  --prog-known: #38bdf8;
+  --prog-learning: #fb923c;
 }
 /* 🍵 茶馆午后 */
 [data-theme="teahouse"] {
@@ -61,6 +68,9 @@
   --purple: #5a6a3a;
   --nav-bg: rgba(221,232,216,0.96);
   --header-bg: rgba(221,232,216,0.96);
+  --prog-mastered: #2a5028;
+  --prog-known: #5a8848;
+  --prog-learning: #b86a18;
 }
 /* 🖋️ 钢笔墨水 */
 [data-theme="ink"] {
@@ -78,6 +88,9 @@
   --purple: #4a3a8a;
   --nav-bg: rgba(240,242,245,0.96);
   --header-bg: rgba(240,242,245,0.96);
+  --prog-mastered: #1e2e5a;
+  --prog-known: #3a5aa8;
+  --prog-learning: #c08020;
 }
 /* 🌙 午夜电台 */
 [data-theme="midnight"] {
@@ -95,6 +108,9 @@
   --purple: #c47fa8;
   --nav-bg: rgba(26,26,46,0.94);
   --header-bg: rgba(26,26,46,0.94);
+  --prog-mastered: #5a4a9a;
+  --prog-known: #9b8ec4;
+  --prog-learning: #e8a838;
 }
 /* 🍑 桃子汽水 */
 [data-theme="peach"] {
@@ -112,6 +128,9 @@
   --purple: #9060b0;
   --nav-bg: rgba(255,248,232,0.96);
   --header-bg: rgba(255,248,232,0.96);
+  --prog-mastered: #a04000;
+  --prog-known: #e87008;
+  --prog-learning: #f0c050;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: var(--bg); color: var(--text); }
@@ -571,14 +590,14 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
             <span style="font-weight:600;color:var(--text)" id="stat-progress-pct">0%</span>
           </div>
           <div class="stacked-bar">
-            <div class="stacked-seg" id="seg-mastered" style="background:var(--purple);width:0%"></div>
-            <div class="stacked-seg" id="seg-known" style="background:var(--green);width:0%"></div>
-            <div class="stacked-seg" id="seg-learning" style="background:var(--orange);width:0%"></div>
+            <div class="stacked-seg" id="seg-mastered" style="background:var(--prog-mastered);width:0%"></div>
+            <div class="stacked-seg" id="seg-known" style="background:var(--prog-known);width:0%"></div>
+            <div class="stacked-seg" id="seg-learning" style="background:var(--prog-learning);width:0%"></div>
           </div>
           <div class="stacked-legend">
-            <span class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span><span data-i18n="legendMastered">已熟悉</span> <b id="pct-mastered">0%</b></span>
-            <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span><span data-i18n="legendKnown">已学会</span> <b id="pct-known">0%</b></span>
-            <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span><span data-i18n="legendLearning">学习中</span> <b id="pct-learning">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--prog-mastered)"></span><span data-i18n="legendMastered">已熟悉</span> <b id="pct-mastered">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--prog-known)"></span><span data-i18n="legendKnown">已学会</span> <b id="pct-known">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--prog-learning)"></span><span data-i18n="legendLearning">学习中</span> <b id="pct-learning">0%</b></span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--sep)"></span><span data-i18n="legendNew">未学</span> <b id="pct-new">100%</b></span>
           </div>
         </div>
