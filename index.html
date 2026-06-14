@@ -571,14 +571,14 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
             <span style="font-weight:600;color:var(--text)" id="stat-progress-pct">0%</span>
           </div>
           <div class="stacked-bar">
+            <div class="stacked-seg" id="seg-mastered" style="background:var(--purple);width:0%"></div>
             <div class="stacked-seg" id="seg-known" style="background:var(--green);width:0%"></div>
             <div class="stacked-seg" id="seg-learning" style="background:var(--orange);width:0%"></div>
-            <div class="stacked-seg" id="seg-mastered" style="background:var(--purple);width:0%"></div>
           </div>
           <div class="stacked-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span><span data-i18n="legendMastered">已熟悉</span> <b id="pct-mastered">0%</b></span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span><span data-i18n="legendKnown">已学会</span> <b id="pct-known">0%</b></span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span><span data-i18n="legendLearning">学习中</span> <b id="pct-learning">0%</b></span>
-            <span class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span><span data-i18n="legendMastered">已熟悉</span> <b id="pct-mastered">0%</b></span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--sep)"></span><span data-i18n="legendNew">未学</span> <b id="pct-new">100%</b></span>
           </div>
         </div>
