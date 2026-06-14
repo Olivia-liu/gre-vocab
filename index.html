@@ -424,6 +424,9 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 .pulsing { animation: pulse 1.5s ease infinite; }
+.lang-btn { flex:1; background:var(--card-bg); border:1.5px solid var(--sep); border-radius:20px; padding:8px 16px; font-size:14px; color:var(--text2); cursor:pointer; transition:border-color 0.15s; }
+.lang-btn.active { border-color:var(--blue); color:var(--blue); font-weight:600; }
+.lang-btn:active { opacity:0.7; }
 .theme-btn { display:flex; align-items:center; gap:6px; background:var(--card-bg); border:1.5px solid var(--sep); border-radius:20px; padding:6px 14px 6px 8px; font-size:13px; color:var(--text2); cursor:pointer; transition:border-color 0.15s; }
 .theme-btn span { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
 .theme-btn.active { border-color:var(--blue); color:var(--blue); font-weight:600; }
@@ -440,7 +443,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
   <header id="header">
     <div class="header-row">
       <div>
-        <div class="header-title">GRE 单词</div>
+        <div class="header-title" data-i18n="appTitle">GRE 单词</div>
         <div style="margin-top:2px;line-height:1;" id="session-count"></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
@@ -456,7 +459,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
     <div class="view" id="study-view">
       <div class="card-area">
         <div class="skip-hint-row" id="skip-hint-row">
-          <button class="skip-hint-btn" id="btn-skip">已熟悉此词，点击永久跳过</button>
+          <button class="skip-hint-btn" id="btn-skip" data-i18n="skipHint">已熟悉此词，点击永久跳过</button>
         </div>
         <div class="card-outer">
           <div class="card" id="card">
@@ -472,25 +475,25 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
               </div>
               <!-- Mnemonic area on front -->
               <div id="front-mnemonic-cached" class="front-mnemonic" style="display:none">
-                <div class="front-mnemonic-label">✨ 联想记忆</div>
+                <div class="front-mnemonic-label" data-i18n="mnemonicLabel">✨ 联想记忆</div>
                 <div class="front-mnemonic-text" id="front-mnemonic-text"></div>
               </div>
               <div id="front-ai-area" class="ai-prompt-area">
                 <button class="ai-generate-btn" id="front-gen-btn">
-                  <span>✨</span><span>AI帮我记</span>
+                  <span>✨</span><span data-i18n="aiHelpMe">AI帮我记</span>
                 </button>
-                <div class="ai-hint-text">生成一个搞笑联想记忆法</div>
+                <div class="ai-hint-text" data-i18n="aiHintText">生成一个搞笑联想记忆法</div>
               </div>
             </div>
             <!-- Back -->
             <div class="card-face card-back-face">
-              <div class="swipe-label swipe-label-left" id="swipe-left">← 不会</div>
-              <div class="swipe-label swipe-label-right" id="swipe-right">记住了 →</div>
-              <div class="swipe-label swipe-label-down" id="swipe-down">↑ 模糊</div>
+              <div class="swipe-label swipe-label-left" id="swipe-left" data-i18n="swipeLeft">← 不会</div>
+              <div class="swipe-label swipe-label-right" id="swipe-right" data-i18n="swipeRight">记住了 →</div>
+              <div class="swipe-label swipe-label-down" id="swipe-down" data-i18n="swipeDown">↑ 模糊</div>
               <div class="back-top">
                 <span class="back-pos" id="back-pos"></span>
                 <span class="back-page-indicator" id="back-page-indicator" style="display:none"></span>
-                <button class="back-extras-toggle" id="back-extras-toggle" type="button">近/反/派</button>
+                <button class="back-extras-toggle" id="back-extras-toggle" type="button" data-i18n="synAntDer">近/反/派</button>
                 <span class="word-num" id="back-num"></span>
               </div>
               <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
@@ -502,16 +505,15 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
               <div class="back-mnemonic-area">
                 <div class="back-mnemonic-box">
                   <div class="mnemonic-header">
-                    <span class="mnemonic-label">✨ 联想记忆</span>
+                    <span class="mnemonic-label" data-i18n="mnemonicLabel">✨ 联想记忆</span>
                     <div style="display:flex;gap:4px;">
-                      <button class="mnemonic-regen-btn" id="back-like-btn" title="好记！" style="opacity:0.35">👍</button>
-                      <button class="mnemonic-regen-btn" id="back-flag-btn" title="标记需要改进" style="opacity:0.35">👎</button>
-                      <!-- <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button> -->
+                      <button class="mnemonic-regen-btn" id="back-like-btn" data-i18n-attr="title:goodMnemonic" title="好记！" style="opacity:0.35">👍</button>
+                      <button class="mnemonic-regen-btn" id="back-flag-btn" data-i18n-attr="title:flagMnemonic" title="标记需要改进" style="opacity:0.35">👎</button>
                     </div>
                   </div>
                   <div id="back-mnemonic-content">
                     <button class="back-mnemonic-generate" id="back-gen-btn">
-                      <span>✨</span><span>点击生成联想记忆法</span>
+                      <span>✨</span><span data-i18n="generateMnemonic">点击生成联想记忆法</span>
                     </button>
                   </div>
                 </div>
@@ -522,12 +524,12 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
       </div>
       <div class="study-actions" id="study-actions">
         <div class="flip-row" id="flip-row">
-          <button class="flip-btn" id="flip-btn">翻转查看释义</button>
+          <button class="flip-btn" id="flip-btn" data-i18n="flipBtn">翻转查看释义</button>
         </div>
         <div class="rate-row" id="rate-row" style="display:none">
-          <button class="rate-btn btn-again" id="btn-again"><span>← 不会</span><small>明天再来</small></button>
-          <button class="rate-btn btn-hard" id="btn-hard"><span>↑ 模糊</span><small>2天后</small></button>
-          <button class="rate-btn btn-easy" id="btn-easy"><span>记住了 →</span><small>4天后</small></button>
+          <button class="rate-btn btn-again" id="btn-again"><span data-i18n="swipeLeft">← 不会</span><small data-i18n="rateAgainSub">明天再来</small></button>
+          <button class="rate-btn btn-hard" id="btn-hard"><span data-i18n="swipeDown">↑ 模糊</span><small data-i18n="rateHardSub">2天后</small></button>
+          <button class="rate-btn btn-easy" id="btn-easy"><span data-i18n="swipeRight">记住了 →</span><small data-i18n="rateEasySub">4天后</small></button>
         </div>
       </div>
     </div>
@@ -535,16 +537,16 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
     <!-- Browse View -->
     <div class="view hidden" id="browse-view">
       <div class="search-bar-wrap">
-        <input class="search-input" type="search" id="search-input" placeholder="搜索单词…">
+        <input class="search-input" type="search" id="search-input" data-i18n-attr="placeholder:searchPlaceholder" placeholder="搜索单词…">
         <div class="filter-row">
-          <button class="filter-chip active" data-filter="all">全部</button>
-          <button class="filter-chip" data-filter="new">未学</button>
-          <button class="filter-chip" data-filter="learning">学习中</button>
-          <button class="filter-chip" data-filter="known">已学会</button>
-          <button class="filter-chip" data-filter="mastered">已熟悉</button>
-          <button class="filter-chip" data-filter="n">名词</button>
-          <button class="filter-chip" data-filter="v">动词</button>
-          <button class="filter-chip" data-filter="adj">形容词</button>
+          <button class="filter-chip active" data-filter="all" data-i18n="filterAll">全部</button>
+          <button class="filter-chip" data-filter="new" data-i18n="filterNew">未学</button>
+          <button class="filter-chip" data-filter="learning" data-i18n="filterLearning">学习中</button>
+          <button class="filter-chip" data-filter="known" data-i18n="filterKnown">已学会</button>
+          <button class="filter-chip" data-filter="mastered" data-i18n="filterMastered">已熟悉</button>
+          <button class="filter-chip" data-filter="n" data-i18n="filterNoun">名词</button>
+          <button class="filter-chip" data-filter="v" data-i18n="filterVerb">动词</button>
+          <button class="filter-chip" data-filter="adj" data-i18n="filterAdj">形容词</button>
         </div>
       </div>
       <div class="word-list-wrap">
@@ -555,17 +557,17 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 
     <!-- Stats View -->
     <div class="view hidden" id="stats-view">
-      <div class="stats-title" style="padding:0 4px">学习统计</div>
+      <div class="stats-title" style="padding:0 4px" data-i18n="statsTitle">学习统计</div>
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-value" id="stat-known">0</div><div class="stat-label">✅ 已学会</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-learning">0</div><div class="stat-label">📖 学习中</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-mastered">0</div><div class="stat-label">⊘ 已熟悉</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-today">0</div><div class="stat-label">🔥 今日学习</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">⚡ 连续天数</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-best-streak">0</div><div class="stat-label">🏆 最高连续</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-known">0</div><div class="stat-label" data-i18n="statKnown">✅ 已学会</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-learning">0</div><div class="stat-label" data-i18n="statLearning">📖 学习中</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-mastered">0</div><div class="stat-label" data-i18n="statMastered">⊘ 已熟悉</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-today">0</div><div class="stat-label" data-i18n="statToday">🔥 今日学习</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-streak">0</div><div class="stat-label" data-i18n="statStreak">⚡ 连续天数</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-best-streak">0</div><div class="stat-label" data-i18n="statBestStreak">🏆 最高连续</div></div>
         <div class="stat-card wide">
           <div class="stat-label" style="display:flex;justify-content:space-between;align-items:baseline">
-            <span>总进度 (<span id="stat-total">0</span> / <span id="stat-grand-total">0</span>词)</span>
+            <span><span data-i18n="totalProgress">总进度</span> (<span id="stat-total">0</span> / <span id="stat-grand-total">0</span><span data-i18n="wordsSuffix">词</span>)</span>
             <span style="font-weight:600;color:var(--text)" id="stat-progress-pct">0%</span>
           </div>
           <div class="stacked-bar">
@@ -573,9 +575,9 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
             <div class="stacked-seg" id="seg-learning" style="background:var(--orange);width:0%"></div>
           </div>
           <div class="stacked-legend">
-            <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>已学会 <b id="pct-known">0%</b></span>
-            <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>学习中 <b id="pct-learning">0%</b></span>
-            <span class="legend-item"><span class="legend-dot" style="background:var(--sep)"></span>未学 <b id="pct-new">100%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span><span data-i18n="legendKnown">已学会</span> <b id="pct-known">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span><span data-i18n="legendLearning">学习中</span> <b id="pct-learning">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--sep)"></span><span data-i18n="legendNew">未学</span> <b id="pct-new">100%</b></span>
           </div>
         </div>
       </div>
@@ -583,13 +585,23 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
   </div>
 
   <div class="view hidden" id="settings-view">
-    <div class="stats-title" style="padding:0 4px;flex-shrink:0;">设置</div>
+    <div class="stats-title" style="padding:0 4px;flex-shrink:0;" data-i18n="settingsTitle">设置</div>
     <div style="max-width:480px;margin:0 auto;width:100%;overflow-y:auto;flex:1;">
       <div class="stat-card wide" style="display:flex;flex-direction:column;gap:20px;">
 
+        <div>
+          <div class="api-key-label" style="margin-bottom:12px;" data-i18n="langLabel">🌐 语言</div>
+          <div style="display:flex;gap:8px;">
+            <button class="lang-btn" data-lang="zh">中文</button>
+            <button class="lang-btn" data-lang="en">English</button>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--sep);"></div>
+
         <div class="settings-row">
           <div class="settings-item">
-            <span class="settings-label">每次学习词数</span>
+            <span class="settings-label" data-i18n="sessionSize">每次学习词数</span>
             <span class="settings-value" id="session-size-val">20词</span>
           </div>
           <input type="range" id="session-size-range" min="10" max="100" step="5" value="20" style="width:100%">
@@ -597,7 +609,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 
         <div class="settings-row">
           <div class="settings-item">
-            <span class="settings-label">每次新词保底数</span>
+            <span class="settings-label" data-i18n="newWordsMin">每次新词保底数</span>
             <span class="settings-value" id="new-words-val">10词</span>
           </div>
           <input type="range" id="new-words-range" min="0" max="60" step="5" value="10" style="width:100%">
@@ -606,24 +618,24 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
         <div style="border-top:1px solid var(--sep);"></div>
 
         <div>
-          <div class="api-key-label" style="margin-bottom:12px;">🎨 主题</div>
+          <div class="api-key-label" style="margin-bottom:12px;" data-i18n="themeLabel">🎨 主题</div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="theme-btn" data-theme="" title="初雪"><span style="background:#b87a90"></span>初雪</button>
-            <button class="theme-btn" data-theme="ocean" title="星际漫游"><span style="background:#38bdf8"></span>星际漫游</button>
-            <button class="theme-btn" data-theme="teahouse" title="茶馆午后"><span style="background:#3a6e2a"></span>茶馆午后</button>
-            <button class="theme-btn" data-theme="ink" title="钢笔墨水"><span style="background:#1e4a8a"></span>钢笔墨水</button>
-            <button class="theme-btn" data-theme="midnight" title="午夜电台"><span style="background:#9b8ec4"></span>午夜电台</button>
-            <button class="theme-btn" data-theme="peach" title="桃子汽水"><span style="background:#d4820a"></span>桃子汽水</button>
+            <button class="theme-btn" data-theme="" data-i18n="themeChuxue" data-i18n-attr="title:themeChuxue" title="初雪"><span style="background:#b87a90"></span>初雪</button>
+            <button class="theme-btn" data-theme="ocean" data-i18n="themeOcean" data-i18n-attr="title:themeOcean" title="星际漫游"><span style="background:#38bdf8"></span>星际漫游</button>
+            <button class="theme-btn" data-theme="teahouse" data-i18n="themeTeahouse" data-i18n-attr="title:themeTeahouse" title="茶馆午后"><span style="background:#3a6e2a"></span>茶馆午后</button>
+            <button class="theme-btn" data-theme="ink" data-i18n="themeInk" data-i18n-attr="title:themeInk" title="钢笔墨水"><span style="background:#1e4a8a"></span>钢笔墨水</button>
+            <button class="theme-btn" data-theme="midnight" data-i18n="themeMidnight" data-i18n-attr="title:themeMidnight" title="午夜电台"><span style="background:#9b8ec4"></span>午夜电台</button>
+            <button class="theme-btn" data-theme="peach" data-i18n="themePeach" data-i18n-attr="title:themePeach" title="桃子汽水"><span style="background:#d4820a"></span>桃子汽水</button>
           </div>
         </div>
 
         <div style="border-top:1px solid var(--sep);"></div>
 
         <div>
-          <div class="api-key-label" style="margin-bottom:8px;">☁️ 多设备同步密钥（所有设备填一样的密码）</div>
+          <div class="api-key-label" style="margin-bottom:8px;" data-i18n="syncLabel">☁️ 多设备同步密钥（所有设备填一样的密码）</div>
           <div class="api-key-row">
-            <input class="api-key-input" type="password" id="sync-token-input" placeholder="自定义同步密码">
-            <button class="api-key-save-btn" id="sync-token-save">保存</button>
+            <input class="api-key-input" type="password" id="sync-token-input" data-i18n-attr="placeholder:syncPlaceholder" placeholder="自定义同步密码">
+            <button class="api-key-save-btn" id="sync-token-save" data-i18n="saveBtn">保存</button>
           </div>
           <div class="api-key-status" id="sync-status"></div>
         </div>
@@ -631,27 +643,27 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
         <div style="border-top:1px solid var(--sep);"></div>
 
         <div>
-          <div class="api-key-label" style="margin-bottom:8px;">🤖 Anthropic API Key（<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取 Key</a>）</div>
+          <div class="api-key-label" style="margin-bottom:8px;" data-i18n-html="apiKeyLabel">🤖 Anthropic API Key（<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取 Key</a>）</div>
           <div class="api-key-row">
             <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-…">
-            <button class="api-key-save-btn" id="api-key-save">保存</button>
+            <button class="api-key-save-btn" id="api-key-save" data-i18n="saveBtn">保存</button>
           </div>
           <div class="api-key-status" id="api-key-status"></div>
         </div>
 
         <div style="border-top:1px solid var(--sep);"></div>
 
-        <button class="reset-btn" id="reset-btn" style="margin-top:0;">⚠️ 重置所有进度</button>
+        <button class="reset-btn" id="reset-btn" style="margin-top:0;" data-i18n="resetBtn">⚠️ 重置所有进度</button>
 
       </div>
     </div>
   </div>
 
   <nav id="nav">
-    <button class="nav-btn active" data-view="study"><span class="nav-icon">📚</span><span>学习</span></button>
-    <button class="nav-btn" data-view="browse"><span class="nav-icon">📖</span><span>单词表</span></button>
-    <button class="nav-btn" data-view="stats"><span class="nav-icon">📊</span><span>统计</span></button>
-    <button class="nav-btn" data-view="settings"><span class="nav-icon">⚙️</span><span>设置</span></button>
+    <button class="nav-btn active" data-view="study"><span class="nav-icon">📚</span><span data-i18n="navStudy">学习</span></button>
+    <button class="nav-btn" data-view="browse"><span class="nav-icon">📖</span><span data-i18n="navBrowse">单词表</span></button>
+    <button class="nav-btn" data-view="stats"><span class="nav-icon">📊</span><span data-i18n="navStats">统计</span></button>
+    <button class="nav-btn" data-view="settings"><span class="nav-icon">⚙️</span><span data-i18n="navSettings">设置</span></button>
   </nav>
 </div>
 
@@ -667,17 +679,162 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
     <div class="modal-mnemonic-section" id="modal-mnemonic-section">
       <!-- filled dynamically -->
     </div>
-    <div style="font-size:13px;color:var(--text3);margin-bottom:6px">📝 我的笔记</div>
-    <textarea class="note-area" id="modal-note" placeholder="写下你自己的联想、造句…"></textarea>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:6px" data-i18n="myNotes">📝 我的笔记</div>
+    <textarea class="note-area" id="modal-note" data-i18n-attr="placeholder:notePlaceholder" placeholder="写下你自己的联想、造句…"></textarea>
     <div class="modal-actions">
-      <button class="modal-btn modal-btn-study" id="modal-study-btn">加入学习队列</button>
-      <button class="modal-btn modal-btn-known" id="modal-known-btn">✓ 已学会</button>
+      <button class="modal-btn modal-btn-study" id="modal-study-btn" data-i18n="joinQueue">加入学习队列</button>
+      <button class="modal-btn modal-btn-known" id="modal-known-btn" data-i18n="knownBtn">✓ 已学会</button>
     </div>
   </div>
 </div>
 
 <script>
 let PHONETICS = [];   // populated by loadAll()
+
+// ============================================================
+// i18n
+// ============================================================
+const TR = {
+  appTitle: { zh: 'GRE 单词', en: 'GRE Vocab' },
+  navStudy: { zh: '学习', en: 'Study' },
+  navBrowse: { zh: '单词表', en: 'Browse' },
+  navStats: { zh: '统计', en: 'Stats' },
+  navSettings: { zh: '设置', en: 'Settings' },
+  todayShort: { zh: '今日', en: 'Today' },
+  wordsSuffix: { zh: ' 词', en: ' words' },
+  loadFailed: { zh: '加载失败，请检查服务器', en: 'Failed to load — check the server' },
+  skipHint: { zh: '已熟悉此词，点击永久跳过', en: 'Already familiar — tap to skip forever' },
+  mnemonicLabel: { zh: '✨ 联想记忆', en: '✨ Mnemonic' },
+  aiHelpMe: { zh: 'AI帮我记', en: 'Help me remember' },
+  aiHintText: { zh: '生成一个搞笑联想记忆法', en: 'Generate a fun mnemonic' },
+  generateMnemonic: { zh: '点击生成联想记忆法', en: 'Tap to generate mnemonic' },
+  generatingMnemonic: { zh: '正在生成联想记忆…', en: 'Generating mnemonic…' },
+  generating: { zh: '生成中…', en: 'Generating…' },
+  retry: { zh: '重试', en: 'Retry' },
+  regenerate: { zh: '↻ 重新生成', en: '↻ Regenerate' },
+  regenerating: { zh: '重新生成中…', en: 'Regenerating…' },
+  goodMnemonic: { zh: '好记！', en: 'Good!' },
+  flagMnemonic: { zh: '标记需要改进', en: 'Mark for improvement' },
+  generateMnemonicLong: { zh: 'AI帮我生成联想记忆法', en: 'AI: generate a mnemonic' },
+  swipeLeft: { zh: '← 不会', en: "← Don't know" },
+  swipeRight: { zh: '记住了 →', en: 'Got it →' },
+  swipeDown: { zh: '↑ 模糊', en: '↑ Fuzzy' },
+  synAntDer: { zh: '近/反/派', en: 'Syn/Ant/Der' },
+  noDefinition: { zh: '（无释义）', en: '(no definition)' },
+  flipBtn: { zh: '翻转查看释义', en: 'Flip to see definition' },
+  rateAgainSub: { zh: '明天再来', en: 'Tomorrow' },
+  rateHardSub: { zh: '2天后', en: 'In 2 days' },
+  rateEasySub: { zh: '4天后', en: 'In 4 days' },
+  tagSyn: { zh: '近', en: 'Syn' },
+  tagAnt: { zh: '反', en: 'Ant' },
+  tagDer: { zh: '派', en: 'Der' },
+  doneTitle: { zh: '本轮完成！', en: 'Round complete!' },
+  doneSub: { zh: '今日已学 <strong>{n}</strong> 个单词<br>每天坚持，GRE必过！', en: "Studied <strong>{n}</strong> words today<br>Keep it up — you'll crush GRE!" },
+  doneBtn: { zh: '继续下一轮', en: 'Next round' },
+  searchPlaceholder: { zh: '搜索单词…', en: 'Search words…' },
+  filterAll: { zh: '全部', en: 'All' },
+  filterNew: { zh: '未学', en: 'New' },
+  filterLearning: { zh: '学习中', en: 'Learning' },
+  filterKnown: { zh: '已学会', en: 'Known' },
+  filterMastered: { zh: '已熟悉', en: 'Mastered' },
+  filterNoun: { zh: '名词', en: 'Noun' },
+  filterVerb: { zh: '动词', en: 'Verb' },
+  filterAdj: { zh: '形容词', en: 'Adj' },
+  totalCount: { zh: '共 {n} 词', en: '{n} words total' },
+  statsTitle: { zh: '学习统计', en: 'Study stats' },
+  statKnown: { zh: '✅ 已学会', en: '✅ Known' },
+  statLearning: { zh: '📖 学习中', en: '📖 Learning' },
+  statMastered: { zh: '⊘ 已熟悉', en: '⊘ Mastered' },
+  statToday: { zh: '🔥 今日学习', en: '🔥 Today' },
+  statStreak: { zh: '⚡ 连续天数', en: '⚡ Streak' },
+  statBestStreak: { zh: '🏆 最高连续', en: '🏆 Best streak' },
+  totalProgress: { zh: '总进度', en: 'Total progress' },
+  legendKnown: { zh: '已学会', en: 'Known' },
+  legendLearning: { zh: '学习中', en: 'Learning' },
+  legendNew: { zh: '未学', en: 'New' },
+  settingsTitle: { zh: '设置', en: 'Settings' },
+  langLabel: { zh: '🌐 语言', en: '🌐 Language' },
+  sessionSize: { zh: '每次学习词数', en: 'Words per session' },
+  newWordsMin: { zh: '每次新词保底数', en: 'Min new words per session' },
+  themeLabel: { zh: '🎨 主题', en: '🎨 Theme' },
+  themeChuxue: { zh: '初雪', en: 'First Snow' },
+  themeOcean: { zh: '星际漫游', en: 'Interstellar' },
+  themeTeahouse: { zh: '茶馆午后', en: 'Teahouse' },
+  themeInk: { zh: '钢笔墨水', en: 'Fountain Pen' },
+  themeMidnight: { zh: '午夜电台', en: 'Midnight Radio' },
+  themePeach: { zh: '桃子汽水', en: 'Peach Soda' },
+  syncLabel: { zh: '☁️ 多设备同步密钥（所有设备填一样的密码）', en: '☁️ Sync password (use same password on all devices)' },
+  syncPlaceholder: { zh: '自定义同步密码', en: 'Custom sync password' },
+  saveBtn: { zh: '保存', en: 'Save' },
+  apiKeyLabel: { zh: '🤖 Anthropic API Key（<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取 Key</a>）', en: '🤖 Anthropic API Key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">get key</a>)' },
+  syncEnabled: { zh: '✓ 同步已启用', en: '✓ Sync enabled' },
+  syncing: { zh: '同步中…', en: 'Syncing…' },
+  apiKeySaved: { zh: '✅ API Key 已保存（{prefix}…）', en: '✅ API Key saved ({prefix}…)' },
+  apiKeyReplaceHint: { zh: '已保存，输入新值可替换', en: 'Saved — enter new value to replace' },
+  apiKeyUnset: { zh: '未设置 — 设置后可使用AI联想记忆功能', en: 'Not set — set it to use AI mnemonic' },
+  apiKeyInvalid: { zh: 'API Key 无效，请确认格式以 sk- 开头', en: 'Invalid API Key — must start with sk-' },
+  apiKeyPromptMsg: { zh: '请输入 Anthropic API Key（将只保存在您的设备上）\n\n可在 console.anthropic.com 免费获取：', en: 'Enter your Anthropic API Key (saved only on this device)\n\nGet one free at console.anthropic.com:' },
+  apiKeyInvalidShort: { zh: '请输入有效的 API Key（以 sk- 开头）', en: 'Enter a valid API Key (must start with sk-)' },
+  resetBtn: { zh: '⚠️ 重置所有进度', en: '⚠️ Reset all progress' },
+  resetConfirm: { zh: '确定要重置所有学习进度？', en: 'Reset all study progress?' },
+  myNotes: { zh: '📝 我的笔记', en: '📝 My notes' },
+  notePlaceholder: { zh: '写下你自己的联想、造句…', en: 'Write your own mnemonic, sentences…' },
+  joinQueue: { zh: '加入学习队列', en: 'Add to queue' },
+  knownBtn: { zh: '✓ 已学会', en: '✓ Known' },
+  masteredToggle: { zh: '⊘ 已熟悉（点击取消）', en: '⊘ Mastered (tap to cancel)' },
+  markMastered: { zh: '已熟悉，永久跳过', en: 'Skip forever' },
+  genFailed: { zh: '生成失败：{msg}', en: 'Generation failed: {msg}' },
+  genFailedWithKey: { zh: '生成失败：{msg}\n\n请检查API Key是否正确，或网络是否正常。', en: 'Generation failed: {msg}\n\nCheck the API Key or your network.' }
+};
+
+let currentLang = localStorage.getItem('gre_lang') || 'zh';
+
+function t(key, vars) {
+  const entry = TR[key];
+  if (!entry) return key;
+  let s = entry[currentLang] || entry.zh || key;
+  if (vars) for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+  return s;
+}
+
+function applyI18n(root) {
+  const r = root || document;
+  r.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+  r.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.getAttribute('data-i18n-html')); });
+  r.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    el.getAttribute('data-i18n-attr').split(',').forEach(pair => {
+      const [attr, key] = pair.split(':');
+      if (attr && key) el.setAttribute(attr.trim(), t(key.trim()));
+    });
+  });
+  document.documentElement.lang = currentLang === 'en' ? 'en' : 'zh-CN';
+  document.title = currentLang === 'en' ? 'GRE Vocab · Crush 3000' : 'GRE单词 · 要你命3000';
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('gre_lang', lang);
+  applyI18n();
+  // Refresh dynamic UI
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+  if (typeof WORDS !== 'undefined' && WORDS && WORDS.length) {
+    updateSessionCount();
+    if (currentQueue && currentQueue.length) showCard();
+    renderWordList();
+    updateStats();
+    updateApiKeyUI();
+    refreshSettingsLabels();
+  }
+}
+
+function refreshSettingsLabels() {
+  const ssVal = document.getElementById('session-size-val');
+  if (ssVal) ssVal.textContent = sessionSize + t('wordsSuffix');
+  const nwVal = document.getElementById('new-words-val');
+  if (nwVal) nwVal.textContent = newWordsMin + t('wordsSuffix');
+  const syncStatus = document.getElementById('sync-status');
+  if (syncStatus && getSyncToken()) syncStatus.textContent = t('syncEnabled');
+}
 
 // ============================================================
 // SPACED REPETITION
@@ -721,9 +878,9 @@ async function generateMnemonic(wordIdx, force = false) {
 
   const apiKey = localStorage.getItem('gre_api_key');
   if (!apiKey) {
-    const key = prompt('请输入 Anthropic API Key（将只保存在您的设备上）\n\n可在 console.anthropic.com 免费获取：');
+    const key = prompt(t('apiKeyPromptMsg'));
     if (!key || !key.trim().startsWith('sk-')) {
-      alert('API Key 无效，请确认格式以 sk- 开头');
+      alert(t('apiKeyInvalid'));
       return null;
     }
     localStorage.setItem('gre_api_key', key.trim());
@@ -967,7 +1124,7 @@ Promise.all([
   WORDS = words;
   PHONETICS = phon;
   init();
-}).catch(() => { document.getElementById('front-word').textContent = '加载失败，请检查服务器'; });
+}).catch(() => { document.getElementById('front-word').textContent = t('loadFailed'); });
 
 function fixCardHeight() {
   const cardOuter = document.querySelector('.card-outer');
@@ -1014,10 +1171,11 @@ function getSessionEmoji(n) {
 
 function updateSessionCount() {
   const emoji = getSessionEmoji(todayCount);
-  document.getElementById('session-count').innerHTML = `${emoji} <span style="font-size:11px;color:var(--text3)">今日 </span><span style="font-size:16px;font-weight:700;color:var(--text)">${todayCount}</span><span style="font-size:11px;color:var(--text3)"> 词</span>`;
+  document.getElementById('session-count').innerHTML = `${emoji} <span style="font-size:11px;color:var(--text3)">${t('todayShort')} </span><span style="font-size:16px;font-weight:700;color:var(--text)">${todayCount}</span><span style="font-size:11px;color:var(--text3)">${t('wordsSuffix')}</span>`;
 }
 
 function init() {
+  applyI18n();
   initTheme();
   updateSessionCount();
   syncPull().then(() => {
@@ -1073,7 +1231,7 @@ function shuffle(a) {
 // 近/反/派 appear (off by default, persisted in localStorage).
 function renderKaofaList(word, mode) {
   const ks = word.k || [];
-  if (!ks.length) return '<div class="def-cn-line">（无释义）</div>';
+  if (!ks.length) return `<div class="def-cn-line">${t('noDefinition')}</div>`;
   const showExamples = true;
   const showSynAnt = (mode === 'modal') || (mode === 'card' && showCardExtras);
   const exLimit = mode === 'modal' ? 99 : 1;
@@ -1087,9 +1245,9 @@ function renderKaofaList(word, mode) {
           `<div class="kaofa-ex"><span class="ex-en">${escHtml(e.en)}</span>${e.cn ? ` <span class="ex-cn">${escHtml(e.cn)}</span>` : ''}</div>`
         ).join('')}</div>`
       : '';
-    const syn = showSynAnt && k.syn ? `<div class="kaofa-syn"><span class="kaofa-tag">近</span> ${escHtml(k.syn)}</div>` : '';
-    const ant = showSynAnt && k.ant ? `<div class="kaofa-ant"><span class="kaofa-tag">反</span> ${escHtml(k.ant)}</div>` : '';
-    const der = showSynAnt && k.der ? `<div class="kaofa-der"><span class="kaofa-tag">派</span> ${escHtml(k.der)}</div>` : '';
+    const syn = showSynAnt && k.syn ? `<div class="kaofa-syn"><span class="kaofa-tag">${t('tagSyn')}</span> ${escHtml(k.syn)}</div>` : '';
+    const ant = showSynAnt && k.ant ? `<div class="kaofa-ant"><span class="kaofa-tag">${t('tagAnt')}</span> ${escHtml(k.ant)}</div>` : '';
+    const der = showSynAnt && k.der ? `<div class="kaofa-der"><span class="kaofa-tag">${t('tagDer')}</span> ${escHtml(k.der)}</div>` : '';
     return `<div class="kaofa-block">
       <div class="kaofa-head">${numTag}${pos}${cn}</div>
       ${en}${exs}${syn}${ant}${der}
@@ -1312,13 +1470,13 @@ function setBackMnemonicUI(wordIdx, text, loading) {
   const content = document.getElementById('back-mnemonic-content');
   const regenBtn = document.getElementById('back-regen-btn');
   if (loading) {
-    content.innerHTML = `<div style="text-align:center;padding:8px 0;color:var(--purple)"><span class="spinner"></span> <span class="pulsing" style="font-size:13px;margin-left:6px">正在生成联想记忆…</span></div>`;
+    content.innerHTML = `<div style="text-align:center;padding:8px 0;color:var(--purple)"><span class="spinner"></span> <span class="pulsing" style="font-size:13px;margin-left:6px">${t('generatingMnemonic')}</span></div>`;
     regenBtn.style.display = 'none';
   } else if (text) {
     content.innerHTML = `<div class="back-mnemonic-text" id="back-mnemonic-text">${escHtml(text)}</div>`;
     regenBtn.style.display = '';
   } else {
-    content.innerHTML = `<button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span>点击生成联想记忆法</span></button>`;
+    content.innerHTML = `<button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span>${t('generateMnemonic')}</span></button>`;
     regenBtn.style.display = 'none';
     // Re-attach event
     const btn = document.getElementById('back-gen-btn');
@@ -1364,7 +1522,7 @@ async function triggerGenerateMnemonic(wordIdx, force = false) {
   const frontBtn = document.getElementById('front-gen-btn');
 
   if (frontBtn) {
-    frontBtn.innerHTML = '<span class="spinner"></span><span>生成中…</span>';
+    frontBtn.innerHTML = `<span class="spinner"></span><span data-i18n="generating">${t('generating')}</span>`;
     frontBtn.classList.add('loading');
   }
   setBackMnemonicUI(wordIdx, null, true);
@@ -1372,17 +1530,15 @@ async function triggerGenerateMnemonic(wordIdx, force = false) {
   try {
     const mnemonic = await generateMnemonic(wordIdx, force);
     if (!mnemonic) {
-      // User cancelled or error - reset
-      if (frontBtn) { frontBtn.innerHTML = '<span>✨</span><span>AI帮我记</span>'; frontBtn.classList.remove('loading'); }
+      if (frontBtn) { frontBtn.innerHTML = `<span>✨</span><span data-i18n="aiHelpMe">${t('aiHelpMe')}</span>`; frontBtn.classList.remove('loading'); }
       setBackMnemonicUI(wordIdx, null, false);
       return;
     }
-    // Show on back
     setBackMnemonicUI(wordIdx, mnemonic, false);
   } catch (e) {
-    if (frontBtn) { frontBtn.innerHTML = '<span>✨</span><span>重试</span>'; frontBtn.classList.remove('loading'); }
+    if (frontBtn) { frontBtn.innerHTML = `<span>✨</span><span data-i18n="retry">${t('retry')}</span>`; frontBtn.classList.remove('loading'); }
     setBackMnemonicUI(wordIdx, null, false);
-    alert('生成失败：' + e.message + '\n\n请检查API Key是否正确，或网络是否正常。');
+    alert(t('genFailedWithKey', { msg: e.message }));
   }
 }
 
@@ -1440,9 +1596,9 @@ function showDone() {
   document.querySelector('.card-area').innerHTML = `
     <div class="done-card">
       <div class="done-icon">🎉</div>
-      <div class="done-title">本轮完成！</div>
-      <div class="done-sub">今日已学 <strong>${todayCount}</strong> 个单词<br>每天坚持，GRE必过！</div>
-      <button class="done-btn" onclick="nextRound()">继续下一轮</button>
+      <div class="done-title">${t('doneTitle')}</div>
+      <div class="done-sub">${t('doneSub', { n: todayCount })}</div>
+      <button class="done-btn" onclick="nextRound()">${t('doneBtn')}</button>
     </div>`;
   document.getElementById('study-actions').style.display = 'none';
   document.getElementById('progress-fill').style.width = '100%';
@@ -1452,7 +1608,7 @@ function showDone() {
 function nextRound() {
   document.querySelector('.card-area').innerHTML = `
     <div class="skip-hint-row" id="skip-hint-row">
-      <button class="skip-hint-btn" id="btn-skip">已熟悉此词，点击永久跳过</button>
+      <button class="skip-hint-btn" id="btn-skip" data-i18n="skipHint">${t('skipHint')}</button>
     </div>
     <div class="card-outer">
       <div class="card" id="card">
@@ -1463,19 +1619,19 @@ function nextRound() {
             <div class="word-ipa" id="front-ipa"></div>
           </div>
           <div id="front-mnemonic-cached" class="front-mnemonic" style="display:none">
-            <div class="front-mnemonic-label">✨ 联想记忆</div>
+            <div class="front-mnemonic-label" data-i18n="mnemonicLabel">${t('mnemonicLabel')}</div>
             <div class="front-mnemonic-text" id="front-mnemonic-text"></div>
           </div>
           <div id="front-ai-area" class="ai-prompt-area">
-            <button class="ai-generate-btn" id="front-gen-btn"><span>✨</span><span>AI帮我记</span></button>
-            <div class="ai-hint-text">生成一个搞笑联想记忆法</div>
+            <button class="ai-generate-btn" id="front-gen-btn"><span>✨</span><span data-i18n="aiHelpMe">${t('aiHelpMe')}</span></button>
+            <div class="ai-hint-text" data-i18n="aiHintText">${t('aiHintText')}</div>
           </div>
         </div>
         <div class="card-face card-back-face">
-          <div class="swipe-label swipe-label-left" id="swipe-left">← 不会</div>
-          <div class="swipe-label swipe-label-right" id="swipe-right">记住了 →</div>
-          <div class="swipe-label swipe-label-down" id="swipe-down">↑ 模糊</div>
-          <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="back-page-indicator" id="back-page-indicator" style="display:none"></span><button class="back-extras-toggle" id="back-extras-toggle" type="button">近/反/派</button><span class="word-num" id="back-num"></span></div>
+          <div class="swipe-label swipe-label-left" id="swipe-left" data-i18n="swipeLeft">${t('swipeLeft')}</div>
+          <div class="swipe-label swipe-label-right" id="swipe-right" data-i18n="swipeRight">${t('swipeRight')}</div>
+          <div class="swipe-label swipe-label-down" id="swipe-down" data-i18n="swipeDown">${t('swipeDown')}</div>
+          <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="back-page-indicator" id="back-page-indicator" style="display:none"></span><button class="back-extras-toggle" id="back-extras-toggle" type="button" data-i18n="synAntDer">${t('synAntDer')}</button><span class="word-num" id="back-num"></span></div>
           <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
           <div class="def-cn" id="def-cn"></div>
           <div class="def-en" id="def-en"></div>
@@ -1483,14 +1639,13 @@ function nextRound() {
           <div class="back-mnemonic-area">
             <div class="back-mnemonic-box">
               <div class="mnemonic-header">
-                <span class="mnemonic-label">✨ 联想记忆</span>
+                <span class="mnemonic-label" data-i18n="mnemonicLabel">${t('mnemonicLabel')}</span>
                 <div style="display:flex;gap:4px;">
-                  <button class="mnemonic-regen-btn" id="back-like-btn" title="好记！" style="opacity:0.35">👍</button>
-                  <button class="mnemonic-regen-btn" id="back-flag-btn" title="标记需要改进" style="opacity:0.35">👎</button>
-                  <!-- <button class="mnemonic-regen-btn" id="back-regen-btn" title="重新生成">↻</button> -->
+                  <button class="mnemonic-regen-btn" id="back-like-btn" data-i18n-attr="title:goodMnemonic" title="${t('goodMnemonic')}" style="opacity:0.35">👍</button>
+                  <button class="mnemonic-regen-btn" id="back-flag-btn" data-i18n-attr="title:flagMnemonic" title="${t('flagMnemonic')}" style="opacity:0.35">👎</button>
                 </div>
               </div>
-              <div id="back-mnemonic-content"><button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span>点击生成联想记忆法</span></button></div>
+              <div id="back-mnemonic-content"><button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span data-i18n="generateMnemonic">${t('generateMnemonic')}</span></button></div>
             </div>
           </div>
         </div>
@@ -1572,7 +1727,7 @@ function renderWordList() {
       </div>`;
     }
   }
-  html += `<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">共 ${list.length} 词</div>`;
+  html += `<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">${t('totalCount', { n: list.length })}</div>`;
   document.getElementById('word-list').innerHTML = html;
 
   // Build alpha bar
@@ -1673,7 +1828,7 @@ function openModal(idx) {
   document.getElementById('modal-note').value = localStorage.getItem('gre_note_' + idx) || '';
 
   // Mastered button
-  document.getElementById('modal-known-btn').textContent = mastered.has(idx) ? '⊘ 已熟悉（点击取消）' : '已熟悉，永久跳过';
+  document.getElementById('modal-known-btn').textContent = mastered.has(idx) ? t('masteredToggle') : t('markMastered');
 
   document.getElementById('modal').classList.add('open');
 }
@@ -1686,41 +1841,41 @@ function renderModalMnemonic(idx) {
     section.innerHTML = `
       <div class="modal-mnemonic-box" style="margin-bottom:14px">
         <div class="modal-mnemonic-top">
-          <span class="modal-mnemonic-title">✨ 联想记忆</span>
-          <button class="modal-mnemonic-regen" onclick="modalRegenMnemonic(${idx})">↻ 重新生成</button>
+          <span class="modal-mnemonic-title">${t('mnemonicLabel')}</span>
+          <button class="modal-mnemonic-regen" onclick="modalRegenMnemonic(${idx})">${t('regenerate')}</button>
         </div>
         <div class="modal-mnemonic-text">${escHtml(cached)}</div>
       </div>`;
   } else {
     section.innerHTML = `
       <button class="modal-mnemonic-generate-btn" id="modal-gen-btn" onclick="modalGenerateMnemonic(${idx})">
-        <span>✨</span><span>AI帮我生成联想记忆法</span>
+        <span>✨</span><span>${t('generateMnemonicLong')}</span>
       </button>`;
   }
 }
 
 async function modalGenerateMnemonic(idx) {
   const btn = document.getElementById('modal-gen-btn');
-  if (btn) { btn.innerHTML = '<span class="spinner"></span><span>生成中…</span>'; btn.classList.add('loading'); }
+  if (btn) { btn.innerHTML = `<span class="spinner"></span><span data-i18n="generating">${t('generating')}</span>`; btn.classList.add('loading'); }
   try {
     const m = await generateMnemonic(idx, false);
     if (m) renderModalMnemonic(idx);
-    else { if (btn) { btn.innerHTML = '<span>✨</span><span>AI帮我生成联想记忆法</span>'; btn.classList.remove('loading'); } }
+    else { if (btn) { btn.innerHTML = `<span>✨</span><span data-i18n="generateMnemonicLong">${t('generateMnemonicLong')}</span>`; btn.classList.remove('loading'); } }
   } catch (e) {
-    if (btn) { btn.innerHTML = '<span>✨</span><span>重试</span>'; btn.classList.remove('loading'); }
-    alert('生成失败：' + e.message);
+    if (btn) { btn.innerHTML = `<span>✨</span><span data-i18n="retry">${t('retry')}</span>`; btn.classList.remove('loading'); }
+    alert(t('genFailed', { msg: e.message }));
   }
 }
 
 async function modalRegenMnemonic(idx) {
   const section = document.getElementById('modal-mnemonic-section');
-  section.innerHTML = `<div style="text-align:center;padding:16px;color:var(--purple)"><span class="spinner"></span> <span class="pulsing" style="font-size:14px;margin-left:8px">重新生成中…</span></div>`;
+  section.innerHTML = `<div style="text-align:center;padding:16px;color:var(--purple)"><span class="spinner"></span> <span class="pulsing" style="font-size:14px;margin-left:8px">${t('regenerating')}</span></div>`;
   try {
     const m = await generateMnemonic(idx, true);
     if (m) renderModalMnemonic(idx);
   } catch (e) {
     renderModalMnemonic(idx);
-    alert('生成失败：' + e.message);
+    alert(t('genFailed', { msg: e.message }));
   }
 }
 
@@ -1775,10 +1930,10 @@ function updateApiKeyUI() {
   const status = document.getElementById('api-key-status');
   const input = document.getElementById('api-key-input');
   if (key) {
-    if (status) { status.textContent = '✅ API Key 已保存（' + key.slice(0,8) + '…）'; status.className = 'api-key-status ok'; }
-    if (input) input.placeholder = '已保存，输入新值可替换';
+    if (status) { status.textContent = t('apiKeySaved', { prefix: key.slice(0,8) }); status.className = 'api-key-status ok'; }
+    if (input) input.placeholder = t('apiKeyReplaceHint');
   } else {
-    if (status) { status.textContent = '未设置 — 设置后可使用AI联想记忆功能'; status.className = 'api-key-status none'; }
+    if (status) { status.textContent = t('apiKeyUnset'); status.className = 'api-key-status none'; }
   }
 }
 
@@ -2038,23 +2193,29 @@ function setupEventListeners() {
     updateStats(); renderWordList();
   });
 
+  // Language toggle
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+    btn.addEventListener('click', () => setLang(btn.getAttribute('data-lang')));
+  });
+
   // Session size
   const sizeRange = document.getElementById('session-size-range');
   sizeRange.value = sessionSize;
-  document.getElementById('session-size-val').textContent = sessionSize + '词';
+  document.getElementById('session-size-val').textContent = sessionSize + t('wordsSuffix');
   sizeRange.addEventListener('input', () => {
     sessionSize = parseInt(sizeRange.value);
-    document.getElementById('session-size-val').textContent = sessionSize + '词';
+    document.getElementById('session-size-val').textContent = sessionSize + t('wordsSuffix');
     localStorage.setItem('gre_session_size', String(sessionSize));
   });
 
   // New words minimum
   const newWordsRange = document.getElementById('new-words-range');
   newWordsRange.value = newWordsMin;
-  document.getElementById('new-words-val').textContent = newWordsMin + '词';
+  document.getElementById('new-words-val').textContent = newWordsMin + t('wordsSuffix');
   newWordsRange.addEventListener('input', () => {
     newWordsMin = parseInt(newWordsRange.value);
-    document.getElementById('new-words-val').textContent = newWordsMin + '词';
+    document.getElementById('new-words-val').textContent = newWordsMin + t('wordsSuffix');
     localStorage.setItem('gre_new_words_min', String(newWordsMin));
   });
 
@@ -2066,7 +2227,7 @@ function setupEventListeners() {
       document.getElementById('api-key-input').value = '';
       updateApiKeyUI();
     } else {
-      alert('请输入有效的 API Key（以 sk- 开头）');
+      alert(t('apiKeyInvalidShort'));
     }
   });
 
@@ -2074,21 +2235,21 @@ function setupEventListeners() {
   const syncInput = document.getElementById('sync-token-input');
   const syncStatus = document.getElementById('sync-status');
   const existingToken = getSyncToken();
-  if (existingToken) syncStatus.textContent = '✓ 同步已启用';
+  if (existingToken) syncStatus.textContent = t('syncEnabled');
   document.getElementById('sync-token-save').addEventListener('click', async () => {
     const val = syncInput.value.trim();
     if (!val) return;
     localStorage.setItem('gre_sync_token', val);
     syncInput.value = '';
-    syncStatus.textContent = '同步中…';
+    syncStatus.textContent = t('syncing');
     await syncPull();
     syncPush();
-    syncStatus.textContent = '✓ 同步已启用';
+    syncStatus.textContent = t('syncEnabled');
   });
 
   // Reset
   document.getElementById('reset-btn').addEventListener('click', () => {
-    if (confirm('确定要重置所有学习进度？')) {
+    if (confirm(t('resetConfirm'))) {
       localStorage.removeItem('gre_sr'); localStorage.removeItem('gre_today_count'); localStorage.removeItem('gre_streak');
       srData = {}; todayCount = 0; buildQueue(); showCard(); updateStats(); renderWordList();
     }
