@@ -348,12 +348,12 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .stat-card.wide { grid-column: 1 / -1; }
 .stat-value { font-size: 36px; font-weight: 700; }
 .stat-label { font-size: 13px; color: var(--text3); margin-top: 2px; }
-.progress-rings { display: flex; gap: 12px; align-items: center; justify-content: space-around; margin: 8px 0; }
-.ring-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.ring-label { font-size: 12px; color: var(--text3); }
-.ring-count { font-size: 15px; font-weight: 600; }
-.ring-bar { height: 8px; border-radius: 4px; width: 60px; overflow: hidden; background: var(--sep); }
-.ring-fill { height: 100%; border-radius: 4px; }
+.stacked-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--sep); margin: 10px 0; }
+.stacked-seg { height: 100%; transition: width 0.4s ease; }
+.stacked-legend { display: flex; justify-content: space-around; gap: 12px; font-size: 12px; color: var(--text3); flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.legend-item b { color: var(--text); font-weight: 600; }
 .settings-row { display: flex; flex-direction: column; gap: 10px; }
 .settings-item { display: flex; justify-content: space-between; align-items: center; }
 .settings-label { font-size: 15px; }
@@ -564,12 +564,18 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
         <div class="stat-card"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">⚡ 连续天数</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-best-streak">0</div><div class="stat-label">🏆 最高连续</div></div>
         <div class="stat-card wide">
-          <div class="stat-label" style="margin-bottom:10px">总进度 (<span id="stat-total">0</span> / 2967词)</div>
-          <div class="progress-track" style="height:8px"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
-          <div class="progress-rings">
-            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-known" style="background:var(--green);width:0%"></div></div><div class="ring-count" id="pct-known">0%</div><div class="ring-label">已学会</div></div>
-            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-learning" style="background:var(--orange);width:0%"></div></div><div class="ring-count" id="pct-learning">0%</div><div class="ring-label">学习中</div></div>
-            <div class="ring-item"><div class="ring-bar"><div class="ring-fill" id="bar-new" style="background:var(--sep);width:100%"></div></div><div class="ring-count" id="pct-new">100%</div><div class="ring-label">未学</div></div>
+          <div class="stat-label" style="display:flex;justify-content:space-between;align-items:baseline">
+            <span>总进度 (<span id="stat-total">0</span> / <span id="stat-grand-total">0</span>词)</span>
+            <span style="font-weight:600;color:var(--text)" id="stat-progress-pct">0%</span>
+          </div>
+          <div class="stacked-bar">
+            <div class="stacked-seg" id="seg-known" style="background:var(--green);width:0%"></div>
+            <div class="stacked-seg" id="seg-learning" style="background:var(--orange);width:0%"></div>
+          </div>
+          <div class="stacked-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>已学会 <b id="pct-known">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>学习中 <b id="pct-learning">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--sep)"></span>未学 <b id="pct-new">100%</b></span>
           </div>
         </div>
       </div>
@@ -1752,14 +1758,16 @@ function updateStats() {
   document.getElementById('stat-streak').textContent = curStreak || 1;
   document.getElementById('stat-best-streak').textContent = bestStreak || 1;
   document.getElementById('stat-total').textContent = known + learning;
-  const pk = Math.round(known/total*100), pl = Math.round(learning/total*100);
-  document.getElementById('overall-progress').style.width = pk + '%';
-  document.getElementById('bar-known').style.width = pk + '%';
-  document.getElementById('bar-learning').style.width = pl + '%';
-  document.getElementById('bar-new').style.width = Math.max(0, 100-pk-pl) + '%';
+  document.getElementById('stat-grand-total').textContent = total;
+  const pk = total ? Math.round(known/total*100) : 0;
+  const pl = total ? Math.round(learning/total*100) : 0;
+  const pn = Math.max(0, 100 - pk - pl);
+  document.getElementById('stat-progress-pct').textContent = (pk + pl) + '%';
+  document.getElementById('seg-known').style.width = pk + '%';
+  document.getElementById('seg-learning').style.width = pl + '%';
   document.getElementById('pct-known').textContent = pk + '%';
   document.getElementById('pct-learning').textContent = pl + '%';
-  document.getElementById('pct-new').textContent = Math.max(0, 100-pk-pl) + '%';
+  document.getElementById('pct-new').textContent = pn + '%';
 }
 
 function updateApiKeyUI() {
