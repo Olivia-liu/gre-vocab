@@ -850,9 +850,15 @@ async function syncPush() {
       const k = localStorage.key(i);
       if (k && k.startsWith('gre_mn_')) mnemonics[k] = localStorage.getItem(k);
     }
+    const streakMeta = {
+      streak: parseInt(localStorage.getItem('gre_streak') || '0'),
+      last_day: localStorage.getItem('gre_last_day') || '',
+      today_count: parseInt(localStorage.getItem('gre_today_count') || '0'),
+      today_key: localStorage.getItem('gre_today_key') || ''
+    };
     await fetch(SYNC_URL + '?token=' + encodeURIComponent(token + '_extras'), {
       method: 'PUT',
-      body: JSON.stringify({ flagged, mnemonics, mastered: [...mastered] })
+      body: JSON.stringify({ flagged, mnemonics, mastered: [...mastered], streak: streakMeta })
     });
   } catch(e) {}
 }
@@ -902,6 +908,23 @@ async function syncPull() {
       extras.mastered.forEach(i => mastered.add(Number(i)));
       saveMastered();
     }
+    // Merge streak: side with more recent last_day wins; same day → max(streak), max(today_count)
+    if (extras.streak && extras.streak.last_day) {
+      const cloudDate = new Date(extras.streak.last_day).getTime();
+      const localLastDay = localStorage.getItem('gre_last_day');
+      const localDate = localLastDay ? new Date(localLastDay).getTime() : 0;
+      if (cloudDate > localDate) {
+        localStorage.setItem('gre_streak', String(extras.streak.streak || 1));
+        localStorage.setItem('gre_last_day', extras.streak.last_day);
+        if (extras.streak.today_key) localStorage.setItem('gre_today_key', extras.streak.today_key);
+        localStorage.setItem('gre_today_count', String(extras.streak.today_count || 0));
+      } else if (cloudDate === localDate) {
+        const localStreak = parseInt(localStorage.getItem('gre_streak') || '0');
+        const localCount = parseInt(localStorage.getItem('gre_today_count') || '0');
+        localStorage.setItem('gre_streak', String(Math.max(localStreak, extras.streak.streak || 0)));
+        localStorage.setItem('gre_today_count', String(Math.max(localCount, extras.streak.today_count || 0)));
+      }
+    }
   } catch(e) {}
 }
 let newWordsMin = parseInt(localStorage.getItem('gre_new_words_min') || '10');
@@ -909,16 +932,20 @@ let activeFilter = 'all';
 let browseSearch = '';
 let currentModalIdx = -1;
 
-// Daily streak logic
-const todayKey = new Date().toDateString();
-if (localStorage.getItem('gre_today_key') !== todayKey) {
-  const lastDay = localStorage.getItem('gre_last_day');
-  const yesterday = new Date(Date.now() - 86400000).toDateString();
-  const streak = parseInt(localStorage.getItem('gre_streak') || '0');
-  localStorage.setItem('gre_today_key', todayKey);
-  localStorage.setItem('gre_today_count', '0');
-  if (lastDay === yesterday) localStorage.setItem('gre_streak', String(streak + 1));
-  else if (lastDay !== todayKey) localStorage.setItem('gre_streak', '1');
+// Daily streak rollover — run AFTER syncPull so cloud streak/last_day wins
+// when another device studied more recently. See init().
+function dailyRollover() {
+  const todayKey = new Date().toDateString();
+  if (localStorage.getItem('gre_today_key') !== todayKey) {
+    const lastDay = localStorage.getItem('gre_last_day');
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    const streak = parseInt(localStorage.getItem('gre_streak') || '0');
+    localStorage.setItem('gre_today_key', todayKey);
+    localStorage.setItem('gre_today_count', '0');
+    if (lastDay === yesterday) localStorage.setItem('gre_streak', String(streak + 1));
+    else if (lastDay !== todayKey) localStorage.setItem('gre_streak', '1');
+  }
+  todayCount = parseInt(localStorage.getItem('gre_today_count') || '0');
 }
 todayCount = parseInt(localStorage.getItem('gre_today_count') || '0');
 
@@ -986,7 +1013,11 @@ function updateSessionCount() {
 function init() {
   initTheme();
   updateSessionCount();
-  syncPull().then(() => { buildQueue(); showCard(); updateStats(); renderWordList(); });
+  syncPull().then(() => {
+    dailyRollover();
+    buildQueue(); showCard(); updateStats(); updateSessionCount(); renderWordList();
+    syncPushDebounced();
+  });
   setupEventListeners();
   updateApiKeyUI();
   fixCardHeight();
