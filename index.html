@@ -573,10 +573,12 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
           <div class="stacked-bar">
             <div class="stacked-seg" id="seg-known" style="background:var(--green);width:0%"></div>
             <div class="stacked-seg" id="seg-learning" style="background:var(--orange);width:0%"></div>
+            <div class="stacked-seg" id="seg-mastered" style="background:var(--purple);width:0%"></div>
           </div>
           <div class="stacked-legend">
             <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span><span data-i18n="legendKnown">已学会</span> <b id="pct-known">0%</b></span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span><span data-i18n="legendLearning">学习中</span> <b id="pct-learning">0%</b></span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span><span data-i18n="legendMastered">已熟悉</span> <b id="pct-mastered">0%</b></span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--sep)"></span><span data-i18n="legendNew">未学</span> <b id="pct-new">100%</b></span>
           </div>
         </div>
@@ -751,6 +753,7 @@ const TR = {
   totalProgress: { zh: '总进度', en: 'Total progress' },
   legendKnown: { zh: '已学会', en: 'Known' },
   legendLearning: { zh: '学习中', en: 'Learning' },
+  legendMastered: { zh: '已熟悉', en: 'Mastered' },
   legendNew: { zh: '未学', en: 'New' },
   settingsTitle: { zh: '设置', en: 'Settings' },
   langLabel: { zh: '🌐 语言', en: '🌐 Language' },
@@ -1912,16 +1915,20 @@ function updateStats() {
   }
   document.getElementById('stat-streak').textContent = curStreak || 1;
   document.getElementById('stat-best-streak').textContent = bestStreak || 1;
-  document.getElementById('stat-total').textContent = known + learning;
+  const masteredCount = mastered.size;
+  document.getElementById('stat-total').textContent = known + learning + masteredCount;
   document.getElementById('stat-grand-total').textContent = total;
   const pk = total ? Math.round(known/total*100) : 0;
   const pl = total ? Math.round(learning/total*100) : 0;
-  const pn = Math.max(0, 100 - pk - pl);
-  document.getElementById('stat-progress-pct').textContent = (pk + pl) + '%';
+  const pm = total ? Math.round(masteredCount/total*100) : 0;
+  const pn = Math.max(0, 100 - pk - pl - pm);
+  document.getElementById('stat-progress-pct').textContent = (pk + pl + pm) + '%';
   document.getElementById('seg-known').style.width = pk + '%';
   document.getElementById('seg-learning').style.width = pl + '%';
+  document.getElementById('seg-mastered').style.width = pm + '%';
   document.getElementById('pct-known').textContent = pk + '%';
   document.getElementById('pct-learning').textContent = pl + '%';
+  document.getElementById('pct-mastered').textContent = pm + '%';
   document.getElementById('pct-new').textContent = pn + '%';
 }
 
