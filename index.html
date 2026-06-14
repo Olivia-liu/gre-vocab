@@ -562,6 +562,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
         <div class="stat-card"><div class="stat-value" id="stat-mastered">0</div><div class="stat-label">⊘ 已熟悉</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-today">0</div><div class="stat-label">🔥 今日学习</div></div>
         <div class="stat-card"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">⚡ 连续天数</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-best-streak">0</div><div class="stat-label">🏆 最高连续</div></div>
         <div class="stat-card wide">
           <div class="stat-label" style="margin-bottom:10px">总进度 (<span id="stat-total">0</span> / 2967词)</div>
           <div class="progress-track" style="height:8px"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
@@ -852,6 +853,7 @@ async function syncPush() {
     }
     const streakMeta = {
       streak: parseInt(localStorage.getItem('gre_streak') || '0'),
+      best_streak: parseInt(localStorage.getItem('gre_best_streak') || '0'),
       last_day: localStorage.getItem('gre_last_day') || '',
       today_count: parseInt(localStorage.getItem('gre_today_count') || '0'),
       today_key: localStorage.getItem('gre_today_key') || ''
@@ -924,6 +926,10 @@ async function syncPull() {
         localStorage.setItem('gre_streak', String(Math.max(localStreak, extras.streak.streak || 0)));
         localStorage.setItem('gre_today_count', String(Math.max(localCount, extras.streak.today_count || 0)));
       }
+      // best_streak is monotonic — always take max regardless of date
+      const localBest = parseInt(localStorage.getItem('gre_best_streak') || '0');
+      const cloudBest = extras.streak.best_streak || 0;
+      if (cloudBest > localBest) localStorage.setItem('gre_best_streak', String(cloudBest));
     }
   } catch(e) {}
 }
@@ -1403,8 +1409,10 @@ function rateWord(q) {
   if (lastDay !== todayKey) {
     const yesterday = new Date(Date.now() - 86400000).toDateString();
     const streak = parseInt(localStorage.getItem('gre_streak') || '0');
-    if (lastDay === yesterday) localStorage.setItem('gre_streak', String(streak + 1));
-    else localStorage.setItem('gre_streak', '1');
+    const newStreak = (lastDay === yesterday) ? streak + 1 : 1;
+    localStorage.setItem('gre_streak', String(newStreak));
+    const bestStreak = parseInt(localStorage.getItem('gre_best_streak') || '0');
+    if (newStreak > bestStreak) localStorage.setItem('gre_best_streak', String(newStreak));
   }
   todayCount++;
   localStorage.setItem('gre_today_count', String(todayCount));
@@ -1736,7 +1744,13 @@ function updateStats() {
   document.getElementById('stat-learning').textContent = learning;
   document.getElementById('stat-mastered').textContent = mastered.size;
   document.getElementById('stat-today').textContent = todayCount;
-  document.getElementById('stat-streak').textContent = localStorage.getItem('gre_streak') || '1';
+  const curStreak = parseInt(localStorage.getItem('gre_streak') || '0');
+  const bestStreak = Math.max(curStreak, parseInt(localStorage.getItem('gre_best_streak') || '0'));
+  if (bestStreak > parseInt(localStorage.getItem('gre_best_streak') || '0')) {
+    localStorage.setItem('gre_best_streak', String(bestStreak));
+  }
+  document.getElementById('stat-streak').textContent = curStreak || 1;
+  document.getElementById('stat-best-streak').textContent = bestStreak || 1;
   document.getElementById('stat-total').textContent = known + learning;
   const pk = Math.round(known/total*100), pl = Math.round(learning/total*100);
   document.getElementById('overall-progress').style.width = pk + '%';
