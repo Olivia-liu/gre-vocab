@@ -41,21 +41,58 @@ HEADERS = {
 }
 
 def make_prompt(word):
-    pos = word.get('p', '')
-    cn  = word.get('c', '')
-    en  = word.get('e', '')
-    meaning = cn or en
-    return f"""你是专门帮中国学生记GRE单词的记忆大师，擅长创作让人忍不住笑的联想记忆。
+    """Build the prompt. Pulls definitions from the new schema (word.k[]),
+    falling back to legacy flat fields if the entry is in the old format."""
+    parts = []
+    if word.get('k'):
+        for k in word['k']:
+            pos = (k.get('pos') or '').rstrip('.')
+            cn  = k.get('cn') or ''
+            en  = k.get('en') or ''
+            line = ' '.join(s for s in [pos, cn, ('— ' + en) if en else ''] if s).strip()
+            if line:
+                parts.append(line)
+    else:
+        # Legacy fallback
+        pos = word.get('p', '')
+        cn  = word.get('c', '')
+        en  = word.get('e', '')
+        line = ' '.join(s for s in [pos, cn, ('— ' + en) if en else ''] if s).strip()
+        if line:
+            parts.append(line)
+    meaning_block = '\n'.join(f'  • {p}' for p in parts) if parts else '(no definition)'
 
-单词：{word['w']}（{pos + '.  ' if pos else ''}{meaning}）
+    return f"""How would you memorize the English word "{word['w']}"?
 
-请创作一个极其有趣、难以忘记的中文联想记忆法。你可以用以下方式：
-🔊 谐音梗：这个词读起来像什么中文词或句子？
-🖼️ 夸张画面：荒诞、视觉冲击强的场景
-😂 搞笑故事：两三句傻乎乎但好记的故事
-🧩 词形拆解：把单词拆成像中文读音的片段
+Definition(s):
+{meaning_block}
 
-要求：越荒诞夸张越好；不超过3句话；直接给联想，无需任何前言。"""
+Write a SHORT, DIRECT mnemonic. Lead with the anchor and stop — short pointers like "X contains Y", "X sounds like Y", or "X = prefix + Y" stick better than multi-sentence narrative scenes. Aim for 1–2 sentences.
+
+Use whatever language has the cleanest hook for THIS specific word — pure English, pure Chinese, or a mix.
+
+Anchor patterns that work:
+- A common English word contained in or sounding like the target ("foible" contains "foil"; "spurious" contains "curious"; "bolster" sounds like "booster")
+- A clean Chinese 谐音 — only when the sounds genuinely match AND the Chinese phrase has its own real meaning ("penchant" ≈ 喷香; "bribe" ≈ 爸来了)
+- A common prefix + a known word ("incessant" = in- not + cease; "malaise" = mal- bad + ease)
+- Restaurant-menu words like "verde" (green) are fair game
+
+Strict rules — NEVER:
+- Use obscure Latin/Greek roots most learners don't know (anth-, sciss-, plod-, dicate-, jure-, rogate-, quot-)
+- Restate the definition as the mnemonic (circular)
+- Force a Chinese 谐音 if the sounds don't actually match (e.g. "rift" does NOT sound like 裂了)
+- Use pure phonetic transliteration with no meaning (e.g. "啊别然特" for aberrant)
+- Anchor "foible" to "feeble", or "maculate" to "immaculate" (these chains are broken for our user)
+- Write a story scene with "picture a..." / "imagine X happens..." setups
+- Write a preamble like "to memorize this word..." or "you can think of..."
+- Truncate mid-sentence
+
+Format:
+- 1–2 sentences (max 3)
+- Lead directly with the mnemonic
+- End by naming the word and its core meaning: `— word, meaning.` or `——word，中文释义。`
+
+Output ONLY the mnemonic. No explanation."""
 
 def call_api(word, idx):
     """Call Claude API for one word. Returns (idx, mnemonic_str) or raises."""
