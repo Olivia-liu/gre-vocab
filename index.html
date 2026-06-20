@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GRE单词">
 <meta name="theme-color" content="#b87a90">
@@ -188,6 +189,29 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 }
 .word-num { font-size: 12px; color: var(--text3); }
 .word-ipa { font-size: 14px; color: var(--text3); letter-spacing: 0.3px; margin-top: 2px; }
+.ipa-row { display: inline-flex; align-items: center; gap: 6px; margin-top: 2px; }
+.speaker-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: color-mix(in srgb, var(--blue) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--blue) 25%, transparent);
+  color: var(--blue); cursor: pointer; padding: 0;
+  font-size: 14px; line-height: 1; flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  align-self: center;
+}
+.speaker-btn:hover { background: color-mix(in srgb, var(--blue) 18%, transparent); }
+.speaker-btn:active { transform: scale(0.92); }
+.speaker-btn.speaking { background: var(--blue); color: #fff; border-color: var(--blue); }
+.speaker-btn.speaking::after {
+  content: ''; position: absolute; inset: -2px; border-radius: 50%;
+  border: 2px solid var(--blue); animation: speakerPulse 1s ease-out infinite;
+  pointer-events: none;
+}
+.speaker-btn-sm { width: 22px; height: 22px; font-size: 12px; }
+@keyframes speakerPulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.6); opacity: 0; } }
 .word-text { font-size: 40px; font-weight: 700; letter-spacing: -1px; margin: 8px 0 6px; line-height: 1.1; word-break: break-word; flex-shrink: 0; }
 
 /* Mnemonic on front (cached) */
@@ -396,6 +420,14 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .api-key-status.none { color: var(--text3); }
 .reset-btn { background: color-mix(in srgb, var(--red) 12%, transparent); color: var(--red); border: none; border-radius: 12px; padding: 12px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; }
 
+/* Toggle switch */
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider { position: absolute; cursor: pointer; inset: 0; background: var(--sep); border-radius: 24px; transition: 0.2s; }
+.switch .slider::before { position: absolute; content: ''; height: 18px; width: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.switch input:checked + .slider { background: var(--blue); }
+.switch input:checked + .slider::before { transform: translateX(20px); }
+
 /* Nav */
 #nav {
   flex-shrink: 0; display: flex; justify-content: space-around; align-items: center;
@@ -413,7 +445,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 .modal-sheet { background: var(--card-bg); border-radius: 20px 20px 0 0; width: 100%; padding: 20px 20px calc(20px + var(--safe-bot)); max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
 .modal-overlay.open .modal-sheet { transform: translateY(0); }
 .modal-handle { width: 36px; height: 4px; background: var(--sep); border-radius: 2px; margin: 0 auto 16px; }
-.modal-word { font-size: 34px; font-weight: 700; margin-bottom: 2px; }
+.modal-word { font-size: 34px; font-weight: 700; margin-bottom: 2px; display: flex; align-items: center; gap: 10px; }
 .modal-pos { font-size: 13px; color: var(--text3); font-weight: 400; letter-spacing: 0.3px; margin-bottom: 10px; }
 .modal-def-cn { margin-bottom: 14px; }
 .modal-def-en { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 10px; }
@@ -490,7 +522,10 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
               </div>
               <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:18%;">
                 <div class="word-text" id="front-word" style="text-align:center;">Loading…</div>
-                <div class="word-ipa" id="front-ipa"></div>
+                <div class="ipa-row">
+                  <span class="word-ipa" id="front-ipa"></span>
+                  <button type="button" class="speaker-btn" id="front-speaker" data-i18n-attr="title:speakWord" title="播放读音">🔊</button>
+                </div>
               </div>
               <!-- Mnemonic area on front -->
               <div id="front-mnemonic-cached" class="front-mnemonic" style="display:none">
@@ -515,7 +550,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
                 <button class="back-extras-toggle" id="back-extras-toggle" type="button" data-i18n="synAntDer">近/反/派</button>
                 <span class="word-num" id="back-num"></span>
               </div>
-              <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
+              <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span><button type="button" class="speaker-btn speaker-btn-sm" id="back-speaker" data-i18n-attr="title:speakWord" title="播放读音">🔊</button></div>
               <div class="def-cn" id="def-cn"></div>
               <div class="def-en" id="def-en"></div>
               <div class="example-inline" id="example-inline" style="display:none">
@@ -620,6 +655,15 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 
         <div style="border-top:1px solid var(--sep);"></div>
 
+        <div>
+          <div class="settings-item" style="margin-bottom:0;">
+            <span class="settings-label" data-i18n="autoPlaySpeech">🔊 自动播放读音</span>
+            <label class="switch"><input type="checkbox" id="autoplay-toggle"><span class="slider"></span></label>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--sep);"></div>
+
         <div class="settings-row">
           <div class="settings-item">
             <span class="settings-label" data-i18n="sessionSize">每次学习词数</span>
@@ -654,10 +698,10 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 
         <div>
           <div class="api-key-label" style="margin-bottom:8px;" data-i18n="syncLabel">☁️ 多设备同步密钥（所有设备填一样的密码）</div>
-          <div class="api-key-row">
-            <input class="api-key-input" type="password" id="sync-token-input" data-i18n-attr="placeholder:syncPlaceholder" placeholder="自定义同步密码">
-            <button class="api-key-save-btn" id="sync-token-save" data-i18n="saveBtn">保存</button>
-          </div>
+          <form class="api-key-row" onsubmit="return false" autocomplete="off">
+            <input class="api-key-input" type="password" id="sync-token-input" autocomplete="off" data-i18n-attr="placeholder:syncPlaceholder" placeholder="自定义同步密码">
+            <button type="button" class="api-key-save-btn" id="sync-token-save" data-i18n="saveBtn">保存</button>
+          </form>
           <div class="api-key-status" id="sync-status"></div>
         </div>
 
@@ -665,10 +709,10 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 
         <div>
           <div class="api-key-label" style="margin-bottom:8px;" data-i18n-html="apiKeyLabel">🤖 Anthropic API Key（<a href="https://console.anthropic.com/" target="_blank" style="color:var(--blue)">获取 Key</a>）</div>
-          <div class="api-key-row">
-            <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-…">
-            <button class="api-key-save-btn" id="api-key-save" data-i18n="saveBtn">保存</button>
-          </div>
+          <form class="api-key-row" onsubmit="return false" autocomplete="off">
+            <input class="api-key-input" type="password" id="api-key-input" autocomplete="off" placeholder="sk-ant-…">
+            <button type="button" class="api-key-save-btn" id="api-key-save" data-i18n="saveBtn">保存</button>
+          </form>
           <div class="api-key-status" id="api-key-status"></div>
         </div>
 
@@ -692,7 +736,7 @@ html, body { height: 100%; height: -webkit-fill-available; overflow: hidden; fon
 <div class="modal-overlay" id="modal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-word" id="modal-word"></div>
+    <div class="modal-word"><span id="modal-word"></span><button type="button" class="speaker-btn" id="modal-speaker" data-i18n-attr="title:speakWord" title="播放读音">🔊</button></div>
     <div class="modal-pos" id="modal-pos"></div>
     <div class="modal-def-cn" id="modal-def-cn"></div>
     <div class="modal-def-en" id="modal-def-en"></div>
@@ -776,6 +820,8 @@ const TR = {
   legendNew: { zh: '未学', en: 'New' },
   settingsTitle: { zh: '设置', en: 'Settings' },
   langLabel: { zh: '🌐 语言', en: '🌐 Language' },
+  autoPlaySpeech: { zh: '🔊 自动播放读音', en: '🔊 Auto-play pronunciation' },
+  speakWord: { zh: '播放读音', en: 'Play pronunciation' },
   sessionSize: { zh: '每次学习词数', en: 'Words per session' },
   newWordsMin: { zh: '每次新词保底数', en: 'Min new words per session' },
   themeLabel: { zh: '🎨 主题', en: '🎨 Theme' },
@@ -810,6 +856,84 @@ const TR = {
 };
 
 let currentLang = localStorage.getItem('gre_lang') || 'zh';
+
+// ============================================================
+// Speech (TTS)
+// ============================================================
+let autoPlaySpeech = localStorage.getItem('gre_autoplay_speech') !== '0'; // default ON
+let _speechVoice = null;
+let _voicesReady = false;
+let _userInteracted = false;
+
+function pickVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = speechSynthesis.getVoices();
+  if (!voices || !voices.length) return null;
+  // Prefer en-US, then any en-*, then first available
+  return voices.find(v => v.lang === 'en-US' && v.localService)
+      || voices.find(v => v.lang === 'en-US')
+      || voices.find(v => v.lang && v.lang.startsWith('en'))
+      || voices[0];
+}
+
+function initSpeech() {
+  if (!('speechSynthesis' in window)) return;
+  const refresh = () => { _speechVoice = pickVoice(); if (_speechVoice) _voicesReady = true; };
+  refresh();
+  if (!_voicesReady && speechSynthesis.addEventListener) {
+    speechSynthesis.addEventListener('voiceschanged', refresh, { once: false });
+  }
+  // Track first user interaction. Also prime the engine inside the gesture
+  // by speaking an empty utterance — iOS/Safari needs this to unlock TTS
+  // for the rest of the session.
+  const onFirst = () => {
+    _userInteracted = true;
+    try {
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      speechSynthesis.speak(u);
+    } catch (_) {}
+  };
+  document.addEventListener('pointerdown', onFirst, { once: true });
+  document.addEventListener('keydown', onFirst, { once: true });
+}
+
+function _doSpeak(text, opts) {
+  const u = new SpeechSynthesisUtterance(text);
+  const voice = _speechVoice || pickVoice();
+  if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = 'en-US'; }
+  u.rate = 0.95; u.pitch = 1.0; u.volume = 1.0;
+  const btn = opts && opts.btn;
+  if (btn) {
+    btn.classList.add('speaking');
+    u.onend = u.onerror = () => btn.classList.remove('speaking');
+  }
+  try { speechSynthesis.speak(u); } catch (e) { console.warn('speak failed', e); if (btn) btn.classList.remove('speaking'); }
+}
+
+function speak(text, opts) {
+  if (!text || !('speechSynthesis' in window)) return;
+  // If voices aren't loaded yet, wait and retry once they are
+  if (!_voicesReady) {
+    _speechVoice = pickVoice();
+    if (_speechVoice) _voicesReady = true;
+  }
+  // Cancel any in-flight utterance, then defer slightly to avoid the
+  // well-known cancel-then-speak race that swallows audio on Safari/iOS.
+  const wasSpeaking = speechSynthesis.speaking || speechSynthesis.pending;
+  if (wasSpeaking) {
+    speechSynthesis.cancel();
+    setTimeout(() => _doSpeak(text, opts), 120);
+  } else {
+    _doSpeak(text, opts);
+  }
+}
+
+function speakCurrentFront() {
+  if (queueIdx >= currentQueue.length) return;
+  const w = WORDS[currentQueue[queueIdx]];
+  if (w && w.w) speak(w.w, { btn: document.getElementById('front-speaker') });
+}
 
 function t(key, vars) {
   const entry = TR[key];
@@ -1199,6 +1323,7 @@ function updateSessionCount() {
 function init() {
   applyI18n();
   initTheme();
+  initSpeech();
   updateSessionCount();
   syncPull().then(() => {
     dailyRollover();
@@ -1486,6 +1611,11 @@ function showCard() {
   const likeBtn = document.getElementById('back-like-btn');
   if (flagBtn) flagBtn.style.opacity = isFlagged(wordIdx) ? '1' : '0.35';
   if (likeBtn) likeBtn.style.opacity = liked.has(wordIdx) ? '1' : '0.35';
+
+  // Auto-play pronunciation (only on study view)
+  if (autoPlaySpeech && !document.getElementById('study-view').classList.contains('hidden')) {
+    speak(word.w, { btn: document.getElementById('front-speaker') });
+  }
 }
 
 function setBackMnemonicUI(wordIdx, text, loading) {
@@ -1493,13 +1623,13 @@ function setBackMnemonicUI(wordIdx, text, loading) {
   const regenBtn = document.getElementById('back-regen-btn');
   if (loading) {
     content.innerHTML = `<div style="text-align:center;padding:8px 0;color:var(--purple)"><span class="spinner"></span> <span class="pulsing" style="font-size:13px;margin-left:6px">${t('generatingMnemonic')}</span></div>`;
-    regenBtn.style.display = 'none';
+    if (regenBtn) regenBtn.style.display = 'none';
   } else if (text) {
     content.innerHTML = `<div class="back-mnemonic-text" id="back-mnemonic-text">${escHtml(text)}</div>`;
-    regenBtn.style.display = '';
+    if (regenBtn) regenBtn.style.display = '';
   } else {
     content.innerHTML = `<button class="back-mnemonic-generate" id="back-gen-btn"><span>✨</span><span>${t('generateMnemonic')}</span></button>`;
-    regenBtn.style.display = 'none';
+    if (regenBtn) regenBtn.style.display = 'none';
     // Re-attach event
     const btn = document.getElementById('back-gen-btn');
     if (btn) btn.addEventListener('click', e => { e.stopPropagation(); triggerGenerateMnemonic(wordIdx); });
@@ -1638,7 +1768,10 @@ function nextRound() {
           <div class="front-top"><span class="word-pos" id="front-pos"></span><span class="word-num" id="front-num"></span></div>
           <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:18%;">
             <div class="word-text" id="front-word" style="text-align:center;">Loading…</div>
-            <div class="word-ipa" id="front-ipa"></div>
+            <div class="ipa-row">
+              <span class="word-ipa" id="front-ipa"></span>
+              <button type="button" class="speaker-btn" id="front-speaker" data-i18n-attr="title:speakWord" title="${t('speakWord')}">🔊</button>
+            </div>
           </div>
           <div id="front-mnemonic-cached" class="front-mnemonic" style="display:none">
             <div class="front-mnemonic-label" data-i18n="mnemonicLabel">${t('mnemonicLabel')}</div>
@@ -1654,7 +1787,7 @@ function nextRound() {
           <div class="swipe-label swipe-label-right" id="swipe-right" data-i18n="swipeRight">${t('swipeRight')}</div>
           <div class="swipe-label swipe-label-down" id="swipe-down" data-i18n="swipeDown">${t('swipeDown')}</div>
           <div class="back-top"><span class="back-pos" id="back-pos"></span><span class="back-page-indicator" id="back-page-indicator" style="display:none"></span><button class="back-extras-toggle" id="back-extras-toggle" type="button" data-i18n="synAntDer">${t('synAntDer')}</button><span class="word-num" id="back-num"></span></div>
-          <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span></div>
+          <div class="def-word-small"><span id="back-word"></span><span class="back-ipa" id="back-ipa"></span><button type="button" class="speaker-btn speaker-btn-sm" id="back-speaker" data-i18n-attr="title:speakWord" title="${t('speakWord')}">🔊</button></div>
           <div class="def-cn" id="def-cn"></div>
           <div class="def-en" id="def-en"></div>
           <div class="example-inline" id="example-inline" style="display:none"><div class="example-inline-text" id="example-inline-text"></div></div>
@@ -1853,6 +1986,10 @@ function openModal(idx) {
   document.getElementById('modal-known-btn').textContent = mastered.has(idx) ? t('masteredToggle') : t('markMastered');
 
   document.getElementById('modal').classList.add('open');
+
+  if (autoPlaySpeech) {
+    speak(word.w, { btn: document.getElementById('modal-speaker') });
+  }
 }
 
 function renderModalMnemonic(idx) {
@@ -1967,9 +2104,19 @@ function updateApiKeyUI() {
 // EVENT LISTENERS
 // ============================================================
 
+function wireCardSpeakers() {
+  const getCurWord = () => (queueIdx < currentQueue.length) ? (WORDS[currentQueue[queueIdx]]?.w || '') : '';
+  ['front-speaker', 'back-speaker'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', e => { e.stopPropagation(); const w = getCurWord(); if (w) speak(w, { btn }); });
+  });
+}
+
 function setupCardEvents() {
   const card = document.getElementById('card');
   if (!card) return;
+  wireCardSpeakers();
   card.addEventListener('click', e => {
     // Don't flip if clicking a button inside the card
     if (e.target.closest('button')) return;
@@ -2224,6 +2371,24 @@ function setupEventListeners() {
     btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
     btn.addEventListener('click', () => setLang(btn.getAttribute('data-lang')));
   });
+
+  // Modal speaker (front/back wired via wireCardSpeakers in setupCardEvents)
+  const modalSpeaker = document.getElementById('modal-speaker');
+  if (modalSpeaker) modalSpeaker.addEventListener('click', e => {
+    e.stopPropagation();
+    const w = currentModalIdx >= 0 ? WORDS[currentModalIdx]?.w : '';
+    if (w) speak(w, { btn: modalSpeaker });
+  });
+
+  // Auto-play toggle
+  const autoplayToggle = document.getElementById('autoplay-toggle');
+  if (autoplayToggle) {
+    autoplayToggle.checked = autoPlaySpeech;
+    autoplayToggle.addEventListener('change', () => {
+      autoPlaySpeech = autoplayToggle.checked;
+      localStorage.setItem('gre_autoplay_speech', autoPlaySpeech ? '1' : '0');
+    });
+  }
 
   // Session size
   const sizeRange = document.getElementById('session-size-range');
